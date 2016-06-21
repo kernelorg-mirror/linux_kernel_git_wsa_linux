@@ -98,6 +98,8 @@ def print_delta(type, old, new):
 
     return
 
+print("bloat-o-meter comparison of %s and %s" % (remainder[0], remainder[1]))
+
 if do_functions:
     old = getsizes(remainder[0])
     new = getsizes(remainder[1])
