@@ -172,7 +172,7 @@ static int _abb5zes3_rtc_clear_alarm(struct device *dev)
 	ret = regmap_update_bits(data->regmap, ABB5ZES3_REG_CTRL2,
 				 ABB5ZES3_REG_CTRL2_AF, 0);
 	if (ret)
-		dev_err(dev, "%s: clearing alarm failed (%d)\n", __func__, ret);
+		dev_err(dev, "clearing alarm failed (%d)\n", ret);
 
 	return ret;
 }
@@ -187,8 +187,7 @@ static int _abb5zes3_rtc_update_alarm(struct device *dev, bool enable)
 				 ABB5ZES3_REG_CTRL1_AIE,
 				 enable ? ABB5ZES3_REG_CTRL1_AIE : 0);
 	if (ret)
-		dev_err(dev, "%s: writing alarm INT failed (%d)\n",
-			__func__, ret);
+		dev_err(dev, "writing alarm INT failed (%d)\n", ret);
 
 	return ret;
 }
@@ -203,8 +202,7 @@ static int _abb5zes3_rtc_update_timer(struct device *dev, bool enable)
 				 ABB5ZES3_REG_CTRL2_WTAIE,
 				 enable ? ABB5ZES3_REG_CTRL2_WTAIE : 0);
 	if (ret)
-		dev_err(dev, "%s: writing timer INT failed (%d)\n",
-			__func__, ret);
+		dev_err(dev, "writing timer INT failed (%d)\n", ret);
 
 	return ret;
 }
@@ -228,8 +226,7 @@ static int _abb5zes3_rtc_read_time(struct device *dev, struct rtc_time *tm)
 	ret = regmap_bulk_read(data->regmap, ABB5ZES3_REG_CTRL1, regs,
 			       sizeof(regs));
 	if (ret) {
-		dev_err(dev, "%s: reading RTC time failed (%d)\n",
-			__func__, ret);
+		dev_err(dev, "reading RTC time failed (%d)\n", ret);
 		goto err;
 	}
 
@@ -341,8 +338,7 @@ static int _abb5zes3_rtc_read_timer(struct device *dev,
 	ret = regmap_bulk_read(data->regmap, ABB5ZES3_REG_TIM_CLK, regs,
 			       ABB5ZES3_TIMA_SEC_LEN + 1);
 	if (ret) {
-		dev_err(dev, "%s: reading Timer A section failed (%d)\n",
-			__func__, ret);
+		dev_err(dev, "reading Timer A section failed (%d)\n", ret);
 		goto err;
 	}
 
@@ -366,8 +362,7 @@ static int _abb5zes3_rtc_read_timer(struct device *dev,
 
 	ret = regmap_read(data->regmap, ABB5ZES3_REG_CTRL2, &reg);
 	if (ret) {
-		dev_err(dev, "%s: reading ctrl reg failed (%d)\n",
-			__func__, ret);
+		dev_err(dev, "reading ctrl reg failed (%d)\n", ret);
 		goto err;
 	}
 
@@ -391,8 +386,7 @@ static int _abb5zes3_rtc_read_alarm(struct device *dev,
 	ret = regmap_bulk_read(data->regmap, ABB5ZES3_REG_ALRM_MN, regs,
 			       ABB5ZES3_ALRM_SEC_LEN);
 	if (ret) {
-		dev_err(dev, "%s: reading alarm section failed (%d)\n",
-			__func__, ret);
+		dev_err(dev, "reading alarm section failed (%d)\n", ret);
 		goto err;
 	}
 
@@ -433,8 +427,7 @@ static int _abb5zes3_rtc_read_alarm(struct device *dev,
 
 	ret = regmap_read(data->regmap, ABB5ZES3_REG_CTRL1, &reg);
 	if (ret) {
-		dev_err(dev, "%s: reading ctrl reg failed (%d)\n",
-			__func__, ret);
+		dev_err(dev, "reading ctrl reg failed (%d)\n", ret);
 		goto err;
 	}
 
@@ -516,8 +509,9 @@ static int _abb5zes3_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alarm)
 			goto err;
 
 		if (alarm_secs > rtc_secs) {
-			dev_err(dev, "%s: alarm maximum is one month in the "
-				"future (%d)\n", __func__, ret);
+			dev_err(dev,
+				"alarm maximum is one month in the future (%d)\n",
+				ret);
 			ret = -EINVAL;
 			goto err;
 		}
@@ -535,8 +529,7 @@ static int _abb5zes3_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alarm)
 	ret = regmap_bulk_write(data->regmap, ABB5ZES3_REG_ALRM_MN, regs,
 				ABB5ZES3_ALRM_SEC_LEN);
 	if (ret < 0) {
-		dev_err(dev, "%s: writing ALARM section failed (%d)\n",
-			__func__, ret);
+		dev_err(dev, "writing ALARM section failed (%d)\n", ret);
 		goto err;
 	}
 
@@ -567,7 +560,7 @@ static int _abb5zes3_rtc_set_timer(struct device *dev, struct rtc_wkalrm *alarm,
 	ret = regmap_bulk_write(data->regmap, ABB5ZES3_REG_TIMA_CLK, regs,
 				ABB5ZES3_TIMA_SEC_LEN);
 	if (ret < 0) {
-		dev_err(dev, "%s: writing timer section failed\n", __func__);
+		dev_err(dev, "writing timer section failed\n");
 		goto err;
 	}
 
@@ -575,7 +568,7 @@ static int _abb5zes3_rtc_set_timer(struct device *dev, struct rtc_wkalrm *alarm,
 	ret = regmap_update_bits(data->regmap, ABB5ZES3_REG_TIM_CLK,
 				 mask, ABB5ZES3_REG_TIM_CLK_TAC1);
 	if (ret)
-		dev_err(dev, "%s: failed to update timer\n", __func__);
+		dev_err(dev, "failed to update timer\n");
 
 	/* Record currently configured alarm is a timer */
 	data->timer_alarm = 1;
@@ -617,14 +610,12 @@ static int abb5zes3_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alarm)
 	/* Let's first disable both the alarm and the timer interrupts */
 	ret = _abb5zes3_rtc_update_alarm(dev, false);
 	if (ret < 0) {
-		dev_err(dev, "%s: unable to disable alarm (%d)\n", __func__,
-			ret);
+		dev_err(dev, "unable to disable alarm (%d)\n", ret);
 		goto err;
 	}
 	ret = _abb5zes3_rtc_update_timer(dev, false);
 	if (ret < 0) {
-		dev_err(dev, "%s: unable to disable timer (%d)\n", __func__,
-			ret);
+		dev_err(dev, "unable to disable timer (%d)\n", ret);
 		goto err;
 	}
 
@@ -644,8 +635,7 @@ static int abb5zes3_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alarm)
 	mutex_unlock(&data->lock);
 
 	if (ret)
-		dev_err(dev, "%s: unable to configure alarm (%d)\n", __func__,
-			ret);
+		dev_err(dev, "unable to configure alarm (%d)\n", ret);
 
 	return ret;
  }
@@ -689,8 +679,8 @@ static int abb5zes3_rtc_check_setup(struct device *dev)
 		ABB5ZES3_REG_TIM_CLK_COF0 | ABB5ZES3_REG_TIM_CLK_COF1 |
 		ABB5ZES3_REG_TIM_CLK_COF2);
 	if (ret < 0) {
-		dev_err(dev, "%s: unable to initialize clkout register (%d)\n",
-			__func__, ret);
+		dev_err(dev, "unable to initialize clkout register (%d)\n",
+			ret);
 		return ret;
 	}
 
@@ -703,8 +693,7 @@ static int abb5zes3_rtc_check_setup(struct device *dev)
 		ABB5ZES3_REG_ALRM_DT_AE | ABB5ZES3_REG_ALRM_DW_AE);
 	ret = regmap_update_bits(regmap, ABB5ZES3_REG_CTRL2, mask, mask);
 	if (ret < 0) {
-		dev_err(dev, "%s: unable to disable alarm setting (%d)\n",
-			__func__, ret);
+		dev_err(dev, "unable to disable alarm setting (%d)\n", ret);
 		return ret;
 	}
 
@@ -714,8 +703,7 @@ static int abb5zes3_rtc_check_setup(struct device *dev)
 		ABB5ZES3_REG_CTRL1_CAP | ABB5ZES3_REG_CTRL1_STOP);
 	ret = regmap_update_bits(regmap, ABB5ZES3_REG_CTRL1, mask, 0);
 	if (ret < 0) {
-		dev_err(dev, "%s: unable to initialize CTRL1 register (%d)\n",
-			__func__, ret);
+		dev_err(dev, "unable to initialize CTRL1 register (%d)\n", ret);
 		return ret;
 	}
 
@@ -729,8 +717,7 @@ static int abb5zes3_rtc_check_setup(struct device *dev)
 		ABB5ZES3_REG_CTRL2_CTAF);
 	ret = regmap_update_bits(regmap, ABB5ZES3_REG_CTRL2, mask, 0);
 	if (ret < 0) {
-		dev_err(dev, "%s: unable to initialize CTRL2 register (%d)\n",
-			__func__, ret);
+		dev_err(dev, "unable to initialize CTRL2 register (%d)\n", ret);
 		return ret;
 	}
 
@@ -745,16 +732,14 @@ static int abb5zes3_rtc_check_setup(struct device *dev)
 		ABB5ZES3_REG_CTRL3_BSIE| ABB5ZES3_REG_CTRL3_BSF);
 	ret = regmap_update_bits(regmap, ABB5ZES3_REG_CTRL3, mask, 0);
 	if (ret < 0) {
-		dev_err(dev, "%s: unable to initialize CTRL3 register (%d)\n",
-			__func__, ret);
+		dev_err(dev, "unable to initialize CTRL3 register (%d)\n", ret);
 		return ret;
 	}
 
 	/* Check oscillator integrity flag */
 	ret = regmap_read(regmap, ABB5ZES3_REG_RTC_SC, &reg);
 	if (ret < 0) {
-		dev_err(dev, "%s: unable to read osc. integrity flag (%d)\n",
-			__func__, ret);
+		dev_err(dev, "unable to read osc. integrity flag (%d)\n", ret);
 		return ret;
 	}
 
@@ -773,8 +758,7 @@ static int abb5zes3_rtc_check_setup(struct device *dev)
 	 */
 	ret = regmap_read(regmap, ABB5ZES3_REG_CTRL3, &reg);
 	if (ret < 0) {
-		dev_err(dev, "%s: unable to read battery low flag (%d)\n",
-			__func__, ret);
+		dev_err(dev, "unable to read battery low flag (%d)\n", ret);
 		return ret;
 	}
 
@@ -785,8 +769,9 @@ static int abb5zes3_rtc_check_setup(struct device *dev)
 
 		ret = _abb5zes3_rtc_battery_low_irq_enable(regmap, false);
 		if (ret)
-			dev_err(dev, "%s: disabling battery low interrupt "
-				"generation failed (%d)\n", __func__, ret);
+			dev_err(dev,
+				"disabling battery low interrupt generation failed (%d)\n",
+				ret);
 	}
 
 	return ret;
@@ -822,8 +807,7 @@ static irqreturn_t _abb5zes3_rtc_interrupt(int irq, void *data)
 	ret = regmap_bulk_read(rtc_data->regmap, 0, regs,
 			       ABB5ZES3_CTRL_SEC_LEN);
 	if (ret) {
-		dev_err(dev, "%s: unable to read control section (%d)!\n",
-			__func__, ret);
+		dev_err(dev, "unable to read control section (%d)!\n", ret);
 		return handled;
 	}
 
@@ -904,8 +888,7 @@ static int abb5zes3_probe(struct i2c_client *client,
 	regmap = devm_regmap_init_i2c(client, &abb5zes3_rtc_regmap_config);
 	if (IS_ERR(regmap)) {
 		ret = PTR_ERR(regmap);
-		dev_err(dev, "%s: regmap allocation failed: %d\n",
-			__func__, ret);
+		dev_err(dev, "regmap allocation failed: %d\n", ret);
 		goto err;
 	}
 
@@ -938,8 +921,8 @@ static int abb5zes3_probe(struct i2c_client *client,
 			dev_dbg(dev, "%s: irq %d used by RTC\n", __func__,
 				client->irq);
 		} else {
-			dev_err(dev, "%s: irq %d unavailable (%d)\n",
-				__func__, client->irq, ret);
+			dev_err(dev, "irq %d unavailable (%d)\n", client->irq,
+				ret);
 			goto err;
 		}
 	}
@@ -948,8 +931,7 @@ static int abb5zes3_probe(struct i2c_client *client,
 					     THIS_MODULE);
 	ret = PTR_ERR_OR_ZERO(data->rtc);
 	if (ret) {
-		dev_err(dev, "%s: unable to register RTC device (%d)\n",
-			__func__, ret);
+		dev_err(dev, "unable to register RTC device (%d)\n", ret);
 		goto err;
 	}
 
@@ -957,8 +939,9 @@ static int abb5zes3_probe(struct i2c_client *client,
 	if (!data->battery_low && data->irq) {
 		ret = _abb5zes3_rtc_battery_low_irq_enable(regmap, true);
 		if (ret) {
-			dev_err(dev, "%s: enabling battery low interrupt "
-				"generation failed (%d)\n", __func__, ret);
+			dev_err(dev,
+				"enabling battery low interrupt generation failed (%d)\n",
+				ret);
 			goto err;
 		}
 	}
