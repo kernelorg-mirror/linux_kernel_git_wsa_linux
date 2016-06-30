@@ -105,7 +105,7 @@ static int pcf8563_read_block_data(struct i2c_client *client, unsigned char reg,
 	};
 
 	if ((i2c_transfer(client->adapter, msgs, 2)) != 2) {
-		dev_err(&client->dev, "%s: read error\n", __func__);
+		dev_err(&client->dev, "read error\n");
 		return -EIO;
 	}
 
@@ -124,8 +124,8 @@ static int pcf8563_write_block_data(struct i2c_client *client,
 		err = i2c_master_send(client, data, sizeof(data));
 		if (err != sizeof(data)) {
 			dev_err(&client->dev,
-				"%s: err=%d addr=%02x, data=%02x\n",
-				__func__, err, data[0], data[1]);
+				"err=%d addr=%02x, data=%02x\n", err, data[0],
+				data[1]);
 			return -EIO;
 		}
 	}
@@ -151,7 +151,7 @@ static int pcf8563_set_alarm_mode(struct i2c_client *client, bool on)
 
 	err = pcf8563_write_block_data(client, PCF8563_REG_ST2, 1, &buf);
 	if (err < 0) {
-		dev_err(&client->dev, "%s: write error\n", __func__);
+		dev_err(&client->dev, "write error\n");
 		return -EIO;
 	}
 
@@ -586,13 +586,13 @@ static int pcf8563_probe(struct i2c_client *client,
 	buf = PCF8563_TMRC_1_60;
 	err = pcf8563_write_block_data(client, PCF8563_REG_TMRC, 1, &buf);
 	if (err < 0) {
-		dev_err(&client->dev, "%s: write error\n", __func__);
+		dev_err(&client->dev, "write error\n");
 		return err;
 	}
 
 	err = pcf8563_get_alarm_mode(client, NULL, &alm_pending);
 	if (err) {
-		dev_err(&client->dev, "%s: read error\n", __func__);
+		dev_err(&client->dev, "read error\n");
 		return err;
 	}
 	if (alm_pending)
