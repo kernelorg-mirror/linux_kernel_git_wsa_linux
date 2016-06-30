@@ -230,7 +230,7 @@ static int rs5c372_set_datetime(struct i2c_client *client, struct rtc_time *tm)
 	buf[6] = bin2bcd(tm->tm_year - 100);
 
 	if (i2c_smbus_write_i2c_block_data(client, addr, sizeof(buf), buf) < 0) {
-		dev_err(&client->dev, "%s: write error\n", __func__);
+		dev_err(&client->dev, "write error\n");
 		return -EIO;
 	}
 
