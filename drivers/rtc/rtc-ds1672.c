@@ -50,7 +50,7 @@ static int ds1672_get_datetime(struct i2c_client *client, struct rtc_time *tm)
 
 	/* read date registers */
 	if ((i2c_transfer(client->adapter, &msgs[0], 2)) != 2) {
-		dev_err(&client->dev, "%s: read error\n", __func__);
+		dev_err(&client->dev, "read error get\n");
 		return -EIO;
 	}
 
@@ -84,7 +84,7 @@ static int ds1672_set_mmss(struct i2c_client *client, unsigned long secs)
 
 	xfer = i2c_master_send(client, buf, 6);
 	if (xfer != 6) {
-		dev_err(&client->dev, "%s: send: %d\n", __func__, xfer);
+		dev_err(&client->dev, "send: %d\n", xfer);
 		return -EIO;
 	}
 
@@ -121,7 +121,7 @@ static int ds1672_get_control(struct i2c_client *client, u8 *status)
 
 	/* read control register */
 	if ((i2c_transfer(client->adapter, &msgs[0], 2)) != 2) {
-		dev_err(&client->dev, "%s: read error\n", __func__);
+		dev_err(&client->dev, "read error ctrl\n");
 		return -EIO;
 	}
 
