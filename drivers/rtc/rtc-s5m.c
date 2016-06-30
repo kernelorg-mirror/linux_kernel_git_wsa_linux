@@ -295,8 +295,7 @@ static int s5m8767_rtc_set_alarm_reg(struct s5m_rtc_info *info)
 
 	ret = regmap_read(info->regmap, info->regs->udr_update, &data);
 	if (ret < 0) {
-		dev_err(info->dev, "%s: fail to read update reg(%d)\n",
-			__func__, ret);
+		dev_err(info->dev, "fail to read update reg(%d)\n", ret);
 		return ret;
 	}
 
@@ -317,8 +316,7 @@ static int s5m8767_rtc_set_alarm_reg(struct s5m_rtc_info *info)
 
 	ret = regmap_write(info->regmap, info->regs->udr_update, data);
 	if (ret < 0) {
-		dev_err(info->dev, "%s: fail to write update reg(%d)\n",
-			__func__, ret);
+		dev_err(info->dev, "fail to write update reg(%d)\n", ret);
 		return ret;
 	}
 
@@ -681,8 +679,8 @@ static int s5m8767_rtc_init_reg(struct s5m_rtc_info *info)
 		ret = regmap_update_bits(info->regmap, S5M_RTC_UDR_CON,
 				S5M_RTC_UDR_T_MASK, S5M_RTC_UDR_T_450_US);
 		if (ret < 0)
-			dev_err(info->dev, "%s: fail to change UDR time: %d\n",
-					__func__, ret);
+			dev_err(info->dev, "fail to change UDR time: %d\n",
+				ret);
 
 		/* Set RTC control register : Binary mode, 24hour mode */
 		data[0] = (1 << BCD_EN_SHIFT) | (1 << MODEL24_SHIFT);
@@ -714,8 +712,7 @@ static int s5m8767_rtc_init_reg(struct s5m_rtc_info *info)
 
 	info->rtc_24hr_mode = 1;
 	if (ret < 0) {
-		dev_err(info->dev, "%s: fail to write controlm reg(%d)\n",
-			__func__, ret);
+		dev_err(info->dev, "fail to write controlm reg(%d)\n", ret);
 		return ret;
 	}
 
