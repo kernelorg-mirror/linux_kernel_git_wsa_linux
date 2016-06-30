@@ -170,7 +170,7 @@ static int _isl12057_rtc_clear_alarm(struct device *dev)
 	ret = regmap_update_bits(data->regmap, ISL12057_REG_SR,
 				 ISL12057_REG_SR_A1F, 0);
 	if (ret)
-		dev_err(dev, "%s: clearing alarm failed (%d)\n", __func__, ret);
+		dev_err(dev, "clearing alarm failed (%d)\n", ret);
 
 	return ret;
 }
@@ -184,8 +184,8 @@ static int _isl12057_rtc_update_alarm(struct device *dev, int enable)
 				 ISL12057_REG_INT_A1IE,
 				 enable ? ISL12057_REG_INT_A1IE : 0);
 	if (ret)
-		dev_err(dev, "%s: changing alarm interrupt flag failed (%d)\n",
-			__func__, ret);
+		dev_err(dev, "changing alarm interrupt flag failed (%d)\n",
+			ret);
 
 	return ret;
 }
@@ -205,8 +205,8 @@ static int _isl12057_rtc_read_time(struct device *dev, struct rtc_time *tm)
 
 	ret = regmap_read(data->regmap, ISL12057_REG_SR, &sr);
 	if (ret) {
-		dev_err(dev, "%s: unable to read oscillator status flag (%d)\n",
-			__func__, ret);
+		dev_err(dev, "unable to read oscillator status flag (%d)\n",
+			ret);
 		goto out;
 	} else {
 		if (sr & ISL12057_REG_SR_OSF) {
@@ -218,8 +218,7 @@ static int _isl12057_rtc_read_time(struct device *dev, struct rtc_time *tm)
 	ret = regmap_bulk_read(data->regmap, ISL12057_REG_RTC_SC, regs,
 			       ISL12057_RTC_SEC_LEN);
 	if (ret)
-		dev_err(dev, "%s: unable to read RTC time section (%d)\n",
-			__func__, ret);
+		dev_err(dev, "unable to read RTC time section (%d)\n", ret);
 
 out:
 	if (ret)
@@ -255,8 +254,7 @@ static int isl12057_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alarm)
 	ret = regmap_bulk_read(data->regmap, ISL12057_REG_A1_SC, regs,
 			       ISL12057_A1_SEC_LEN);
 	if (ret) {
-		dev_err(dev, "%s: reading alarm section failed (%d)\n",
-			__func__, ret);
+		dev_err(dev, "reading alarm section failed (%d)\n", ret);
 		goto err_unlock;
 	}
 
@@ -297,8 +295,7 @@ static int isl12057_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alarm)
 
 	ret = regmap_read(data->regmap, ISL12057_REG_INT, &ir);
 	if (ret) {
-		dev_err(dev, "%s: reading alarm interrupt flag failed (%d)\n",
-			__func__, ret);
+		dev_err(dev, "reading alarm interrupt flag failed (%d)\n", ret);
 		goto err_unlock;
 	}
 
@@ -354,8 +351,7 @@ static int isl12057_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alarm)
 			goto err_unlock;
 
 		if (alarm_secs > rtc_secs) {
-			dev_err(dev, "%s: max for alarm is one month (%d)\n",
-				__func__, ret);
+			dev_err(dev, "max for alarm is one month (%d)\n", ret);
 			ret = -EINVAL;
 			goto err_unlock;
 		}
@@ -364,8 +360,7 @@ static int isl12057_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alarm)
 	/* Disable the alarm before modifying it */
 	ret = _isl12057_rtc_update_alarm(dev, 0);
 	if (ret < 0) {
-		dev_err(dev, "%s: unable to disable the alarm (%d)\n",
-			__func__, ret);
+		dev_err(dev, "unable to disable the alarm (%d)\n", ret);
 		goto err_unlock;
 	}
 
@@ -378,8 +373,7 @@ static int isl12057_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alarm)
 	ret = regmap_bulk_write(data->regmap, ISL12057_REG_A1_SC, regs,
 				ISL12057_A1_SEC_LEN);
 	if (ret < 0) {
-		dev_err(dev, "%s: writing alarm section failed (%d)\n",
-			__func__, ret);
+		dev_err(dev, "writing alarm section failed (%d)\n", ret);
 		goto err_unlock;
 	}
 
@@ -406,8 +400,7 @@ static int isl12057_rtc_set_time(struct device *dev, struct rtc_time *tm)
 	ret = regmap_bulk_write(data->regmap, ISL12057_REG_RTC_SC, regs,
 				ISL12057_RTC_SEC_LEN);
 	if (ret) {
-		dev_err(dev, "%s: unable to write RTC time section (%d)\n",
-			__func__, ret);
+		dev_err(dev, "unable to write RTC time section (%d)\n", ret);
 		goto out;
 	}
 
@@ -418,8 +411,7 @@ static int isl12057_rtc_set_time(struct device *dev, struct rtc_time *tm)
 	ret = regmap_update_bits(data->regmap, ISL12057_REG_SR,
 				 ISL12057_REG_SR_OSF, 0);
 	if (ret < 0)
-		dev_err(dev, "%s: unable to clear osc. failure bit (%d)\n",
-			__func__, ret);
+		dev_err(dev, "unable to clear osc. failure bit (%d)\n", ret);
 
 out:
 	mutex_unlock(&data->lock);
@@ -440,8 +432,7 @@ static int isl12057_check_rtc_status(struct device *dev, struct regmap *regmap)
 	ret = regmap_update_bits(regmap, ISL12057_REG_INT,
 				 ISL12057_REG_INT_EOSC, 0);
 	if (ret < 0) {
-		dev_err(dev, "%s: unable to enable oscillator (%d)\n",
-			__func__, ret);
+		dev_err(dev, "unable to enable oscillator (%d)\n", ret);
 		return ret;
 	}
 
@@ -449,8 +440,7 @@ static int isl12057_check_rtc_status(struct device *dev, struct regmap *regmap)
 	ret = regmap_update_bits(regmap, ISL12057_REG_SR,
 				 ISL12057_REG_SR_A1F, 0);
 	if (ret < 0) {
-		dev_err(dev, "%s: unable to clear alarm bit (%d)\n",
-			__func__, ret);
+		dev_err(dev, "unable to clear alarm bit (%d)\n", ret);
 		return ret;
 	}
 
@@ -556,8 +546,7 @@ static int isl12057_probe(struct i2c_client *client,
 	regmap = devm_regmap_init_i2c(client, &isl12057_rtc_regmap_config);
 	if (IS_ERR(regmap)) {
 		ret = PTR_ERR(regmap);
-		dev_err(dev, "%s: regmap allocation failed (%d)\n",
-			__func__, ret);
+		dev_err(dev, "regmap allocation failed (%d)\n", ret);
 		return ret;
 	}
 
@@ -585,7 +574,7 @@ static int isl12057_probe(struct i2c_client *client,
 		if (!ret)
 			data->irq = client->irq;
 		else
-			dev_err(dev, "%s: irq %d unavailable (%d)\n", __func__,
+			dev_err(dev, "irq %d unavailable (%d)\n",
 				client->irq, ret);
 	}
 
@@ -596,8 +585,7 @@ static int isl12057_probe(struct i2c_client *client,
 					     THIS_MODULE);
 	ret = PTR_ERR_OR_ZERO(data->rtc);
 	if (ret) {
-		dev_err(dev, "%s: unable to register RTC device (%d)\n",
-			__func__, ret);
+		dev_err(dev, "unable to register RTC device (%d)\n", ret);
 		goto err;
 	}
 
