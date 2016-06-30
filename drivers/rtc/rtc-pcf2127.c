@@ -56,7 +56,7 @@ static int pcf2127_rtc_read_time(struct device *dev, struct rtc_time *tm)
 	ret = regmap_bulk_read(pcf2127->regmap, PCF2127_REG_CTRL1, buf,
 				sizeof(buf));
 	if (ret) {
-		dev_err(dev, "%s: read error\n", __func__);
+		dev_err(dev, "read error\n");
 		return ret;
 	}
 
@@ -132,7 +132,7 @@ static int pcf2127_rtc_set_time(struct device *dev, struct rtc_time *tm)
 	err = regmap_bulk_write(pcf2127->regmap, PCF2127_REG_SC, buf, i);
 	if (err) {
 		dev_err(dev,
-			"%s: err=%d", __func__, err);
+			"err=%d", err);
 		return err;
 	}
 
@@ -292,8 +292,8 @@ static int pcf2127_i2c_probe(struct i2c_client *client,
 	regmap = devm_regmap_init(&client->dev, &pcf2127_i2c_regmap,
 					&client->dev, &config);
 	if (IS_ERR(regmap)) {
-		dev_err(&client->dev, "%s: regmap allocation failed: %ld\n",
-			__func__, PTR_ERR(regmap));
+		dev_err(&client->dev, "regmap allocation failed: %ld\n",
+			PTR_ERR(regmap));
 		return PTR_ERR(regmap);
 	}
 
@@ -356,8 +356,8 @@ static int pcf2127_spi_probe(struct spi_device *spi)
 
 	regmap = devm_regmap_init_spi(spi, &config);
 	if (IS_ERR(regmap)) {
-		dev_err(&spi->dev, "%s: regmap allocation failed: %ld\n",
-			__func__, PTR_ERR(regmap));
+		dev_err(&spi->dev, "regmap allocation failed: %ld\n",
+			PTR_ERR(regmap));
 		return PTR_ERR(regmap);
 	}
 
