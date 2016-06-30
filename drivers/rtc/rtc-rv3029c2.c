@@ -378,14 +378,14 @@ static int rv3029_read_time(struct device *dev, struct rtc_time *tm)
 
 	ret = rv3029_get_sr(dev, buf);
 	if (ret < 0) {
-		dev_err(dev, "%s: reading SR failed\n", __func__);
+		dev_err(dev, "reading SR failed\n");
 		return -EIO;
 	}
 
 	ret = rv3029_read_regs(dev, RV3029_W_SEC, regs,
 			       RV3029_WATCH_SECTION_LEN);
 	if (ret < 0) {
-		dev_err(dev, "%s: reading RTC section failed\n", __func__);
+		dev_err(dev, "reading RTC section failed\n");
 		return ret;
 	}
 
@@ -421,7 +421,7 @@ static int rv3029_read_alarm(struct device *dev, struct rtc_wkalrm *alarm)
 
 	ret = rv3029_get_sr(dev, regs);
 	if (ret < 0) {
-		dev_err(dev, "%s: reading SR failed\n", __func__);
+		dev_err(dev, "reading SR failed\n");
 		return -EIO;
 	}
 
@@ -429,7 +429,7 @@ static int rv3029_read_alarm(struct device *dev, struct rtc_wkalrm *alarm)
 			       RV3029_ALARM_SECTION_LEN);
 
 	if (ret < 0) {
-		dev_err(dev, "%s: reading alarm section failed\n", __func__);
+		dev_err(dev, "reading alarm section failed\n");
 		return ret;
 	}
 
@@ -500,7 +500,7 @@ static int rv3029_set_alarm(struct device *dev, struct rtc_wkalrm *alarm)
 
 	ret = rv3029_get_sr(dev, regs);
 	if (ret < 0) {
-		dev_err(dev, "%s: reading SR failed\n", __func__);
+		dev_err(dev, "reading SR failed\n");
 		return -EIO;
 	}
 
@@ -567,13 +567,13 @@ static int rv3029_set_time(struct device *dev, struct rtc_time *tm)
 
 	ret = rv3029_get_sr(dev, regs);
 	if (ret < 0) {
-		dev_err(dev, "%s: reading SR failed\n", __func__);
+		dev_err(dev, "reading SR failed\n");
 		return ret;
 	}
 	/* clear PON bit */
 	ret = rv3029_set_sr(dev, (regs[0] & ~RV3029_STATUS_PON));
 	if (ret < 0) {
-		dev_err(dev, "%s: reading SR failed\n", __func__);
+		dev_err(dev, "reading SR failed\n");
 		return ret;
 	}
 
@@ -860,8 +860,8 @@ static int rv3029_i2c_probe(struct i2c_client *client,
 
 	regmap = devm_regmap_init_i2c(client, &config);
 	if (IS_ERR(regmap)) {
-		dev_err(&client->dev, "%s: regmap allocation failed: %ld\n",
-			__func__, PTR_ERR(regmap));
+		dev_err(&client->dev, "regmap allocation failed: %ld\n",
+			PTR_ERR(regmap));
 		return PTR_ERR(regmap);
 	}
 
@@ -918,8 +918,8 @@ static int rv3049_probe(struct spi_device *spi)
 
 	regmap = devm_regmap_init_spi(spi, &config);
 	if (IS_ERR(regmap)) {
-		dev_err(&spi->dev, "%s: regmap allocation failed: %ld\n",
-			__func__, PTR_ERR(regmap));
+		dev_err(&spi->dev, "regmap allocation failed: %ld\n",
+			PTR_ERR(regmap));
 		return PTR_ERR(regmap);
 	}
 
