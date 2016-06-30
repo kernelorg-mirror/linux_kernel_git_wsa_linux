@@ -450,8 +450,7 @@ static irqreturn_t hym8563_irq(int irq, void *dev_id)
 
 	data = i2c_smbus_read_byte_data(client, HYM8563_CTL2);
 	if (data < 0) {
-		dev_err(&client->dev, "%s: error reading i2c data %d\n",
-			__func__, data);
+		dev_err(&client->dev, "error reading i2c data %d\n", data);
 		goto out;
 	}
 
@@ -459,8 +458,7 @@ static irqreturn_t hym8563_irq(int irq, void *dev_id)
 
 	ret = i2c_smbus_write_byte_data(client, HYM8563_CTL2, data);
 	if (ret < 0) {
-		dev_err(&client->dev, "%s: error writing i2c data %d\n",
-			__func__, ret);
+		dev_err(&client->dev, "error writing i2c data %d\n", ret);
 	}
 
 out:
