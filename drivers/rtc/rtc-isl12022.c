@@ -73,8 +73,7 @@ static int isl12022_read_regs(struct i2c_client *client, uint8_t reg,
 	data[0] = reg;
 	ret = i2c_transfer(client->adapter, msgs, ARRAY_SIZE(msgs));
 	if (ret != ARRAY_SIZE(msgs)) {
-		dev_err(&client->dev, "%s: read error, ret=%d\n",
-			__func__, ret);
+		dev_err(&client->dev, "read error, ret=%d\n", ret);
 		return -EIO;
 	}
 
@@ -91,8 +90,8 @@ static int isl12022_write_reg(struct i2c_client *client,
 	err = i2c_master_send(client, data, sizeof(data));
 	if (err != sizeof(data)) {
 		dev_err(&client->dev,
-			"%s: err=%d addr=%02x, data=%02x\n",
-			__func__, err, data[0], data[1]);
+			"err=%d addr=%02x, data=%02x\n", err, data[0],
+			data[1]);
 		return -EIO;
 	}
 
