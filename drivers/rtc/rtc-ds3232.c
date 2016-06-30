@@ -430,8 +430,8 @@ static int ds3232_i2c_probe(struct i2c_client *client,
 
 	regmap = devm_regmap_init_i2c(client, &config);
 	if (IS_ERR(regmap)) {
-		dev_err(&client->dev, "%s: regmap allocation failed: %ld\n",
-			__func__, PTR_ERR(regmap));
+		dev_err(&client->dev, "regmap allocation failed: %ld\n",
+			PTR_ERR(regmap));
 		return PTR_ERR(regmap);
 	}
 
@@ -491,8 +491,8 @@ static int ds3234_probe(struct spi_device *spi)
 
 	regmap = devm_regmap_init_spi(spi, &config);
 	if (IS_ERR(regmap)) {
-		dev_err(&spi->dev, "%s: regmap allocation failed: %ld\n",
-			__func__, PTR_ERR(regmap));
+		dev_err(&spi->dev, "regmap allocation failed: %ld\n",
+			PTR_ERR(regmap));
 		return PTR_ERR(regmap);
 	}
 
