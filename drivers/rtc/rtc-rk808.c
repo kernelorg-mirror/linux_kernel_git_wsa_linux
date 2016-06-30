@@ -322,7 +322,7 @@ static irqreturn_t rk808_alarm_irq(int irq, void *data)
 			   RTC_STATUS_MASK);
 	if (ret) {
 		dev_err(&client->dev,
-			"%s:Failed to update RTC status: %d\n", __func__, ret);
+			"Failed to update RTC status: %d\n", ret);
 		return ret;
 	}
 
