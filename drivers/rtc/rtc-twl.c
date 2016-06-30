@@ -254,7 +254,7 @@ static int twl_rtc_read_time(struct device *dev, struct rtc_time *tm)
 
 	ret = twl_rtc_read_u8(&save_control, REG_RTC_CTRL_REG);
 	if (ret < 0) {
-		dev_err(dev, "%s: reading CTRL_REG, error %d\n", __func__, ret);
+		dev_err(dev, "reading CTRL_REG, error %d\n", ret);
 		return ret;
 	}
 	/* for twl6030/32 make sure BIT_RTC_CTRL_REG_GET_TIME_M is clear */
@@ -263,8 +263,7 @@ static int twl_rtc_read_time(struct device *dev, struct rtc_time *tm)
 			save_control &= ~BIT_RTC_CTRL_REG_GET_TIME_M;
 			ret = twl_rtc_write_u8(save_control, REG_RTC_CTRL_REG);
 			if (ret < 0) {
-				dev_err(dev, "%s clr GET_TIME, error %d\n",
-					__func__, ret);
+				dev_err(dev, "clr GET_TIME, error %d\n", ret);
 				return ret;
 			}
 		}
@@ -279,7 +278,7 @@ static int twl_rtc_read_time(struct device *dev, struct rtc_time *tm)
 
 	ret = twl_rtc_write_u8(rtc_control, REG_RTC_CTRL_REG);
 	if (ret < 0) {
-		dev_err(dev, "%s: writing CTRL_REG, error %d\n", __func__, ret);
+		dev_err(dev, "writing CTRL_REG, error %d\n", ret);
 		return ret;
 	}
 
@@ -287,7 +286,7 @@ static int twl_rtc_read_time(struct device *dev, struct rtc_time *tm)
 			(rtc_reg_map[REG_SECONDS_REG]), ALL_TIME_REGS);
 
 	if (ret < 0) {
-		dev_err(dev, "%s: reading data, error %d\n", __func__, ret);
+		dev_err(dev, "reading data, error %d\n", ret);
 		return ret;
 	}
 
@@ -295,8 +294,7 @@ static int twl_rtc_read_time(struct device *dev, struct rtc_time *tm)
 	if (twl_class_is_6030()) {
 		ret = twl_rtc_write_u8(save_control, REG_RTC_CTRL_REG);
 		if (ret < 0) {
-			dev_err(dev, "%s: restore CTRL_REG, error %d\n",
-				__func__, ret);
+			dev_err(dev, "restore CTRL_REG, error %d\n", ret);
 			return ret;
 		}
 	}
