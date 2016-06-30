@@ -320,7 +320,7 @@ static int mpc5121_rtc_probe(struct platform_device *op)
 
 	rtc->regs = of_iomap(op->dev.of_node, 0);
 	if (!rtc->regs) {
-		dev_err(&op->dev, "%s: couldn't map io space\n", __func__);
+		dev_err(&op->dev, "couldn't map io space\n");
 		return -ENOSYS;
 	}
 
@@ -332,8 +332,7 @@ static int mpc5121_rtc_probe(struct platform_device *op)
 	err = request_irq(rtc->irq, mpc5121_rtc_handler, 0,
 						"mpc5121-rtc", &op->dev);
 	if (err) {
-		dev_err(&op->dev, "%s: could not request irq: %i\n",
-							__func__, rtc->irq);
+		dev_err(&op->dev, "could not request irq: %i\n", rtc->irq);
 		goto out_dispose;
 	}
 
@@ -341,8 +340,8 @@ static int mpc5121_rtc_probe(struct platform_device *op)
 	err = request_irq(rtc->irq_periodic, mpc5121_rtc_handler_upd,
 				0, "mpc5121-rtc_upd", &op->dev);
 	if (err) {
-		dev_err(&op->dev, "%s: could not request irq: %i\n",
-						__func__, rtc->irq_periodic);
+		dev_err(&op->dev, "could not request irq: %i\n",
+			rtc->irq_periodic);
 		goto out_dispose2;
 	}
 
