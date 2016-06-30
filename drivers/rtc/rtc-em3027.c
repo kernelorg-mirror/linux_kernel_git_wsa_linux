@@ -65,7 +65,7 @@ static int em3027_get_time(struct device *dev, struct rtc_time *tm)
 
 	/* read time/date registers */
 	if ((i2c_transfer(client->adapter, &msgs[0], 2)) != 2) {
-		dev_err(&client->dev, "%s: read error\n", __func__);
+		dev_err(&client->dev, "read error\n");
 		return -EIO;
 	}
 
@@ -102,7 +102,7 @@ static int em3027_set_time(struct device *dev, struct rtc_time *tm)
 
 	/* write time/date registers */
 	if ((i2c_transfer(client->adapter, &msg, 1)) != 1) {
-		dev_err(&client->dev, "%s: write error\n", __func__);
+		dev_err(&client->dev, "write error\n");
 		return -EIO;
 	}
 
