@@ -22,7 +22,7 @@
 #include <linux/mfd/da9052/reg.h>
 
 #define rtc_err(rtc, fmt, ...) \
-		dev_err(rtc->da9052->dev, "%s: " fmt, __func__, ##__VA_ARGS__)
+		dev_err(rtc->da9052->dev, fmt,  ##__VA_ARGS__)
 
 #define DA9052_GET_TIME_RETRIES 5
 
