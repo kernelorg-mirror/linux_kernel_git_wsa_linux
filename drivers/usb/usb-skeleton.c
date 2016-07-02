@@ -173,8 +173,8 @@ static void skel_read_bulk_callback(struct urb *urb)
 		    urb->status == -ECONNRESET ||
 		    urb->status == -ESHUTDOWN))
 			dev_err(&dev->interface->dev,
-				"%s - nonzero write bulk status received: %d\n",
-				__func__, urb->status);
+				"nonzero read bulk status received: %d\n",
+				urb->status);
 
 		dev->errors = urb->status;
 	} else {
@@ -344,8 +344,8 @@ static void skel_write_bulk_callback(struct urb *urb)
 		    urb->status == -ECONNRESET ||
 		    urb->status == -ESHUTDOWN))
 			dev_err(&dev->interface->dev,
-				"%s - nonzero write bulk status received: %d\n",
-				__func__, urb->status);
+				"nonzero write bulk status received: %d\n",
+				urb->status);
 
 		spin_lock(&dev->err_lock);
 		dev->errors = urb->status;
