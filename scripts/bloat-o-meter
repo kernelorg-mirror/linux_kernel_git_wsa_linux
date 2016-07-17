@@ -7,11 +7,23 @@
 # This software may be used and distributed according to the terms
 # of the GNU General Public License, incorporated herein by reference.
 
-import sys, os, re
+import sys, os, re, getopt
 
-if len(sys.argv) != 3:
-    sys.stderr.write("usage: %s file1 file2\n" % sys.argv[0])
+do_sections = do_functions = False
+
+options, remainder = getopt.gnu_getopt(sys.argv[1:], 'sf', [ 'sections', 'functions' ])
+if len(remainder) != 2:
+    sys.stderr.write("usage: %s [-f|--functions] [-s|--sections] file1 file2\n" % sys.argv[0])
     sys.exit(-1)
+
+for opt, arg in options:
+    if opt in ('-s', '--sections'):
+        do_sections = True
+    if opt in ('-f', '--functions'):
+        do_functions = True
+
+if not options:
+    do_functions = True
 
 def getsizes(file):
     sym = {}
@@ -86,6 +98,12 @@ def print_delta(type, old, new):
 
     return
 
-old = getsizes(sys.argv[1])
-new = getsizes(sys.argv[2])
-print_delta("function", old, new)
+if do_functions:
+    old = getsizes(remainder[0])
+    new = getsizes(remainder[1])
+    print_delta("function", old, new)
+
+if do_sections:
+    old = getsections(remainder[0])
+    new = getsections(remainder[1])
+    print_delta("section", old, new)
