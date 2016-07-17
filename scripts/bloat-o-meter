@@ -28,6 +28,21 @@ def getsizes(file):
             sym[name] = sym.get(name, 0) + int(size, 16)
     return sym
 
+def getsections(file):
+    sym = {}
+    for l in os.popen("objdump -h -w " + file).readlines():
+        line_tokens = l.split()
+        # retain Size column index
+        if "Size" in l:
+            idx = line_tokens.index("Size")
+        # cumulate all section's sizes
+        for section in ".rodata", ".text", ".debug":
+            if section in l:
+                if section not in sym:
+                    sym[section] = 0
+                sym[section] += int(line_tokens[idx], 16)
+    return sym
+
 def print_delta(type, old, new):
     grow, shrink, add, remove, up, down = 0, 0, 0, 0, 0, 0
     delta, common = [], {}
