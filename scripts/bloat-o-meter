@@ -28,44 +28,49 @@ def getsizes(file):
             sym[name] = sym.get(name, 0) + int(size, 16)
     return sym
 
+def print_delta(type, old, new):
+    grow, shrink, add, remove, up, down = 0, 0, 0, 0, 0, 0
+    delta, common = [], {}
+    otot, ntot = 0, 0
+
+    for a in old:
+        if a in new:
+            common[a] = 1
+
+    for name in old:
+        otot += old[name]
+        if name not in common:
+            remove += 1
+            down += old[name]
+            delta.append((-old[name], name))
+
+    for name in new:
+        ntot += new[name]
+        if name not in common:
+            add += 1
+            up += new[name]
+            delta.append((new[name], name))
+
+    for name in common:
+            d = new.get(name, 0) - old.get(name, 0)
+            if d>0: grow, up = grow+1, up+d
+            if d<0: shrink, down = shrink+1, down-d
+            delta.append((d, name))
+
+    delta.sort()
+    delta.reverse()
+
+    print("add/remove: %s/%s grow/shrink: %s/%s up/down: %s/%s (%s)" % \
+          (add, remove, grow, shrink, up, -down, up-down))
+    print("%-40s %7s %7s %+7s" % (type, "old", "new", "delta"))
+    for d, n in delta:
+        if d: print("%-40s %7s %7s %+7d" % (n, old.get(n,"-"), new.get(n,"-"), d))
+
+    print("Total: Before=%d, After=%d, chg %f%%" % \
+        (otot, ntot, (ntot - otot) * 100.0 / otot))
+
+    return
+
 old = getsizes(sys.argv[1])
 new = getsizes(sys.argv[2])
-grow, shrink, add, remove, up, down = 0, 0, 0, 0, 0, 0
-delta, common = [], {}
-otot, ntot = 0, 0
-
-for a in old:
-    if a in new:
-        common[a] = 1
-
-for name in old:
-    otot += old[name]
-    if name not in common:
-        remove += 1
-        down += old[name]
-        delta.append((-old[name], name))
-
-for name in new:
-    ntot += new[name]
-    if name not in common:
-        add += 1
-        up += new[name]
-        delta.append((new[name], name))
-
-for name in common:
-        d = new.get(name, 0) - old.get(name, 0)
-        if d>0: grow, up = grow+1, up+d
-        if d<0: shrink, down = shrink+1, down-d
-        delta.append((d, name))
-
-delta.sort()
-delta.reverse()
-
-print("add/remove: %s/%s grow/shrink: %s/%s up/down: %s/%s (%s)" % \
-      (add, remove, grow, shrink, up, -down, up-down))
-print("%-40s %7s %7s %+7s" % ("function", "old", "new", "delta"))
-for d, n in delta:
-    if d: print("%-40s %7s %7s %+7d" % (n, old.get(n,"-"), new.get(n,"-"), d))
-
-print("Total: Before=%d, After=%d, chg %f%%" % \
-    (otot, ntot, (ntot - otot) * 100.0 / otot))
+print_delta("function", old, new)
