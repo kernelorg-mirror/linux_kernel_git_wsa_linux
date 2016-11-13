@@ -197,6 +197,8 @@ static void tmio_mmc_enable_sdio_irq(struct mmc_host *mmc, int enable)
 		pm_runtime_mark_last_busy(mmc_dev(mmc));
 		pm_runtime_put_autosuspend(mmc_dev(mmc));
 	}
+
+	mdelay(1); // Huh? A race condition somewhere?
 }
 
 static void tmio_mmc_clk_start(struct tmio_mmc_host *host)
