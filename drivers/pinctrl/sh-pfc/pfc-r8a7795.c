@@ -5416,6 +5416,9 @@ static int r8a7795_pinmux_init(struct sh_pfc *pfc)
 		pr_info("%s: R-Car H3 >= ES2.0\n", __func__);
 		// FIXME Fixup r8a7795_pinmux_info for ES2.0
 	}
+
+#define TDSEL 0xe60603c0
+	sh_pfc_write_reg(pfc, TDSEL, 32, 0xc3);
 	return 0;
 }
 
