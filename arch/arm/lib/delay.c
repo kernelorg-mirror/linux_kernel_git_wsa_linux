@@ -60,6 +60,7 @@ static void __timer_delay(unsigned long cycles)
 
 	while ((get_cycles() - start) < cycles)
 		cpu_relax();
+	trace_printk("%lu\n", cycles);
 }
 
 static void __timer_const_udelay(unsigned long xloops)

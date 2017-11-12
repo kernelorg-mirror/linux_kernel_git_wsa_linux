@@ -62,6 +62,7 @@ void mmc_set_initial_state(struct mmc_host *host);
 
 static inline void mmc_delay(unsigned int ms)
 {
+	trace_printk("%d ms\n", ms);
 	if (ms <= 20)
 		usleep_range(ms * 1000, ms * 1250);
 	else
