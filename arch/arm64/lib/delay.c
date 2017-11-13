@@ -30,7 +30,6 @@ void __delay(unsigned long cycles)
 
 	while ((get_cycles() - start) < cycles)
 		cpu_relax();
-	trace_printk("%lu\n", cycles);
 }
 EXPORT_SYMBOL(__delay);
 
