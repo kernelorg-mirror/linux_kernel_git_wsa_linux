@@ -2335,6 +2335,35 @@ static int mmc_test_reset(struct mmc_test_card *test)
 	return RESULT_FAIL;
 }
 
+/*
+ * Test tuning (SDR104, HS200 and upwards)
+ */
+
+#define NUM_TUNE_TESTS 1000
+
+static int mmc_test_retune(struct mmc_test_card *test)
+{
+	struct mmc_host *host = test->card->host;
+	unsigned int fail = 0, i;
+
+/* FIXME
+ * if (!card_can_retune)
+ * 	return RESULT_UNSUP_CARD;
+ */
+
+	for (i = 0; i < NUM_TUNE_TESTS; i++) {
+		mmc_retune_needed(host);
+		mmc_retune_recheck(host);
+		if (mmc_retune(host))
+			fail++;
+	}
+
+	pr_info("%s: %u out of %u retunes failed\n", mmc_hostname(host),
+		fail, NUM_TUNE_TESTS);
+
+	return fail == 0 ? RESULT_OK : RESULT_FAIL;
+}
+
 static int mmc_test_send_status(struct mmc_test_card *test,
 				struct mmc_command *cmd)
 {
@@ -2918,6 +2947,12 @@ static const struct mmc_test_case mmc_test_cases[] = {
 		.run = mmc_test_cmds_during_write_cmd23_nonblock,
 		.cleanup = mmc_test_area_cleanup,
 	},
+
+	{
+		.name = "Retuning test",
+		.run = mmc_test_retune,
+	},
+
 };
 
 static DEFINE_MUTEX(mmc_test_lock);
