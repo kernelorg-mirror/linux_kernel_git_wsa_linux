@@ -115,9 +115,6 @@ static int msm_hdmi_i2c_xfer(struct i2c_adapter *i2c,
 
 	WARN_ON(!(hdmi_read(hdmi, REG_HDMI_CTRL) & HDMI_CTRL_ENABLE));
 
-	if (num == 0)
-		return num;
-
 	init_ddc(hdmi_i2c);
 
 	ret = ddc_clear_irq(hdmi_i2c);
