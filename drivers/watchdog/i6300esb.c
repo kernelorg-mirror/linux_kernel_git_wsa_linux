@@ -356,7 +356,7 @@ static struct pci_driver esb_driver = {
 	.remove         = esb_remove,
 };
 
-module_pci_driver(esb_driver);
+module_watchdog_pci_driver(esb_driver, nowayout);
 
 MODULE_AUTHOR("Ross Biro and David Härdeman");
 MODULE_DESCRIPTION("Watchdog driver for Intel 6300ESB chipsets");
