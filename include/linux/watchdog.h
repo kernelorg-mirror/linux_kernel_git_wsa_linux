@@ -233,4 +233,8 @@ module_exit(__driver##_exit)
 	module_watchdog_driver(__platform_driver, platform_driver_register, \
 				platform_driver_unregister, __nowayout)
 
+#define module_watchdog_pci_driver(__pci_driver, __nowayout) \
+	module_watchdog_driver(__pci_driver, pci_register_driver, \
+				pci_unregister_driver, __nowayout)
+
 #endif  /* ifndef _LINUX_WATCHDOG_H */
