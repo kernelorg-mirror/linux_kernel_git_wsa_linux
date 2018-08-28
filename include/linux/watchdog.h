@@ -216,4 +216,21 @@ extern void watchdog_unregister_device(struct watchdog_device *);
 /* devres register variant */
 int devm_watchdog_register_device(struct device *dev, struct watchdog_device *);
 
+#define module_watchdog_driver(__driver, __register, __unregister, __nowayout, ...) \
+static int __init __driver##_init(void) \
+{ \
+	__driver.driver.suppress_bind_attrs = !!(__nowayout); \
+	return __register(&(__driver)  ##__VA_ARGS__); \
+} \
+module_init(__driver##_init); \
+static void __exit __driver##_exit(void) \
+{ \
+	__unregister(&(__driver), ##__VA_ARGS__); \
+} \
+module_exit(__driver##_exit)
+
+#define module_watchdog_platform_driver(__platform_driver, __nowayout) \
+	module_watchdog_driver(__platform_driver, platform_driver_register, \
+				platform_driver_unregister, __nowayout)
+
 #endif  /* ifndef _LINUX_WATCHDOG_H */
