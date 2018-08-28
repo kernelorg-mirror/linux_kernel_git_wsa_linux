@@ -302,7 +302,7 @@ static struct platform_driver rwdt_driver = {
 	.probe = rwdt_probe,
 	.remove = rwdt_remove,
 };
-module_platform_driver(rwdt_driver);
+module_watchdog_platform_driver(rwdt_driver, nowayout);
 
 MODULE_DESCRIPTION("Renesas WDT Watchdog Driver");
 MODULE_LICENSE("GPL v2");
