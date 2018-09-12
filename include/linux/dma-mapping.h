@@ -663,11 +663,12 @@ static inline void arch_setup_dma_ops(struct device *dev, u64 dma_base,
 				      bool coherent) { }
 #endif
 
-#ifndef arch_teardown_dma_ops
-static inline void arch_teardown_dma_ops(struct device *dev)
+static inline void generic_teardown_dma_ops(struct device *dev)
 {
 	dev->dma_ops = NULL;
 }
+#ifndef arch_teardown_dma_ops
+#define arch_teardown_dma_ops generic_teardown_dma_ops
 #endif
 
 static inline unsigned int dma_get_max_seg_size(struct device *dev)
