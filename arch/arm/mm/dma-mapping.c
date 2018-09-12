@@ -2399,5 +2399,5 @@ void arch_teardown_dma_ops(struct device *dev)
 	if (dev->archdata.dma_ops_setup)
 		arm_teardown_iommu_dma_ops(dev);
 
-	generic_teardown_dma_ops(dev);
+	generic_teardown_dma(dev);
 }
