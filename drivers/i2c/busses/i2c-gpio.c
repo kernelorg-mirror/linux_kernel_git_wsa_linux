@@ -7,12 +7,14 @@
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
  */
+#include <linux/completion.h>
 #include <linux/debugfs.h>
 #include <linux/delay.h>
 #include <linux/gpio/consumer.h>
 #include <linux/i2c-algo-bit.h>
 #include <linux/i2c.h>
 #include <linux/init.h>
+#include <linux/interrupt.h>
 #include <linux/module.h>
 #include <linux/of.h>
 #include <linux/platform_data/i2c-gpio.h>
@@ -27,6 +29,7 @@ struct i2c_gpio_private_data {
 	struct i2c_gpio_platform_data pdata;
 #ifdef CONFIG_I2C_GPIO_FAULT_INJECTOR
 	struct dentry *debug_dir;
+	struct completion irq_happened;
 #endif
 };
 
@@ -162,6 +165,59 @@ static int fops_incomplete_write_byte_set(void *data, u64 addr)
 }
 DEFINE_DEBUGFS_ATTRIBUTE(fops_incomplete_write_byte, NULL, fops_incomplete_write_byte_set, "%llu\n");
 
+static irqreturn_t lose_arbitration_irq(int irq, void *dev_id)
+{
+	struct i2c_gpio_private_data *priv = dev_id;
+
+	setsda(&priv->bit_data, 0);
+	udelay(200);
+	setsda(&priv->bit_data, 1);
+
+	complete(&priv->irq_happened);
+	return IRQ_HANDLED;
+}
+
+static int fops_lose_arbitration_set(void *data, u64 num_faults)
+{
+	struct i2c_gpio_private_data *priv = data;
+	int irq = gpiod_to_irq(priv->scl);
+	int ret, i;
+
+	i2c_lock_bus(&priv->adap, I2C_LOCK_ROOT_ADAPTER);
+
+	/*
+	 * Interrupt on falling SCL. This ensures that the master under test has
+	 * really started the transfer. Interrupt on falling SDA did only
+	 * exercise 'bus busy' detection on some HW but not 'arbitration lost'.
+	 * Note that the interrupt latency may cause the first bits to be
+	 * transmitted correctly
+	 */
+	ret = gpiod_direction_input(priv->scl);
+	if (ret)
+		goto unlock;
+
+	ret = request_irq(irq, lose_arbitration_irq, IRQF_TRIGGER_FALLING,
+			  "i2c-gpio-fi", priv);
+	if (ret)
+		goto output;
+
+	for (i = 0; i < num_faults; i++) {
+		ret = wait_for_completion_interruptible(&priv->irq_happened);
+		if (ret)
+			break;
+		reinit_completion(&priv->irq_happened);
+	}
+
+	free_irq(irq, priv);
+ output:
+	ret = gpiod_direction_output(priv->scl, 1);
+ unlock:
+	i2c_unlock_bus(&priv->adap, I2C_LOCK_ROOT_ADAPTER);
+
+	return ret;
+}
+DEFINE_DEBUGFS_ATTRIBUTE(fops_lose_arbitration, NULL, fops_lose_arbitration_set, "%llu\n");
+
 static void i2c_gpio_fault_injector_init(struct platform_device *pdev)
 {
 	struct i2c_gpio_private_data *priv = platform_get_drvdata(pdev);
@@ -181,10 +237,15 @@ static void i2c_gpio_fault_injector_init(struct platform_device *pdev)
 	if (!priv->debug_dir)
 		return;
 
+	init_completion(&priv->irq_happened);
+
 	debugfs_create_file_unsafe("incomplete_address_phase", 0200, priv->debug_dir,
 				   priv, &fops_incomplete_addr_phase);
 	debugfs_create_file_unsafe("incomplete_write_byte", 0200, priv->debug_dir,
 				   priv, &fops_incomplete_write_byte);
+	if (priv->bit_data.getscl)
+		debugfs_create_file_unsafe("lose_arbitration", 0200, priv->debug_dir,
+					   priv, &fops_lose_arbitration);
 	debugfs_create_file_unsafe("scl", 0600, priv->debug_dir, priv, &fops_scl);
 	debugfs_create_file_unsafe("sda", 0600, priv->debug_dir, priv, &fops_sda);
 }
