@@ -25,6 +25,7 @@
 #include <linux/of_device.h>
 #include <linux/platform_device.h>
 #include <linux/mmc/host.h>
+#include <linux/mmc/mmc.h>
 #include <linux/mmc/slot-gpio.h>
 #include <linux/mfd/tmio.h>
 #include <linux/sh_dma.h>
@@ -248,6 +249,11 @@ static int renesas_sdhi_start_signal_voltage_switch(struct mmc_host *mmc,
 #define SH_MOBILE_SDHI_SCC_RVSCNTL	0x008
 #define SH_MOBILE_SDHI_SCC_RVSREQ	0x00A
 #define SH_MOBILE_SDHI_SCC_TMPPORT2	0x00E
+#define SH_MOBILE_SDHI_SCC_TMPPORT3	0x014
+#define SH_MOBILE_SDHI_SCC_TMPPORT4	0x016
+#define SH_MOBILE_SDHI_SCC_TMPPORT5	0x018
+#define SH_MOBILE_SDHI_SCC_TMPPORT6	0x01A
+#define SH_MOBILE_SDHI_SCC_TMPPORT7	0x01C
 
 /* Definitions for values the SH_MOBILE_SDHI_SCC_DTCNTL register */
 #define SH_MOBILE_SDHI_SCC_DTCNTL_TAPEN		BIT(0)
@@ -263,6 +269,19 @@ static int renesas_sdhi_start_signal_voltage_switch(struct mmc_host *mmc,
 /* Definitions for values the SH_MOBILE_SDHI_SCC_TMPPORT2 register */
 #define SH_MOBILE_SDHI_SCC_TMPPORT2_HS400OSEL	BIT(4)
 #define SH_MOBILE_SDHI_SCC_TMPPORT2_HS400EN	BIT(31)
+
+/* Definitions for values the SH_MOBILE_SDHI_SCC_TMPPORT4 register */
+#define SH_MOBILE_SDHI_SCC_TMPPORT4_DLL_ACC_START	BIT(0)
+
+/* Definitions for values the SH_MOBILE_SDHI_SCC_TMPPORT5 register */
+#define SH_MOBILE_SDHI_SCC_TMPPORT5_DLL_RW_SEL_R	BIT(8)
+#define SH_MOBILE_SDHI_SCC_TMPPORT5_DLL_RW_SEL_W	(0 << 8)
+#define SH_MOBILE_SDHI_SCC_TMPPORT5_DLL_ADR_MASK	0x3F
+
+/* Definitions for values the SH_MOBILE_SDHI_SCC register */
+#define SH_MOBILE_SDHI_SCC_TMPPORT_DISABLE_WP_CODE	0xa5000000
+#define SH_MOBILE_SDHI_SCC_TMPPORT_CALIB_CODE_MASK	0x1f
+#define SH_MOBILE_SDHI_SCC_TMPPORT_MANUAL_MODE		BIT(7)
 
 static inline u32 sd_scc_read32(struct tmio_mmc_host *host,
 				struct renesas_sdhi *priv, int addr)
@@ -386,6 +405,76 @@ static void renesas_sdhi_disable_scc(struct tmio_mmc_host *host)
 			sd_ctrl_read16(host, CTL_SD_CARD_CLK_CTL));
 }
 
+static u32 sd_scc_tmpport_read32(struct tmio_mmc_host *host,
+				 struct renesas_sdhi *priv, u32 addr)
+{
+	/* read mode */
+	sd_scc_write32(host, priv, SH_MOBILE_SDHI_SCC_TMPPORT5,
+		       SH_MOBILE_SDHI_SCC_TMPPORT5_DLL_RW_SEL_R |
+		       (SH_MOBILE_SDHI_SCC_TMPPORT5_DLL_ADR_MASK & addr));
+
+	/* access start and stop */
+	sd_scc_write32(host, priv, SH_MOBILE_SDHI_SCC_TMPPORT4,
+		       SH_MOBILE_SDHI_SCC_TMPPORT4_DLL_ACC_START);
+	sd_scc_write32(host, priv, SH_MOBILE_SDHI_SCC_TMPPORT4, 0);
+
+	return sd_scc_read32(host, priv, SH_MOBILE_SDHI_SCC_TMPPORT7);
+}
+
+static void sd_scc_tmpport_write32(struct tmio_mmc_host *host,
+				   struct renesas_sdhi *priv, u32 addr, u32 val)
+{
+	/* write mode */
+	sd_scc_write32(host, priv, SH_MOBILE_SDHI_SCC_TMPPORT5,
+		       SH_MOBILE_SDHI_SCC_TMPPORT5_DLL_RW_SEL_W |
+		       (SH_MOBILE_SDHI_SCC_TMPPORT5_DLL_ADR_MASK & addr));
+
+	sd_scc_write32(host, priv, SH_MOBILE_SDHI_SCC_TMPPORT6, val);
+
+	/* access start and stop */
+	sd_scc_write32(host, priv, SH_MOBILE_SDHI_SCC_TMPPORT4,
+		       SH_MOBILE_SDHI_SCC_TMPPORT4_DLL_ACC_START);
+	sd_scc_write32(host, priv, SH_MOBILE_SDHI_SCC_TMPPORT4, 0);
+}
+
+static void renesas_sdhi_adjust_hs400_mode_enable(struct tmio_mmc_host *host)
+{
+	struct renesas_sdhi *priv = host_to_priv(host);
+	u32 calib_code;
+
+	/* disable write protect */
+	sd_scc_tmpport_write32(host, priv, 0x00,
+			       SH_MOBILE_SDHI_SCC_TMPPORT_DISABLE_WP_CODE);
+	/* read calibration code and adjust */
+	calib_code = sd_scc_tmpport_read32(host, priv, 0x26);
+	calib_code &= SH_MOBILE_SDHI_SCC_TMPPORT_CALIB_CODE_MASK;
+	if (calib_code > priv->quirks->manual_calibration_fixup)
+		calib_code -= priv->quirks->manual_calibration_fixup;
+	else
+		calib_code = 0;
+	/* enable manual calibration */
+	sd_scc_tmpport_write32(host, priv, 0x22,
+			       SH_MOBILE_SDHI_SCC_TMPPORT_MANUAL_MODE | calib_code);
+	/* set offset value to TMPPORT3, hardcoded to OFFSET0 (= 0x3) for now */
+	sd_scc_write32(host, priv, SH_MOBILE_SDHI_SCC_TMPPORT3, 0x3);
+
+	/* adjustment done, clear flag */
+	priv->needs_adjust_hs400 = false;
+}
+
+static void renesas_sdhi_adjust_hs400_mode_disable(struct tmio_mmc_host *host)
+{
+	struct renesas_sdhi *priv = host_to_priv(host);
+
+	/* disable write protect */
+	sd_scc_tmpport_write32(host, priv, 0x00,
+			       SH_MOBILE_SDHI_SCC_TMPPORT_DISABLE_WP_CODE);
+	/* disable manual calibration */
+	sd_scc_tmpport_write32(host, priv, 0x22, 0);
+	/* clear offset value of TMPPORT3 */
+	sd_scc_write32(host, priv, SH_MOBILE_SDHI_SCC_TMPPORT3, 0);
+}
+
 static void renesas_sdhi_reset_hs400_mode(struct tmio_mmc_host *host,
 					  struct renesas_sdhi *priv)
 {
@@ -403,13 +492,20 @@ static void renesas_sdhi_reset_hs400_mode(struct tmio_mmc_host *host,
 			 SH_MOBILE_SDHI_SCC_TMPPORT2_HS400OSEL) &
 			sd_scc_read32(host, priv, SH_MOBILE_SDHI_SCC_TMPPORT2));
 
+	if (priv->quirks && priv->quirks->manual_calibration)
+		renesas_sdhi_adjust_hs400_mode_disable(host);
+
 	sd_ctrl_write16(host, CTL_SD_CARD_CLK_CTL, CLK_CTL_SCLKEN |
 			sd_ctrl_read16(host, CTL_SD_CARD_CLK_CTL));
 }
 
 static void renesas_sdhi_prepare_hs400_tuning(struct tmio_mmc_host *host)
 {
-	renesas_sdhi_reset_hs400_mode(host, host_to_priv(host));
+	struct renesas_sdhi *priv = host_to_priv(host);
+
+	renesas_sdhi_reset_hs400_mode(host, priv);
+	if (priv->quirks && priv->quirks->manual_calibration)
+		priv->needs_adjust_hs400 = true;
 }
 
 #define SH_MOBILE_SDHI_MAX_TAP 3
@@ -520,6 +616,7 @@ static void renesas_sdhi_hw_reset(struct tmio_mmc_host *host)
 
 	renesas_sdhi_reset_scc(host, priv);
 	renesas_sdhi_reset_hs400_mode(host, priv);
+	priv->needs_adjust_hs400 = false;
 
 	sd_ctrl_write16(host, CTL_SD_CARD_CLK_CTL, CLK_CTL_SCLKEN |
 			sd_ctrl_read16(host, CTL_SD_CARD_CLK_CTL));
@@ -596,6 +693,13 @@ static int renesas_sdhi_multi_io_quirk(struct mmc_card *card,
 	return blk_size;
 }
 
+static void renesas_sdhi_fixup_request(struct tmio_mmc_host *host, struct mmc_request *mrq)
+{
+	struct renesas_sdhi *priv = host_to_priv(host);
+
+	if (priv->needs_adjust_hs400 && mrq->cmd->opcode == MMC_SEND_STATUS)
+		renesas_sdhi_adjust_hs400_mode_enable(host);
+}
 static void renesas_sdhi_enable_dma(struct tmio_mmc_host *host, bool enable)
 {
 	/* Iff regs are 8 byte apart, sdbuf is 64 bit. Otherwise always 32. */
@@ -618,12 +722,24 @@ static const struct renesas_sdhi_quirks sdhi_quirks_nohs400 = {
 	.hs400_disabled = true,
 };
 
+static const struct renesas_sdhi_quirks sdhi_quirks_manual_calib0 = {
+	.manual_calibration = true,
+	.manual_calibration_fixup = 0,
+};
+
+static const struct renesas_sdhi_quirks sdhi_quirks_manual_calib4 = {
+	.manual_calibration = true,
+	.manual_calibration_fixup = 4,
+};
+
 static const struct soc_device_attribute sdhi_quirks_match[]  = {
 	{ .soc_id = "r8a774a1", .revision = "ES1.[012]", .data = &sdhi_quirks_4tap_nohs400 },
 	{ .soc_id = "r8a7795", .revision = "ES1.*", .data = &sdhi_quirks_4tap_nohs400 },
 	{ .soc_id = "r8a7795", .revision = "ES2.0", .data = &sdhi_quirks_4tap },
 	{ .soc_id = "r8a7796", .revision = "ES1.[012]", .data = &sdhi_quirks_4tap_nohs400 },
+	{ .soc_id = "r8a77965", .data = &sdhi_quirks_manual_calib0 },
 	{ .soc_id = "r8a77980", .data = &sdhi_quirks_nohs400 },
+	{ .soc_id = "r8a77990", .data = &sdhi_quirks_manual_calib4 },
 	{ /* Sentinel. */ },
 };
 
@@ -719,6 +835,9 @@ int renesas_sdhi_probe(struct platform_device *pdev,
 
 	if (quirks && quirks->hs400_4taps)
 		mmc_data->flags |= TMIO_MMC_HAVE_4TAP_HS400;
+
+	if (quirks && quirks->manual_calibration)
+		host->fixup_request = renesas_sdhi_fixup_request;
 
 	/* For some SoC, we disable internal WP. GPIO may override this */
 	if (mmc_can_gpio_ro(host->mmc))
