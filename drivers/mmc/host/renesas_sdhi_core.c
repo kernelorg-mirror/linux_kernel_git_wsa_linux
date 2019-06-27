@@ -460,6 +460,7 @@ static void renesas_sdhi_adjust_hs400_mode_enable(struct tmio_mmc_host *host)
 
 	/* adjustment done, clear flag */
 	priv->needs_adjust_hs400 = false;
+trace_printk("%s: adjustment enabled, flag disabled\n", dev_name(&host->pdev->dev));
 }
 
 static void renesas_sdhi_adjust_hs400_mode_disable(struct tmio_mmc_host *host)
@@ -473,6 +474,7 @@ static void renesas_sdhi_adjust_hs400_mode_disable(struct tmio_mmc_host *host)
 	sd_scc_tmpport_write32(host, priv, 0x22, 0);
 	/* clear offset value of TMPPORT3 */
 	sd_scc_write32(host, priv, SH_MOBILE_SDHI_SCC_TMPPORT3, 0);
+trace_printk("%s: adjustment disabled\n", dev_name(&host->pdev->dev));
 }
 
 static void renesas_sdhi_reset_hs400_mode(struct tmio_mmc_host *host,
@@ -504,8 +506,10 @@ static void renesas_sdhi_prepare_hs400_tuning(struct tmio_mmc_host *host)
 	struct renesas_sdhi *priv = host_to_priv(host);
 
 	renesas_sdhi_reset_hs400_mode(host, priv);
-	if (priv->quirks && priv->quirks->manual_calibration)
+	if (priv->quirks && priv->quirks->manual_calibration) {
 		priv->needs_adjust_hs400 = true;
+trace_printk("%s: flag enabled\n", dev_name(&host->pdev->dev));
+	}
 }
 
 #define SH_MOBILE_SDHI_MAX_TAP 3
@@ -617,6 +621,7 @@ static void renesas_sdhi_hw_reset(struct tmio_mmc_host *host)
 	renesas_sdhi_reset_scc(host, priv);
 	renesas_sdhi_reset_hs400_mode(host, priv);
 	priv->needs_adjust_hs400 = false;
+trace_printk("%s: reset! flag disabled\n", dev_name(&host->pdev->dev));
 
 	sd_ctrl_write16(host, CTL_SD_CARD_CLK_CTL, CLK_CTL_SCLKEN |
 			sd_ctrl_read16(host, CTL_SD_CARD_CLK_CTL));
@@ -697,6 +702,7 @@ static void renesas_sdhi_fixup_request(struct tmio_mmc_host *host, struct mmc_re
 {
 	struct renesas_sdhi *priv = host_to_priv(host);
 
+trace_printk("%s: opcode %u, flag %u\n", dev_name(&host->pdev->dev), mrq->cmd->opcode, priv->needs_adjust_hs400);
 	if (priv->needs_adjust_hs400 && mrq->cmd->opcode == MMC_SEND_STATUS)
 		renesas_sdhi_adjust_hs400_mode_enable(host);
 }
