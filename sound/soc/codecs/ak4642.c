@@ -639,6 +639,25 @@ static int ak4642_i2c_probe(struct i2c_client *i2c,
 	struct regmap *regmap;
 	struct ak4642_priv *priv;
 	struct clk *mcko = NULL;
+struct i2c_client *test, *test2, *test3;
+
+test = i2c_new_alias_device(i2c->adapter);
+printk(KERN_INFO "****** wsa: %08x %08x\n", test->addr, i2c->adapter->alias_idx);
+
+test2 = i2c_new_alias_device(i2c->adapter);
+printk(KERN_INFO "****** wsa: %08x %08x\n", test2->addr, i2c->adapter->alias_idx);
+
+//i2c_unregister_device(test2);
+//printk(KERN_INFO "****** wsa: %08x %08x\n", test2->addr, i2c->adapter->alias_idx);
+
+i2c_unregister_device(test);
+printk(KERN_INFO "****** wsa: %08x %08x\n", test->addr, i2c->adapter->alias_idx);
+
+test = i2c_new_alias_device(i2c->adapter);
+printk(KERN_INFO "****** wsa: %08x %08x\n", test->addr, i2c->adapter->alias_idx);
+
+test3 = i2c_new_alias_device(i2c->adapter);
+printk(KERN_INFO "****** wsa: %08x %08x\n", test3->addr, i2c->adapter->alias_idx);
 
 	if (np) {
 		const struct of_device_id *of_id;
@@ -658,6 +677,7 @@ static int ak4642_i2c_probe(struct i2c_client *i2c,
 		dev_err(dev, "Unknown device type\n");
 		return -EINVAL;
 	}
+
 
 	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
 	if (!priv)

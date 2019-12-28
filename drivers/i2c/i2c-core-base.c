@@ -1307,7 +1307,7 @@ static int i2c_register_adapter(struct i2c_adapter *adap)
 		adap->lock_ops = &i2c_adapter_lock_ops;
 
 	adap->locked_flags = 0;
-	adap->alias_idx = 0x08;	/* first valid I2C address */
+	adap->alias_idx = 0x3e;	/* first valid I2C address */
 	rt_mutex_init(&adap->bus_lock);
 	rt_mutex_init(&adap->mux_lock);
 	mutex_init(&adap->userspace_clients_lock);
