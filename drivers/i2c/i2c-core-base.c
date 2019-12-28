@@ -2108,6 +2108,27 @@ static int i2c_default_probe(struct i2c_adapter *adap, unsigned short addr)
 	return err >= 0;
 }
 
+static int i2c_scan_for_client(struct i2c_adapter *adap, unsigned short addr,
+			    int (*probe)(struct i2c_adapter *adap, unsigned short addr))
+{
+	int err;
+
+	/* Make sure the address is valid */
+	err = i2c_check_7bit_addr_validity_strict(addr);
+	if (WARN(err, "Invalid probe address 0x%02x\n", addr))
+		return err;
+
+	/* Skip if already in use (7 bit, no need to encode flags) */
+	if (i2c_check_addr_busy(adap, addr))
+		return -EBUSY;
+
+	/* Make sure there is something at this address */
+	if (!probe(adap, addr))
+		return -ENODEV;
+
+	return 0;
+}
+
 static int i2c_detect_address(struct i2c_client *temp_client,
 			      struct i2c_driver *driver)
 {
@@ -2116,21 +2137,10 @@ static int i2c_detect_address(struct i2c_client *temp_client,
 	int addr = temp_client->addr;
 	int err;
 
-	/* Make sure the address is valid */
-	err = i2c_check_7bit_addr_validity_strict(addr);
-	if (err) {
-		dev_warn(&adapter->dev, "Invalid probe address 0x%02x\n",
-			 addr);
-		return err;
-	}
-
-	/* Skip if already in use (7 bit, no need to encode flags) */
-	if (i2c_check_addr_busy(adapter, addr))
-		return 0;
-
-	/* Make sure there is something at this address */
-	if (!i2c_default_probe(adapter, addr))
-		return 0;
+	/* Only report broken addresses, busy addresses are no error */
+	err = i2c_scan_for_client(adapter, addr, i2c_default_probe);
+	if (err < 0)
+		return err == -EINVAL ? -EINVAL : 0;
 
 	/* Finally call the custom detection function */
 	memset(&info, 0, sizeof(struct i2c_board_info));
@@ -2232,26 +2242,9 @@ i2c_new_scanned_device(struct i2c_adapter *adap,
 	if (!probe)
 		probe = i2c_default_probe;
 
-	for (i = 0; addr_list[i] != I2C_CLIENT_END; i++) {
-		/* Check address validity */
-		if (i2c_check_7bit_addr_validity_strict(addr_list[i]) < 0) {
-			dev_warn(&adap->dev, "Invalid 7-bit address 0x%02x\n",
-				 addr_list[i]);
-			continue;
-		}
-
-		/* Check address availability (7 bit, no need to encode flags) */
-		if (i2c_check_addr_busy(adap, addr_list[i])) {
-			dev_dbg(&adap->dev,
-				"Address 0x%02x already in use, not probing\n",
-				addr_list[i]);
-			continue;
-		}
-
-		/* Test address responsiveness */
-		if (probe(adap, addr_list[i]))
+	for (i = 0; addr_list[i] != I2C_CLIENT_END; i++)
+		if (i2c_scan_for_client(adap, addr_list[i], probe) == 0)
 			break;
-	}
 
 	if (addr_list[i] == I2C_CLIENT_END) {
 		dev_dbg(&adap->dev, "Probing failed, no device found\n");
