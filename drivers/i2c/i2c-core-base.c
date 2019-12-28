@@ -2241,6 +2241,28 @@ static int i2c_detect(struct i2c_adapter *adapter, struct i2c_driver *driver)
 	return err;
 }
 
+struct i2c_client *i2c_new_alias_device(struct i2c_adapter *adap)
+{
+	struct i2c_client *alias = ERR_PTR(-EBUSY);
+	int ret;
+	u16 addr;
+
+	i2c_lock_bus(adap, I2C_LOCK_SEGMENT);
+
+	for (addr = 0x08; addr < 0x78; addr++) {
+		ret = i2c_scan_for_client(adap, addr, i2c_unlocked_read_byte_probe);
+		if (ret == -ENODEV) {
+			alias = i2c_new_dummy_device(adap, addr);
+			dev_dbg(&adap->dev, "Found alias: 0x%x\n", addr);
+			break;
+		}
+	}
+
+	i2c_unlock_bus(adap, I2C_LOCK_SEGMENT);
+	return alias;
+}
+EXPORT_SYMBOL_GPL(i2c_new_alias_device);
+
 int i2c_probe_func_quick_read(struct i2c_adapter *adap, unsigned short addr)
 {
 	return i2c_smbus_xfer(adap, addr, 0, I2C_SMBUS_READ, 0,
