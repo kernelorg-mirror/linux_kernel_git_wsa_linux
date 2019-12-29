@@ -2108,6 +2108,23 @@ static int i2c_default_probe(struct i2c_adapter *adap, unsigned short addr)
 	return err >= 0;
 }
 
+static int i2c_unlocked_read_byte_probe(struct i2c_adapter *adap, unsigned short addr)
+{
+	union i2c_smbus_data dummy;
+	int err;
+
+	if (i2c_check_functionality(adap, I2C_FUNC_SMBUS_READ_BYTE)) {
+		err = __i2c_smbus_xfer(adap, addr, 0, I2C_SMBUS_READ, 0,
+				     I2C_SMBUS_BYTE, &dummy);
+	} else {
+		dev_warn(&adap->dev, "No suitable probing method supported for address 0x%02X\n",
+			 addr);
+		err = -EOPNOTSUPP;
+	}
+
+	return err >= 0;
+}
+
 static int i2c_scan_for_client(struct i2c_adapter *adap, unsigned short addr,
 			    int (*probe)(struct i2c_adapter *adap, unsigned short addr))
 {
