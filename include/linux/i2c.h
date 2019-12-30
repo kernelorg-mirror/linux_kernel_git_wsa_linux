@@ -309,6 +309,7 @@ struct i2c_driver {
 struct i2c_client {
 	unsigned short flags;		/* div., see below		*/
 #define I2C_CLIENT_PEC		0x04	/* Use Packet Error Checking */
+#define I2C_CLIENT_ALIAS	0x08	/* client is an alias */
 #define I2C_CLIENT_TEN		0x10	/* we have a ten bit chip address */
 					/* Must equal I2C_M_TEN below */
 #define I2C_CLIENT_SLAVE	0x20	/* we are the slave */
@@ -715,6 +716,7 @@ struct i2c_adapter {
 	const struct i2c_adapter_quirks *quirks;
 
 	struct irq_domain *host_notify_domain;
+	u16 alias_idx;
 };
 #define to_i2c_adapter(d) container_of(d, struct i2c_adapter, dev)
 

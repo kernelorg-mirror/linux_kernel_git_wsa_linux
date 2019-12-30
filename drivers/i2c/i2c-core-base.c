@@ -830,6 +830,8 @@ EXPORT_SYMBOL_GPL(i2c_new_device);
  */
 void i2c_unregister_device(struct i2c_client *client)
 {
+	struct i2c_adapter *adap = client->adapter;
+
 	if (IS_ERR_OR_NULL(client))
 		return;
 
@@ -840,6 +842,14 @@ void i2c_unregister_device(struct i2c_client *client)
 
 	if (ACPI_COMPANION(&client->dev))
 		acpi_device_clear_enumerated(ACPI_COMPANION(&client->dev));
+
+	i2c_lock_bus(adap, I2C_LOCK_SEGMENT);
+
+	if (client->flags & I2C_CLIENT_ALIAS && client->addr < adap->alias_idx)
+		adap->alias_idx = client->addr;
+
+	i2c_unlock_bus(adap, I2C_LOCK_SEGMENT);
+
 	device_unregister(&client->dev);
 }
 EXPORT_SYMBOL_GPL(i2c_unregister_device);
@@ -1297,6 +1307,7 @@ static int i2c_register_adapter(struct i2c_adapter *adap)
 		adap->lock_ops = &i2c_adapter_lock_ops;
 
 	adap->locked_flags = 0;
+	adap->alias_idx = 0x08;	/* first valid I2C address */
 	rt_mutex_init(&adap->bus_lock);
 	rt_mutex_init(&adap->mux_lock);
 	mutex_init(&adap->userspace_clients_lock);
@@ -2249,10 +2260,12 @@ struct i2c_client *i2c_new_alias_device(struct i2c_adapter *adap)
 
 	i2c_lock_bus(adap, I2C_LOCK_SEGMENT);
 
-	for (addr = 0x08; addr < 0x78; addr++) {
+	for (addr = adap->alias_idx; addr < 0x78; addr++) {
 		ret = i2c_scan_for_client(adap, addr, i2c_unlocked_read_byte_probe);
 		if (ret == -ENODEV) {
 			alias = i2c_new_dummy_device(adap, addr);
+			alias->flags |= I2C_CLIENT_ALIAS;
+			adap->alias_idx = addr + 1;
 			dev_dbg(&adap->dev, "Found alias: 0x%x\n", addr);
 			break;
 		}
