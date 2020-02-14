@@ -16,25 +16,18 @@
 #include <linux/i2c.h>
 #include <linux/module.h>
 #include <linux/of.h>
+#include <linux/of_address.h>
 #include <linux/of_device.h>
 #include <linux/sysfs.h>
 
 #include "i2c-core.h"
 
-int of_i2c_get_board_info(struct device_node *node, struct i2c_board_info *info)
+static void of_i2c_decode_board_info(struct device_node *node, u32 addr,
+				     bool first_addr, struct i2c_board_info *info)
 {
-	u32 addr;
-	int ret;
-
 	memset(info, 0, sizeof(*info));
 
-	ret = of_property_read_u32(node, "reg", &addr);
-	if (ret) {
-		pr_err("invalid reg on %pOF\n", node);
-		return ret;
-	}
-
-	if (of_modalias_node(node, info->type, sizeof(info->type)) < 0)
+	if (!first_addr || of_modalias_node(node, info->type, sizeof(info->type)) < 0)
 		strlcpy(info->type, I2C_RESERVED_DRV_NAME, sizeof(I2C_RESERVED_DRV_NAME));
 
 	if (addr & I2C_TEN_BIT_ADDRESS) {
@@ -51,11 +44,27 @@ int of_i2c_get_board_info(struct device_node *node, struct i2c_board_info *info)
 	info->of_node = node;
 	info->fwnode = of_fwnode_handle(node);
 
-	if (of_property_read_bool(node, "host-notify"))
-		info->flags |= I2C_CLIENT_HOST_NOTIFY;
+	if (first_addr) {
+		if (of_property_read_bool(node, "host-notify"))
+			info->flags |= I2C_CLIENT_HOST_NOTIFY;
 
-	if (of_get_property(node, "wakeup-source", NULL))
-		info->flags |= I2C_CLIENT_WAKE;
+		if (of_get_property(node, "wakeup-source", NULL))
+			info->flags |= I2C_CLIENT_WAKE;
+	}
+}
+
+int of_i2c_get_board_info(struct device_node *node, struct i2c_board_info *info)
+{
+	u32 addr;
+	int ret;
+
+	ret = of_property_read_u32(node, "reg", &addr);
+	if (ret) {
+		pr_err("invalid reg on %pOF\n", node);
+		return ret;
+	}
+
+	of_i2c_decode_board_info(node, addr, true, info);
 
 	return 0;
 }
@@ -64,21 +73,34 @@ EXPORT_SYMBOL_GPL(of_i2c_get_board_info);
 static struct i2c_client *of_i2c_register_device(struct i2c_adapter *adap,
 						 struct device_node *node)
 {
-	struct i2c_client *client;
+	struct i2c_client *client, *first_client = ERR_PTR(-ENOENT);
 	struct i2c_board_info info;
-	int ret;
+	bool first_reg = true;
+	unsigned int i = 0;
+	const __be32 *prop;
+	u16 reg;
 
 	pr_debug("register %pOF\n", node);
 
-	ret = of_i2c_get_board_info(node, &info);
-	if (ret)
-		return ERR_PTR(ret);
+	while ((prop = of_get_address(node, i++, NULL, NULL))) {
+		reg = of_read_number(prop, 1);
+		of_i2c_decode_board_info(node, reg, first_reg, &info);
 
-	client = i2c_new_client_device(adap, &info);
-	if (IS_ERR(client))
-		pr_err("failure registering %pOF (%ld)\n", node, PTR_ERR(client));
+		client = i2c_new_client_device(adap, &info);
+		if (IS_ERR(client)) {
+			pr_err("failure registering addr 0x%02x for %pOF (%ld)\n",
+				reg, node, PTR_ERR(client));
+			if (first_reg)
+				return client;
+		}
 
-	return client;
+		if (first_reg) {
+			first_client = client;
+			first_reg = false;
+		}
+	}
+
+	return first_client;
 }
 
 void of_i2c_register_devices(struct i2c_adapter *adap)
