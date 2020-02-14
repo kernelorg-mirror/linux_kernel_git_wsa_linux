@@ -340,9 +340,14 @@
 			reg = <0x12>;
 		};
 
+		dummy@13 {
+			reg = <0x13>, <0x14>;
+		};
+
 		composite-in@20 {
 			compatible = "adi,adv7180";
-			reg = <0x20>;
+			reg = <0x20>, <0x0b>, <0x0c>;
+			reg-names = "main", "test1", "test2";
 			remote = <&vin1>;
 
 			port {
