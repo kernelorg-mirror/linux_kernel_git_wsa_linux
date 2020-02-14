@@ -854,6 +854,7 @@ EXPORT_SYMBOL_GPL(i2c_unregister_device);
 
 static const struct i2c_device_id dummy_id[] = {
 	{ I2C_DUMMY_DRV_NAME, 0 },
+	{ I2C_RESERVED_DRV_NAME, 0 },
 	{ },
 };
 

@@ -50,7 +50,6 @@ Examples:
 		reg-io-width = <1>;	/* 8 bit read/write */
 
 		dummy@60 {
-			compatible = "dummy";
 			reg = <0x60>;
 		};
 	};
@@ -68,7 +67,6 @@ or
 		reg-io-width = <1>;	/* 8 bit read/write */
 
 		dummy@60 {
-			compatible = "dummy";
 			reg = <0x60>;
 		};
 	};

@@ -23,6 +23,7 @@ int i2c_dev_irq_from_resources(const struct resource *resources,
 			       unsigned int num_resources);
 
 #define I2C_DUMMY_DRV_NAME "dummy"
+#define I2C_RESERVED_DRV_NAME "reserved"
 
 /*
  * We only allow atomic transfers for very late communication, e.g. to send
