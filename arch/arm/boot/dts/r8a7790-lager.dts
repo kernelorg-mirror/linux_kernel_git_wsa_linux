@@ -394,7 +394,7 @@
 
 		hdmi-in@4c {
 			compatible = "adi,adv7612";
-			reg = <0x4c>;
+			reg = <0x4c>, <0x40>;
 			interrupt-parent = <&gpio1>;
 			interrupts = <20 IRQ_TYPE_LEVEL_LOW>;
 			default-input = <0>;

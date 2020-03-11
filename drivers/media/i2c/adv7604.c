@@ -3589,6 +3589,7 @@ static int adv76xx_probe(struct i2c_client *client,
 	if (err)
 		goto err_entity;
 
+printk(KERN_INFO "****** wsa: %px\n", i2c_new_ancillary_device(client, "test3", 0x0c));
 	return 0;
 
 err_entity:

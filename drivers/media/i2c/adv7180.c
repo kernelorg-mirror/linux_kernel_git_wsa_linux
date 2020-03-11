@@ -1379,6 +1379,9 @@ static int adv7180_probe(struct i2c_client *client,
 	if (ret)
 		goto err_free_irq;
 
+printk(KERN_INFO "****** wsa: %px\n",
+	i2c_new_ancillary_device(client, "test3", 0x0b));
+
 	v4l_info(client, "chip found @ 0x%02x (%s)\n",
 		 client->addr, client->adapter->name);
 
