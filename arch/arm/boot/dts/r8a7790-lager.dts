@@ -38,6 +38,7 @@
 /dts-v1/;
 #include "r8a7790.dtsi"
 #include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/i2c/i2c.h>
 #include <dt-bindings/input/input.h>
 
 / {
@@ -304,7 +305,7 @@
 	 */
 	i2cexio0: i2c-10 {
 		compatible = "i2c-demux-pinctrl";
-		i2c-parent = <&iic0>, <&i2c0>;
+		i2c-parent = <&i2c0>, <&iic0>;
 		i2c-bus-name = "i2c-exio0";
 		#address-cells = <1>;
 		#size-cells = <0>;
@@ -421,7 +422,7 @@
 		compatible = "i2c-demux-pinctrl";
 		pinctrl-names = "default";
 		pinctrl-0 = <&pmic_irq_pins>;
-		i2c-parent = <&iic3>, <&i2c3>;
+		i2c-parent = <&i2c3>, <&iic3>;
 		i2c-bus-name = "i2c-pwr";
 		#address-cells = <1>;
 		#size-cells = <0>;
@@ -798,6 +799,11 @@
 &i2c0	{
 	pinctrl-0 = <&i2c0_pins>;
 	pinctrl-names = "i2c-exio0";
+
+	testunit@32 {
+		compatible = "slave-testunit";
+		reg = <(0x32 | I2C_OWN_SLAVE_ADDRESS)>;
+	};
 };
 
 &iic0	{
@@ -832,6 +838,14 @@
 &i2c3	{
 	pinctrl-0 = <&i2c3_pins>;
 	pinctrl-names = "i2c-pwr";
+
+	smbus;
+
+	dummy@32 {
+		compatible = "dummy";
+		reg = <0x32>;
+		host-notify;
+	};
 };
 
 &iic3	{
