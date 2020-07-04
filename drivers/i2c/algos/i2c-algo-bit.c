@@ -659,7 +659,7 @@ static int __i2c_bit_add_bus(struct i2c_adapter *adap,
 
 	/* register new adapter to i2c module... */
 	adap->algo = &i2c_bit_algo;
-	adap->retries = 3;
+	adap->retries = 0;
 	if (bit_adap->getscl == NULL)
 		adap->quirks = &i2c_bit_quirk_no_clk_stretch;
 
