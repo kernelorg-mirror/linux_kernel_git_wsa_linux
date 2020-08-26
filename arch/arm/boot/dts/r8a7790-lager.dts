@@ -827,6 +827,10 @@
 &iic1	{
 	pinctrl-0 = <&iic1_pins>;
 	pinctrl-names = "i2c-exio1";
+
+	scl-gpios = <&gpio1 16 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+	sda-gpios = <&gpio1 17 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+	//http://lore.kernel.org/r/1562576868-8124-5-git-send-email-yoshihiro.shimoda.uh@renesas.com
 };
 
 &i2c2	{
@@ -839,6 +843,9 @@
 &iic2	{
 	pinctrl-0 = <&iic2_pins>;
 	pinctrl-names = "i2c-hdmi";
+
+	scl-gpios = <&gpio5 5 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+	sda-gpios = <&gpio5 6 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
 
 	clock-frequency = <100000>;
 };

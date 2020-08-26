@@ -137,6 +137,7 @@ struct sh_mobile_i2c_data {
 	struct scatterlist sg;
 	enum dma_data_direction dma_direction;
 	u8 *dma_buf;
+	struct i2c_bus_recovery_info bri;
 };
 
 struct sh_mobile_dt_config {
@@ -933,6 +934,9 @@ static int sh_mobile_i2c_probe(struct platform_device *dev)
 
 	spin_lock_init(&pd->lock);
 	init_waitqueue_head(&pd->wait);
+
+	pd->bri.recover_bus = i2c_generic_scl_recovery;
+	adap->bus_recovery_info = &pd->bri;
 
 	ret = i2c_add_numbered_adapter(adap);
 	if (ret < 0) {
