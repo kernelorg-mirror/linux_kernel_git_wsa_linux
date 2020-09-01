@@ -1218,6 +1218,7 @@ static int mmc_select_hs400(struct mmc_card *card)
 		host->ops->hs400_complete(host);
 
 	err = mmc_switch_status(card, true);
+	err = -EILSEQ;
 	if (err)
 		goto out_err;
 
