@@ -19,6 +19,7 @@ enum testunit_cmds {
 	TU_CMD_READ_BYTES = 1,	/* save 0 for ABORT, RESET or similar */
 	TU_CMD_HOST_NOTIFY,
 	TU_CMD_SMBUS_BLOCK_READ,
+	TU_CMD_SMBUS_BLOCK_PROC_CALL,
 	TU_NUM_CMDS
 };
 
@@ -32,6 +33,7 @@ enum testunit_regs {
 
 enum testunit_flags {
 	TU_FLAG_IN_PROCESS,
+	TU_FLAG_FIRST_READ,
 };
 
 struct testunit_data {
@@ -90,6 +92,10 @@ static int i2c_slave_testunit_slave_cb(struct i2c_client *client,
 	struct testunit_data *tu = i2c_get_clientdata(client);
 	bool is_block_read = tu->reg_idx == 2 &&
 			     tu->regs[TU_REG_CMD] == TU_CMD_SMBUS_BLOCK_READ;
+	bool is_proc_call = tu->reg_idx == 3 && tu->regs[TU_REG_DATAL] == 1 &&
+			    tu->regs[TU_REG_CMD] == TU_CMD_SMBUS_BLOCK_PROC_CALL;
+	bool is_recv_len = is_block_read || is_proc_call;
+	u8 recv_len_idx = is_proc_call ? TU_REG_DATAH : TU_REG_DATAL;
 	int ret = 0;
 
 	switch (event) {
@@ -122,18 +128,23 @@ static int i2c_slave_testunit_slave_cb(struct i2c_client *client,
 	case I2C_SLAVE_WRITE_REQUESTED:
 		memset(tu->regs, 0, TU_NUM_REGS);
 		tu->reg_idx = 0;
+		set_bit(TU_FLAG_FIRST_READ, &tu->flags);
 		break;
 
 	case I2C_SLAVE_READ_PROCESSED:
-		if (is_block_read && tu->regs[TU_REG_DATAL])
-			tu->regs[TU_REG_DATAL]--;
+		if (is_recv_len && tu->regs[recv_len_idx])
+			tu->regs[recv_len_idx]--;
 		fallthrough;
 
 	case I2C_SLAVE_READ_REQUESTED:
-		if (is_block_read)
-			*val = tu->regs[TU_REG_DATAL];
-		else
+		if (is_recv_len) {
+			*val = tu->regs[recv_len_idx];
+			if (tu->regs[TU_REG_CMD] == TU_CMD_SMBUS_BLOCK_PROC_CALL &&
+			    !test_and_clear_bit(TU_FLAG_FIRST_READ, &tu->flags))
+				*val ^= 0xff;
+		} else {
 			*val = TU_CUR_VERSION;
+		}
 		break;
 	}
 
