@@ -120,6 +120,7 @@ static int i2c_slave_testunit_slave_cb(struct i2c_client *client,
 		fallthrough;
 
 	case I2C_SLAVE_WRITE_REQUESTED:
+		memset(tu->regs, 0, TU_NUM_REGS);
 		tu->reg_idx = 0;
 		break;
 
