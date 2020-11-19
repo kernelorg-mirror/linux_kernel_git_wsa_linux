@@ -213,6 +213,11 @@
 		groups = "scif_clk2";
 		function = "scif_clk2";
 	};
+
+	tpu_pin: tpu {
+		groups = "tpu_to1";
+		function = "tpu";
+	};
 };
 
 &rpc {
@@ -254,4 +259,11 @@
 
 &scif_clk2 {
 	clock-frequency = <24000000>;
+};
+
+&tpu {
+	pinctrl-0 = <&tpu_pin>;
+	pinctrl-names = "default";
+
+	status = "okay";
 };
