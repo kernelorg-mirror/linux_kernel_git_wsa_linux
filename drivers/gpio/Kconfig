@@ -1631,6 +1631,9 @@ config GPIO_AGGREGATOR
 config GPIO_LOGIC_ANALYZER_IRQ
 	tristate "Simple GPIO logic analyzer IRQ"
 
+config GPIO_LOGIC_ANALYZER_POLL
+	tristate "Simple GPIO logic analyzer POLL"
+
 config GPIO_MOCKUP
 	tristate "GPIO Testing Driver"
 	select IRQ_SIM

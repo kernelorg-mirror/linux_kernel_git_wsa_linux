@@ -110,7 +110,7 @@
 	};
 
 	logic-analyzer@pwm {
-		compatible = "logic-analyzer-irq";
+		compatible = "logic-analyzer-poll";
 
 		probe-gpios = <&gpio6 21 GPIO_OPEN_DRAIN>,
 				<&gpio6 4 GPIO_OPEN_DRAIN>;
@@ -366,7 +366,7 @@
 
 	status = "okay";
 
-	clock-frequency = <100000>;
+	clock-frequency = <400000>;
 
 	ak4613: codec@10 {
 		compatible = "asahi-kasei,ak4613";

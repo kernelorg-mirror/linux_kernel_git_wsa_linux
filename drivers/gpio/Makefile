@@ -15,6 +15,7 @@ obj-$(CONFIG_GPIO_ACPI)		+= gpiolib-acpi.o
 obj-$(CONFIG_GPIO_REGMAP)	+= gpio-regmap.o
 obj-$(CONFIG_GPIO_GENERIC)	+= gpio-generic.o
 obj-$(CONFIG_GPIO_LOGIC_ANALYZER_IRQ) += gpio-la-irq.o
+obj-$(CONFIG_GPIO_LOGIC_ANALYZER_POLL) += gpio-la-poll.o
 
 # directly supported by gpio-generic
 gpio-generic-$(CONFIG_GPIO_GENERIC)	+= gpio-mmio.o
