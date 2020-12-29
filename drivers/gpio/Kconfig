@@ -1628,6 +1628,9 @@ config GPIO_AGGREGATOR
 	      industrial control context, to be operated from userspace using
 	      the GPIO chardev interface.
 
+config GPIO_LOGIC_ANALYZER_IRQ
+	tristate "Simple GPIO logic analyzer IRQ"
+
 config GPIO_MOCKUP
 	tristate "GPIO Testing Driver"
 	select IRQ_SIM
