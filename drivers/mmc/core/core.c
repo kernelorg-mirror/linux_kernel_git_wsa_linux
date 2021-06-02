@@ -211,10 +211,7 @@ void mmc_request_done(struct mmc_host *host, struct mmc_request *mrq)
 	    (mrq->stop && mrq->stop->error == -EILSEQ)))
 		mmc_retune_needed(host);
 
-	/*
-	 * Request starter must handle retries - see
-	 * mmc_wait_for_req_done().
-	 */
+	/* Request starter must handle retries - see mmc_wait_for_req_done() */
 	if (mrq->done)
 		mrq->done(mrq);
 }
