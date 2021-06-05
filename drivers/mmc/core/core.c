@@ -76,34 +76,40 @@ static int mmc_schedule_delayed_work(struct delayed_work *work,
 #ifdef CONFIG_FAIL_MMC_REQUEST
 
 /*
- * Internal function. Inject random data errors.
- * If mmc_data is NULL no errors are injected.
+ * Hook into the fault injection framework. Inject random errors to the data
+ * transfer, if there is one. Use the fail_function injector to let the command
+ * fail with a specific errorcode.
  */
-static void mmc_should_fail_request(struct mmc_host *host,
-				    struct mmc_request *mrq)
+static noinline int mmc_should_fail_request(struct mmc_host *host,
+					    struct mmc_data *data)
 {
-	struct mmc_command *cmd = mrq->cmd;
-	struct mmc_data *data = mrq->data;
 	static const int data_errors[] = {
 		-ETIMEDOUT,
 		-EILSEQ,
 		-EIO,
 	};
 
-	if (!data)
-		return;
+	if (data && !data->error &&
+	    should_fail(&host->fail_mmc_request, data->blksz * data->blocks)) {
+		data->error = data_errors[prandom_u32() % ARRAY_SIZE(data_errors)];
+		data->bytes_xfered = (prandom_u32() % (data->bytes_xfered >> 9)) << 9;
+	}
 
-	if ((cmd && cmd->error) || data->error ||
-	    !should_fail(&host->fail_mmc_request, data->blksz * data->blocks))
-		return;
-
-	data->error = data_errors[prandom_u32() % ARRAY_SIZE(data_errors)];
-	data->bytes_xfered = (prandom_u32() % (data->bytes_xfered >> 9)) << 9;
+	return 0;
 }
+ALLOW_ERROR_INJECTION(mmc_should_fail_request, ERRNO);
 
+static void mmc_handle_fail_request(struct mmc_host *host,
+				    struct mmc_request *mrq)
+{
+	struct mmc_command *cmd = mrq->cmd;
+
+	if (cmd && !cmd->error)
+		cmd->error = mmc_should_fail_request(host, mrq->data);
+}
 #else /* CONFIG_FAIL_MMC_REQUEST */
 
-static inline void mmc_should_fail_request(struct mmc_host *host,
+static inline void mmc_handle_fail_request(struct mmc_host *host,
 					   struct mmc_request *mrq)
 {
 }
@@ -163,7 +169,7 @@ void mmc_request_done(struct mmc_host *host, struct mmc_request *mrq)
 	 *   if there are errors or retries)
 	 */
 	if (!err || !cmd->retries || mmc_card_removed(host->card)) {
-		mmc_should_fail_request(host, mrq);
+		mmc_handle_fail_request(host, mrq);
 
 		if (!host->ongoing_mrq)
 			led_trigger_event(host->led, LED_OFF);
@@ -482,7 +488,7 @@ EXPORT_SYMBOL(mmc_cqe_start_req);
  */
 void mmc_cqe_request_done(struct mmc_host *host, struct mmc_request *mrq)
 {
-	mmc_should_fail_request(host, mrq);
+	mmc_handle_fail_request(host, mrq);
 
 	/* Flag re-tuning needed on CRC errors */
 	if ((mrq->cmd && mrq->cmd->error == -EILSEQ) ||
