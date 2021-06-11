@@ -20,7 +20,6 @@
 #include <linux/leds.h>
 
 #include <linux/seq_file.h>
-#include <linux/debugfs.h>
 
 #include <linux/completion.h>
 #include <linux/uaccess.h>

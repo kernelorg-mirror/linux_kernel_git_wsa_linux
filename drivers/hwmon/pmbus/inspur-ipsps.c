@@ -3,7 +3,6 @@
  * Copyright 2019 Inspur Corp.
  */
 
-#include <linux/debugfs.h>
 #include <linux/device.h>
 #include <linux/fs.h>
 #include <linux/i2c.h>

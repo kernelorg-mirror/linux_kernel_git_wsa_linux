@@ -16,7 +16,6 @@
 #include <linux/mtd/mtd.h>
 #include <linux/mtd/partitions.h>
 
-#include <linux/debugfs.h>
 #include <linux/seq_file.h>
 
 #include <asm/opal.h>

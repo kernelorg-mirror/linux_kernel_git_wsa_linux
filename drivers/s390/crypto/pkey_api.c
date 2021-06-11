@@ -15,7 +15,6 @@
 #include <linux/module.h>
 #include <linux/slab.h>
 #include <linux/kallsyms.h>
-#include <linux/debugfs.h>
 #include <linux/random.h>
 #include <linux/cpufeature.h>
 #include <asm/zcrypt.h>

@@ -41,7 +41,6 @@
 #include <linux/module.h>
 #include <linux/errno.h>
 #include <linux/types.h>
-#include <linux/debugfs.h>
 #include <linux/export.h>
 #include <linux/list.h>
 #include <linux/skbuff.h>

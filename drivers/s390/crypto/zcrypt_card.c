@@ -23,7 +23,6 @@
 #include <linux/atomic.h>
 #include <linux/uaccess.h>
 #include <linux/hw_random.h>
-#include <linux/debugfs.h>
 #include <asm/debug.h>
 
 #include "zcrypt_debug.h"

@@ -23,7 +23,6 @@
  *          Roy Sun
  */
 
-#include <linux/debugfs.h>
 #include <linux/list.h>
 #include <linux/module.h>
 #include <linux/uaccess.h>
@@ -31,7 +30,6 @@
 #include <linux/syscalls.h>
 
 #include <drm/amdgpu_drm.h>
-#include <drm/drm_debugfs.h>
 
 #include "amdgpu.h"
 #include "amdgpu_vm.h"

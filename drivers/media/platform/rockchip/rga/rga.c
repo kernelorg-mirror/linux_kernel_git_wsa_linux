@@ -5,7 +5,6 @@
  */
 
 #include <linux/clk.h>
-#include <linux/debugfs.h>
 #include <linux/delay.h>
 #include <linux/fs.h>
 #include <linux/interrupt.h>

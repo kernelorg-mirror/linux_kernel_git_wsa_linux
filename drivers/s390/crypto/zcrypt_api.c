@@ -22,7 +22,6 @@
 #include <linux/atomic.h>
 #include <linux/uaccess.h>
 #include <linux/hw_random.h>
-#include <linux/debugfs.h>
 #include <linux/cdev.h>
 #include <linux/ctype.h>
 #include <linux/capability.h>

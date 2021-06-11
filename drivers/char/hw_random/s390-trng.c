@@ -17,7 +17,6 @@
 #include <linux/module.h>
 #include <linux/cpufeature.h>
 #include <linux/miscdevice.h>
-#include <linux/debugfs.h>
 #include <linux/atomic.h>
 #include <linux/random.h>
 #include <linux/sched/signal.h>

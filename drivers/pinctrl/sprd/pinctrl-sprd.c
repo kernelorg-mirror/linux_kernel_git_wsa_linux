@@ -4,7 +4,6 @@
  * Copyright (C) 2017 Spreadtrum  - http://www.spreadtrum.com
  */
 
-#include <linux/debugfs.h>
 #include <linux/err.h>
 #include <linux/init.h>
 #include <linux/io.h>

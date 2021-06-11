@@ -21,7 +21,6 @@
 #include <linux/list.h>
 #include <linux/usb.h>
 #include <linux/usb/hcd.h>
-#include <linux/debugfs.h>
 #include <linux/uaccess.h>
 #include <linux/io.h>
 #include <linux/iopoll.h>

@@ -12,7 +12,6 @@
 #include <linux/device.h>
 #include <linux/sysfs.h>
 #include <linux/kdev_t.h>
-#include <linux/debugfs.h>
 #include <linux/idr.h>
 #include <linux/pci.h>
 #include <linux/pm_runtime.h>

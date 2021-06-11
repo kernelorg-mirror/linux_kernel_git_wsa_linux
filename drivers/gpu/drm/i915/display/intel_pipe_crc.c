@@ -26,7 +26,6 @@
 
 #include <linux/circ_buf.h>
 #include <linux/ctype.h>
-#include <linux/debugfs.h>
 #include <linux/seq_file.h>
 
 #include "intel_atomic.h"

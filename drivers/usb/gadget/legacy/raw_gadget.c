@@ -9,7 +9,6 @@
 
 #include <linux/compiler.h>
 #include <linux/ctype.h>
-#include <linux/debugfs.h>
 #include <linux/delay.h>
 #include <linux/kref.h>
 #include <linux/miscdevice.h>
