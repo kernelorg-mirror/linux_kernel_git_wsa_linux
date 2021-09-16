@@ -282,6 +282,11 @@
 		power-source = <1800>;
 	};
 
+	pwm0_pins: pwm0 {
+		groups = "pwm0";
+		function = "pwm0";
+	};
+
 	qspi0_pins: qspi0 {
 		groups = "qspi0_ctrl", "qspi0_data4";
 		function = "qspi0";
@@ -296,6 +301,13 @@
 		groups = "scif_clk";
 		function = "scif_clk";
 	};
+};
+
+&pwm0 {
+	pinctrl-0 = <&pwm0_pins>;
+	pinctrl-names = "default";
+
+	status = "okay";
 };
 
 &rpc {
