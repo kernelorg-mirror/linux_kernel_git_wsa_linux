@@ -494,9 +494,7 @@ static int scaler_probe(struct platform_device *pdev)
 	if (!scaler)
 		return -ENOMEM;
 
-	scaler->scaler_data =
-		(struct scaler_data *)of_device_get_match_data(dev);
-
+	scaler->scaler_data = of_device_get_match_data(dev);
 	scaler->dev = dev;
 	regs_res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
 	scaler->regs = devm_ioremap_resource(dev, regs_res);

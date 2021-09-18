@@ -1229,7 +1229,7 @@ static int gsc_probe(struct platform_device *pdev)
 	if (!ctx)
 		return -ENOMEM;
 
-	driver_data = (struct gsc_driverdata *)of_device_get_match_data(dev);
+	driver_data = of_device_get_match_data(dev);
 	ctx->dev = dev;
 	ctx->num_clocks = driver_data->num_clocks;
 	ctx->clk_names = driver_data->clk_names;
