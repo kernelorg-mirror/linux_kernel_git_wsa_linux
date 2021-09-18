@@ -703,8 +703,7 @@ static int stm32_rtc_probe(struct platform_device *pdev)
 	if (IS_ERR(rtc->base))
 		return PTR_ERR(rtc->base);
 
-	rtc->data = (struct stm32_rtc_data *)
-		    of_device_get_match_data(&pdev->dev);
+	rtc->data = of_device_get_match_data(&pdev->dev);
 	regs = &rtc->data->regs;
 
 	if (rtc->data->need_dbp) {
