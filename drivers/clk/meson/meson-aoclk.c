@@ -41,7 +41,7 @@ int meson_aoclkc_probe(struct platform_device *pdev)
 	struct regmap *regmap;
 	int ret, clkid;
 
-	data = (struct meson_aoclk_data *) of_device_get_match_data(dev);
+	data = of_device_get_match_data(dev);
 	if (!data)
 		return -ENODEV;
 
