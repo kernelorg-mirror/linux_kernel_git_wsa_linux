@@ -759,7 +759,7 @@ static int __init mxs_dma_probe(struct platform_device *pdev)
 		return ret;
 	}
 
-	dma_type = (struct mxs_dma_type *)of_device_get_match_data(&pdev->dev);
+	dma_type = of_device_get_match_data(&pdev->dev);
 	mxs_dma->type = dma_type->type;
 	mxs_dma->dev_id = dma_type->id;
 
