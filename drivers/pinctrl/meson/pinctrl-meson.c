@@ -749,7 +749,7 @@ int meson_pinctrl_probe(struct platform_device *pdev)
 		return -ENOMEM;
 
 	pc->dev = dev;
-	pc->data = (struct meson_pinctrl_data *) of_device_get_match_data(dev);
+	pc->data = of_device_get_match_data(dev);
 
 	ret = meson_pinctrl_parse_dt(pc, dev->of_node);
 	if (ret)
