@@ -92,7 +92,7 @@ static void kirin_drm_private_cleanup(struct drm_device *dev)
 	struct kirin_drm_private *kirin_priv = dev->dev_private;
 	struct kirin_drm_data *data;
 
-	data = (struct kirin_drm_data *)of_device_get_match_data(dev->dev);
+	data = of_device_get_match_data(dev->dev);
 	if (data->cleanup_hw_ctx)
 		data->cleanup_hw_ctx(kirin_priv->hw_ctx);
 
@@ -223,7 +223,7 @@ static int kirin_drm_bind(struct device *dev)
 	struct drm_device *drm_dev;
 	int ret;
 
-	driver_data = (struct kirin_drm_data *)of_device_get_match_data(dev);
+	driver_data = of_device_get_match_data(dev);
 	if (!driver_data)
 		return -EINVAL;
 
