@@ -835,7 +835,7 @@ static int mtk_dpi_probe(struct platform_device *pdev)
 		return -ENOMEM;
 
 	dpi->dev = dev;
-	dpi->conf = (struct mtk_dpi_conf *)of_device_get_match_data(dev);
+	dpi->conf = of_device_get_match_data(dev);
 	dpi->output_fmt = MEDIA_BUS_FMT_RGB888_1X24;
 
 	dpi->pinctrl = devm_pinctrl_get(&pdev->dev);
