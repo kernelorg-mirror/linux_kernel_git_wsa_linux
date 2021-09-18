@@ -1118,8 +1118,7 @@ static int meson_mmc_probe(struct platform_device *pdev)
 		goto free_host;
 	}
 
-	host->data = (struct meson_mmc_data *)
-		of_device_get_match_data(&pdev->dev);
+	host->data = of_device_get_match_data(&pdev->dev);
 	if (!host->data) {
 		ret = -EINVAL;
 		goto free_host;
