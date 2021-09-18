@@ -1272,8 +1272,7 @@ static int dp_display_remove(struct platform_device *pdev)
 
 static int dp_pm_resume(struct device *dev)
 {
-	struct platform_device *pdev = to_platform_device(dev);
-	struct msm_dp *dp_display = platform_get_drvdata(pdev);
+	struct msm_dp *dp_display = dev_get_drvdata(dev);
 	struct dp_display_private *dp;
 	int sink_count = 0;
 
@@ -1329,8 +1328,7 @@ static int dp_pm_resume(struct device *dev)
 
 static int dp_pm_suspend(struct device *dev)
 {
-	struct platform_device *pdev = to_platform_device(dev);
-	struct msm_dp *dp_display = platform_get_drvdata(pdev);
+	struct msm_dp *dp_display = dev_get_drvdata(dev);
 	struct dp_display_private *dp;
 
 	dp = container_of(dp_display, struct dp_display_private, dp_display);
