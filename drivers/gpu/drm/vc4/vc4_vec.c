@@ -555,8 +555,7 @@ static int vc4_vec_bind(struct device *dev, struct device *master, void *data)
 	vec->encoder = &vc4_vec_encoder->base.base;
 
 	vec->pdev = pdev;
-	vec->variant = (const struct vc4_vec_variant *)
-		of_device_get_match_data(dev);
+	vec->variant = of_device_get_match_data(dev);
 	vec->regs = vc4_ioremap_regs(pdev, 0);
 	if (IS_ERR(vec->regs))
 		return PTR_ERR(vec->regs);
