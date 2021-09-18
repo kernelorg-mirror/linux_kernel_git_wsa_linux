@@ -240,12 +240,11 @@ EXPORT_SYMBOL_GPL(meson_sm_get);
 static ssize_t serial_show(struct device *dev, struct device_attribute *attr,
 			 char *buf)
 {
-	struct platform_device *pdev = to_platform_device(dev);
 	struct meson_sm_firmware *fw;
 	uint8_t *id_buf;
 	int ret;
 
-	fw = platform_get_drvdata(pdev);
+	fw = dev_get_drvdata(dev);
 
 	id_buf = kmalloc(SM_CHIP_ID_LENGTH, GFP_KERNEL);
 	if (!id_buf)
