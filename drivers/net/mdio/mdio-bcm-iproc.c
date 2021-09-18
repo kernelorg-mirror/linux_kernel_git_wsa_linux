@@ -181,8 +181,7 @@ static int iproc_mdio_remove(struct platform_device *pdev)
 #ifdef CONFIG_PM_SLEEP
 static int iproc_mdio_resume(struct device *dev)
 {
-	struct platform_device *pdev = to_platform_device(dev);
-	struct iproc_mdio_priv *priv = platform_get_drvdata(pdev);
+	struct iproc_mdio_priv *priv = dev_get_drvdata(dev);
 
 	/* restore the mii clock configuration */
 	iproc_mdio_config_clk(priv->base);
