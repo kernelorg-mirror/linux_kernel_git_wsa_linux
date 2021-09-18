@@ -537,8 +537,7 @@ static int msm_hdmi_bind(struct device *dev, struct device *master, void *data)
 	struct device_node *of_node = dev->of_node;
 	int i, err;
 
-	hdmi_cfg = (struct hdmi_platform_config *)
-			of_device_get_match_data(dev);
+	hdmi_cfg = of_device_get_match_data(dev);
 	if (!hdmi_cfg) {
 		DRM_DEV_ERROR(dev, "unknown hdmi_cfg: %pOFn\n", of_node);
 		return -ENXIO;

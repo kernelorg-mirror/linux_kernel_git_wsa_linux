@@ -149,7 +149,7 @@ static int msm_hdmi_phy_probe(struct platform_device *pdev)
 	if (!phy)
 		return -ENODEV;
 
-	phy->cfg = (struct hdmi_phy_cfg *)of_device_get_match_data(dev);
+	phy->cfg = of_device_get_match_data(dev);
 	if (!phy->cfg)
 		return -ENODEV;
 
