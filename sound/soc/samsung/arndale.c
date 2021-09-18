@@ -150,7 +150,7 @@ static int arndale_audio_probe(struct platform_device *pdev)
 	struct snd_soc_dai_link *dai_link;
 	int ret;
 
-	card = (struct snd_soc_card *)of_device_get_match_data(&pdev->dev);
+	card = of_device_get_match_data(&pdev->dev);
 	card->dev = &pdev->dev;
 	dai_link = card->dai_link;
 
