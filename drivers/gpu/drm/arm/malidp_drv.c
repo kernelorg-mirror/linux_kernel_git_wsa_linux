@@ -724,7 +724,7 @@ static int malidp_bind(struct device *dev)
 	if (!hwdev)
 		return -ENOMEM;
 
-	hwdev->hw = (struct malidp_hw *)of_device_get_match_data(dev);
+	hwdev->hw = of_device_get_match_data(dev);
 	malidp->dev = hwdev;
 
 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
