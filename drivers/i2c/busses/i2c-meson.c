@@ -422,8 +422,7 @@ static int meson_i2c_probe(struct platform_device *pdev)
 	spin_lock_init(&i2c->lock);
 	init_completion(&i2c->done);
 
-	i2c->data = (const struct meson_i2c_data *)
-		of_device_get_match_data(&pdev->dev);
+	i2c->data = of_device_get_match_data(&pdev->dev);
 
 	i2c->clk = devm_clk_get(&pdev->dev, NULL);
 	if (IS_ERR(i2c->clk)) {
