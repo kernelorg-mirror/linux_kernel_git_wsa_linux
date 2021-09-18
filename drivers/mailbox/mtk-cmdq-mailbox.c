@@ -547,7 +547,7 @@ static int cmdq_probe(struct platform_device *pdev)
 	if (cmdq->irq < 0)
 		return cmdq->irq;
 
-	plat_data = (struct gce_plat *)of_device_get_match_data(dev);
+	plat_data = of_device_get_match_data(dev);
 	if (!plat_data) {
 		dev_err(dev, "failed to get match data\n");
 		return -EINVAL;
