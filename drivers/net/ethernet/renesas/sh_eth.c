@@ -3272,7 +3272,7 @@ static int sh_eth_drv_probe(struct platform_device *pdev)
 	if (id)
 		mdp->cd = (struct sh_eth_cpu_data *)id->driver_data;
 	else
-		mdp->cd = (struct sh_eth_cpu_data *)of_device_get_match_data(&pdev->dev);
+		mdp->cd = of_device_get_match_data(&pdev->dev);
 
 	mdp->reg_offset = sh_eth_get_register_offset(mdp->cd->register_type);
 	if (!mdp->reg_offset) {
