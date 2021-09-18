@@ -305,8 +305,7 @@ err_clk:
 #ifdef CONFIG_PM
 static int stm32_dmamux_runtime_suspend(struct device *dev)
 {
-	struct platform_device *pdev = to_platform_device(dev);
-	struct stm32_dmamux_data *stm32_dmamux = platform_get_drvdata(pdev);
+	struct stm32_dmamux_data *stm32_dmamux = dev_get_drvdata(dev);
 
 	clk_disable_unprepare(stm32_dmamux->clk);
 
@@ -315,13 +314,12 @@ static int stm32_dmamux_runtime_suspend(struct device *dev)
 
 static int stm32_dmamux_runtime_resume(struct device *dev)
 {
-	struct platform_device *pdev = to_platform_device(dev);
-	struct stm32_dmamux_data *stm32_dmamux = platform_get_drvdata(pdev);
+	struct stm32_dmamux_data *stm32_dmamux = dev_get_drvdata(dev);
 	int ret;
 
 	ret = clk_prepare_enable(stm32_dmamux->clk);
 	if (ret) {
-		dev_err(&pdev->dev, "failed to prepare_enable clock\n");
+		dev_err(dev, "failed to prepare_enable clock\n");
 		return ret;
 	}
 
@@ -332,8 +330,7 @@ static int stm32_dmamux_runtime_resume(struct device *dev)
 #ifdef CONFIG_PM_SLEEP
 static int stm32_dmamux_suspend(struct device *dev)
 {
-	struct platform_device *pdev = to_platform_device(dev);
-	struct stm32_dmamux_data *stm32_dmamux = platform_get_drvdata(pdev);
+	struct stm32_dmamux_data *stm32_dmamux = dev_get_drvdata(dev);
 	int i, ret;
 
 	ret = pm_runtime_resume_and_get(dev);
@@ -353,8 +350,7 @@ static int stm32_dmamux_suspend(struct device *dev)
 
 static int stm32_dmamux_resume(struct device *dev)
 {
-	struct platform_device *pdev = to_platform_device(dev);
-	struct stm32_dmamux_data *stm32_dmamux = platform_get_drvdata(pdev);
+	struct stm32_dmamux_data *stm32_dmamux = dev_get_drvdata(dev);
 	int i, ret;
 
 	ret = pm_runtime_force_resume(dev);
