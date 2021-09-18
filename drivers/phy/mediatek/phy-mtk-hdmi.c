@@ -136,8 +136,7 @@ static int mtk_hdmi_phy_probe(struct platform_device *pdev)
 	}
 
 	hdmi_phy->dev = dev;
-	hdmi_phy->conf =
-		(struct mtk_hdmi_phy_conf *)of_device_get_match_data(dev);
+	hdmi_phy->conf = of_device_get_match_data(dev);
 	mtk_hdmi_phy_clk_get_data(hdmi_phy, &clk_init);
 	hdmi_phy->pll_hw.init = &clk_init;
 	hdmi_phy->pll = devm_clk_register(dev, &hdmi_phy->pll_hw);
