@@ -408,8 +408,7 @@ static int meson8b_dwmac_probe(struct platform_device *pdev)
 		goto err_remove_config_dt;
 	}
 
-	dwmac->data = (const struct meson8b_dwmac_data *)
-		of_device_get_match_data(&pdev->dev);
+	dwmac->data = of_device_get_match_data(&pdev->dev);
 	if (!dwmac->data) {
 		ret = -EINVAL;
 		goto err_remove_config_dt;
