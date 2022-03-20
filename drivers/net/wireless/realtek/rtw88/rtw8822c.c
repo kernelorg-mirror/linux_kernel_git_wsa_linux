@@ -1476,12 +1476,12 @@ static void rtw8822c_txgapk_read_offset(struct rtw_dev *rtwdev, u8 path)
 	rtw_write32_mask(rtwdev, REG_IQKSTAT, MASKBYTE0, 0x0);
 
 	rtw_write32_mask(rtwdev, REG_TX_TONE_IDX, MASKBYTE0, 0x018);
-	fsleep(1000);
+	usleep_autoyield(1000);
 	if (channel >= 1 && channel <= 14)
 		rtw_write32_mask(rtwdev, REG_R_CONFIG, MASKBYTE0, BIT_2G_SWING);
 	else
 		rtw_write32_mask(rtwdev, REG_R_CONFIG, MASKBYTE0, BIT_5G_SWING);
-	fsleep(1000);
+	usleep_autoyield(1000);
 
 	rtw_write32_mask(rtwdev, REG_NCTL0, MASKDWORD, cfg1_1b00[path]);
 	rtw_write32_mask(rtwdev, REG_NCTL0, MASKDWORD, cfg2_1b00[path]);
@@ -2905,7 +2905,7 @@ static void rtw8822c_do_lck(struct rtw_dev *rtwdev)
 
 	rtw_write_rf(rtwdev, RF_PATH_A, RF_SYN_CTRL, RFREG_MASK, 0x80010);
 	rtw_write_rf(rtwdev, RF_PATH_A, RF_SYN_PFD, RFREG_MASK, 0x1F0FA);
-	fsleep(1);
+	usleep_autoyield(1);
 	rtw_write_rf(rtwdev, RF_PATH_A, RF_AAC_CTRL, RFREG_MASK, 0x80000);
 	rtw_write_rf(rtwdev, RF_PATH_A, RF_SYN_AAC, RFREG_MASK, 0x80001);
 	read_poll_timeout(rtw_read_rf, val, val != 0x1, 1000, 100000,
@@ -2915,7 +2915,7 @@ static void rtw8822c_do_lck(struct rtw_dev *rtwdev)
 
 	rtw_write_rf(rtwdev, RF_PATH_A, RF_FAST_LCK, RFREG_MASK, 0x0f000);
 	rtw_write_rf(rtwdev, RF_PATH_A, RF_FAST_LCK, RFREG_MASK, 0x4f000);
-	fsleep(1);
+	usleep_autoyield(1);
 	rtw_write_rf(rtwdev, RF_PATH_A, RF_FAST_LCK, RFREG_MASK, 0x0f000);
 }
 
