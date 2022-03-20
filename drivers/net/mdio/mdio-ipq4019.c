@@ -192,7 +192,7 @@ static int ipq_mdio_reset(struct mii_bus *bus)
 		val = readl(priv->eth_ldo_rdy);
 		val |= BIT(0);
 		writel(val, priv->eth_ldo_rdy);
-		fsleep(IPQ_PHY_SET_DELAY_US);
+		usleep_autoyield(IPQ_PHY_SET_DELAY_US);
 	}
 
 	/* Configure MDIO clock source frequency if clock is specified in the device tree */
