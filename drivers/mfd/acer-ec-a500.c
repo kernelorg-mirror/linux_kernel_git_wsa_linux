@@ -59,7 +59,7 @@ static int a500_ec_read(void *context, const void *reg_buf, size_t reg_size,
 	*ret_val = ret;
 
 	if (reg == REG_CURRENT_NOW)
-		fsleep(10000);
+		usleep_autoyield(10000);
 
 	return 0;
 }
