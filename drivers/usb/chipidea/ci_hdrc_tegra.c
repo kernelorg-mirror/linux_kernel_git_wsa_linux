@@ -189,13 +189,13 @@ static int tegra_usb_internal_port_reset(struct ehci_hcd *ehci,
 		temp = ehci_readl(ehci, portsc_reg);
 		temp |= PORT_RESET;
 		ehci_writel(ehci, temp, portsc_reg);
-		fsleep(10000);
+		usleep_autoyield(10000);
 		temp &= ~PORT_RESET;
 		ehci_writel(ehci, temp, portsc_reg);
-		fsleep(1000);
+		usleep_autoyield(1000);
 		tries = 100;
 		do {
-			fsleep(1000);
+			usleep_autoyield(1000);
 			/*
 			 * Up to this point, Port Enable bit is
 			 * expected to be set after 2 ms waiting.
