@@ -105,7 +105,7 @@ static int tegra_tsensor_hw_enable(const struct tegra_tsensor *ts)
 		return err;
 	}
 
-	fsleep(1000);
+	usleep_autoyield(1000);
 
 	err = reset_control_deassert(ts->rst);
 	if (err) {
