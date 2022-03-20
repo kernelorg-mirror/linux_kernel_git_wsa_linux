@@ -2438,7 +2438,7 @@ static int _regmap_range_multi_paged_reg_write(struct regmap *map,
 
 				if (regs[i].delay_us) {
 					if (map->can_sleep)
-						fsleep(regs[i].delay_us);
+						usleep_autoyield(regs[i].delay_us);
 					else
 						udelay(regs[i].delay_us);
 				}
@@ -2479,7 +2479,7 @@ static int _regmap_multi_reg_write(struct regmap *map,
 
 			if (regs[i].delay_us) {
 				if (map->can_sleep)
-					fsleep(regs[i].delay_us);
+					usleep_autoyield(regs[i].delay_us);
 				else
 					udelay(regs[i].delay_us);
 			}
