@@ -463,7 +463,7 @@ static void tegra20_mc_stat_gather(struct tegra20_mc_stat *stat)
 	mc_writel(mc, 0xffffffff, MC_STAT_EMC_CLOCK_LIMIT);
 
 	mc_writel(mc, EMC_GATHER_ENABLE, MC_STAT_CONTROL);
-	fsleep(stat->sample_time_usec);
+	usleep_autoyield(stat->sample_time_usec);
 	mc_writel(mc, EMC_GATHER_DISABLE, MC_STAT_CONTROL);
 
 	count0 = mc_readl(mc, MC_STAT_EMC_COUNT_0);
