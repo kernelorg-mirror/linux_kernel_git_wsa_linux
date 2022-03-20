@@ -132,7 +132,7 @@ void mdio_device_reset(struct mdio_device *mdiodev, int value)
 
 	d = value ? mdiodev->reset_assert_delay : mdiodev->reset_deassert_delay;
 	if (d)
-		fsleep(d);
+		usleep_autoyield(d);
 }
 EXPORT_SYMBOL(mdio_device_reset);
 

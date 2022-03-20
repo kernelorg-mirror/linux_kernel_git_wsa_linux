@@ -570,10 +570,10 @@ int __mdiobus_register(struct mii_bus *bus, struct module *owner)
 		return err;
 	} else	if (gpiod) {
 		bus->reset_gpiod = gpiod;
-		fsleep(bus->reset_delay_us);
+		usleep_autoyield(bus->reset_delay_us);
 		gpiod_set_value_cansleep(gpiod, 0);
 		if (bus->reset_post_delay_us > 0)
-			fsleep(bus->reset_post_delay_us);
+			usleep_autoyield(bus->reset_post_delay_us);
 	}
 
 	if (bus->reset) {

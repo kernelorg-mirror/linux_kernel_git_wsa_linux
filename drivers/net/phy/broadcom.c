@@ -447,7 +447,7 @@ static int bcm54xx_resume(struct phy_device *phydev)
 	/* Upon exiting power down, the PHY remains in an internal reset state
 	 * for 40us
 	 */
-	fsleep(40);
+	usleep_autoyield(40);
 
 	/* Issue a soft reset after clearing the power down bit
 	 * and before doing any other configuration.
