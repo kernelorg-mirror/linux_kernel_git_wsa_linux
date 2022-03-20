@@ -112,4 +112,4 @@ NON-ATOMIC CONTEXT:
 			you know you have a need for the interruptible variant.
 
 	FLEXIBLE SLEEPING (any delay, uninterruptible)
-		* Use fsleep
+		* Use usleep_autoyield

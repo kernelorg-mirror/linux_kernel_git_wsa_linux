@@ -78,7 +78,7 @@ static inline void ssleep(unsigned int seconds)
 }
 
 /* see Documentation/timers/timers-howto.rst for the thresholds */
-static inline void fsleep(unsigned long usecs)
+static inline void usleep_autoyield(unsigned long usecs)
 {
 	if (usecs <= 10)
 		udelay(usecs);
@@ -87,5 +87,7 @@ static inline void fsleep(unsigned long usecs)
 	else
 		msleep(DIV_ROUND_UP(usecs, 1000));
 }
+
+#define fsleep usleep_autoyield
 
 #endif /* defined(_LINUX_DELAY_H) */
