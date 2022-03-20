@@ -53,7 +53,7 @@ int __must_check mhi_poll_reg_field(struct mhi_controller *mhi_cntrl,
 		if (out == val)
 			return 0;
 
-		fsleep(delayus);
+		usleep_autoyield(delayus);
 	}
 
 	return -ETIMEDOUT;
