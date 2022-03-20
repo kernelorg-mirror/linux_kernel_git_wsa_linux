@@ -88,6 +88,4 @@ static inline void usleep_autoyield(unsigned long usecs)
 		msleep(DIV_ROUND_UP(usecs, 1000));
 }
 
-#define fsleep usleep_autoyield
-
 #endif /* defined(_LINUX_DELAY_H) */
