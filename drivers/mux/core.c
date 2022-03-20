@@ -343,7 +343,7 @@ static void mux_control_delay(struct mux_control *mux, unsigned int delay_us)
 	delayend = ktime_add_us(mux->last_change, delay_us);
 	remaining = ktime_us_delta(delayend, ktime_get());
 	if (remaining > 0)
-		fsleep(remaining);
+		usleep_autoyield(remaining);
 }
 
 /**
