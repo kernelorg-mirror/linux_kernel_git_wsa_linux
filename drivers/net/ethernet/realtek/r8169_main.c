@@ -727,7 +727,7 @@ static bool rtl_loop_wait(struct rtl8169_private *tp, const struct rtl_cond *c,
 	for (i = 0; i < n; i++) {
 		if (c->check(tp) == high)
 			return true;
-		fsleep(usecs);
+		usleep_autoyield(usecs);
 	}
 
 	if (net_ratelimit())
@@ -2471,7 +2471,7 @@ static void rtl_wait_txrx_fifo_empty(struct rtl8169_private *tp)
 static void rtl_enable_rxdvgate(struct rtl8169_private *tp)
 {
 	RTL_W32(tp, MISC, RTL_R32(tp, MISC) | RXDV_GATED_EN);
-	fsleep(2000);
+	usleep_autoyield(2000);
 	rtl_wait_txrx_fifo_empty(tp);
 }
 
@@ -4007,11 +4007,11 @@ static void rtl8169_cleanup(struct rtl8169_private *tp, bool going_down)
 		break;
 	case RTL_GIGA_MAC_VER_40 ... RTL_GIGA_MAC_VER_63:
 		rtl_enable_rxdvgate(tp);
-		fsleep(2000);
+		usleep_autoyield(2000);
 		break;
 	default:
 		RTL_W8(tp, ChipCmd, RTL_R8(tp, ChipCmd) | StopReq);
-		fsleep(100);
+		usleep_autoyield(100);
 		break;
 	}
 
