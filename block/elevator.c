@@ -761,7 +761,7 @@ static int __elevator_change(struct request_queue *q, const char *name)
 		return elevator_switch(q, NULL);
 	}
 
-	strlcpy(elevator_name, name, sizeof(elevator_name));
+	strscpy(elevator_name, name, sizeof(elevator_name));
 	e = elevator_get(q, strstrip(elevator_name), true);
 	if (!e)
 		return -EINVAL;
