@@ -5743,7 +5743,7 @@ static int add_named_array(const char *val, const struct kernel_param *kp)
 		len--;
 	if (len >= DISK_NAME_LEN)
 		return -E2BIG;
-	strscpy(buf, val, len+1);
+	strscpy(buf, val, len + 1);
 	if (strncmp(buf, "md_", 3) == 0)
 		return md_alloc_and_put(0, buf);
 	if (strncmp(buf, "md", 2) == 0 &&
