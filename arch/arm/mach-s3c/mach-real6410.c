@@ -232,7 +232,7 @@ static char real6410_features_str[12] __initdata = "0";
 static int __init real6410_features_setup(char *str)
 {
 	if (str)
-		strlcpy(real6410_features_str, str,
+		strscpy(real6410_features_str, str,
 			sizeof(real6410_features_str));
 	return 1;
 }
