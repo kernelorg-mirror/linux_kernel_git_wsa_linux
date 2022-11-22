@@ -67,7 +67,6 @@ eb90932e37cf arm64: dts: r8a779g0-whitehawk: Disable display native driver
 88c41a61fe24 arm64: dts: renesas: Update QoS node for R-Car S4 and V4H
 5de8de0a2b6d arm64: dts: renesas: r8a779g0: Add DSC node
 1fdee68f8554 arm64: dts: renesas: r8a779g0: Enable DSI1
-f4d6c849fbfc arm64: dts: renesas: r8a779g0: Add AVS device node
 056ab0e1c413 arm64: dts: renesas: r8a779g0: Add OPPs table for cpu devices
 0981c1a87c28 arm64: dts: renesas: r8a779f0: Add OPPs table for cpu devices
 c8727613ab15 arm64: dts: renesas: r8a779f0: Add reset-names for rswitch
@@ -321,8 +320,6 @@ c5901c556c2d arm64: dts: renesas: r8a779a0: Add FBC devices
 e0e331940feb arm64: dts: renesas: r8a779a0: Add IMP RADSP devices
 26c27860764c arm64: dts: renesas: r8a779a0: Add RFSO devices
 aa2552bb7c2e arm64: dts: renesas: r8a779a0-falcon: Reserve u-boot secure area
-75c6f4c7fb2d arm64: dts: r8a7796{0,1}: Add cpg clock and reset for AVS
-8c54017336c9 arm64: dts: r8a77951: Add cpg clock and reset for AVS
 23c7e7f33c3d arm64: dts: renesas: r8a77990: Add VGA connector to DU
 6df2f31dfd82 arm64: dts: renesas: falcon: Add pfc node for PCIe
 84a6123fe4a3 arm64: dts: renesas: ebisu: Add endpoint for dual-link in Ebisu board
@@ -359,11 +356,6 @@ f579310d2ed3 arm64: dts: renesas: r8a77995-draak: Set max dot clock for vga
 3088c796acfa arm64: dts: renesas: r8a77990-ebisu: Set preferred resolution
 692182da7049 arm64: dts: renesas: salvator-common: Set max dot clock for vga
 cc177bcb7dea arm64: dts: renesas: r8a779{51, 65}: Add brs option
-f2a8944238bd dt-bindings: cpufreq: add AVS bindings for R-Car V4H
-541b03f98c80 soc: renesas: rcar-avs: Support AVS function for R8A779G0
-7aa6dec57f0b soc: renesas: rcar-avs: Release node pointer
-7cc188a06318 soc: renesas: rcar-avs: Add clock enable for AVS
-5797c9e12da5 soc: renesas: rcar-avs: Support AVS function
 9138f2baa207 drm: bridge: max96789: Add basic function for max96789
 72058c09a66e drm: rcar-du: Fix DU setting for V4H
 1e03a491706f drm: rcar-du: Fix the enable process for DSI module
@@ -669,7 +661,6 @@ dc644df9f22b clk: renesas: r8a779{5, 6, 70, 80}: add IMP clock
 43ca51590fa0 clk: renesas: r8a779{70, 80}: Add CPU operation points.
 280b7c5cc56b clk: renesas: rcar-gen3: Fix revision of R8A7796 for applying SD_SKIP_FIRST
 eebc4189c612 clk: renesas: r8a779a0: Extend number of supported module clocks
-ee208b708745 clk: renesas: r8a779{5,6}: Add AVS clock
 151f27fccd60 clk: renesas: cpg-mssr: Fix Realtime Module Stop Control Register offsets
 7be570957b5f clk: renesas: r8a7796: Remove iVDP1C clock on ES3.0 or later
 22fcdce314a2 clk: renesas: r8a77{96, 965, 990}: Add ADG clock
@@ -697,8 +688,6 @@ ecbb6cd00958 arm64: dts: renesas: r8a77950: Override VCP4 device nodes for R-Car
 eae3c2d59f3d arm64: dts: renesas: r8a779{50, 51}: Detach IPMMU-VI from FCDVD
 98ea5401ab70 arm64: dts: renesas: r8a77951-ulcb: Fix source clock for DU2
 51eaa1c02ef0 arm64: dts: renesas: r8a77950-ulcb: Add reserved memory regions
-4c53ea03dbb4 arm64: dts: renesas: r8a779{51, 60, 61}: Add AVS support for GSX
-f215e41739a5 arm64: dts: renesas: r8a779{51, 60, 61}: Add AVS device node
 983c00ba9120 arm64: dts: renesas: Add DEVFREQ support for GSX in Gen3
 870144dfc576 arm64: dts: renesas: r8a77990-ebisu{,-es10}: Enable IPMMU of SDHI3
 4f96fa23c03c arm64: dts: renesas: r8a7796{0,1}: Enable IPMMU-DS1 and IPMMU-MM
@@ -950,3 +939,14 @@ cd4e39885553 arm64: dts: renesas: Add definition for vspm/vsp2 driver
 6852c7e3a173 arm64: dts: renesas: r8a7796{0,1}-ulcb: Add VSPM I/F driver node
 0b183cd80624 arm64: dts: renesas: r8a77950-ulcb: Add VSPM I/F driver node
 8b318e487b5c arm64: dts: renesas: r8a77951-ulcb: Add VSPM I/F driver node
+f4d6c849fbfc arm64: dts: renesas: r8a779g0: Add AVS device node
+75c6f4c7fb2d arm64: dts: r8a7796{0,1}: Add cpg clock and reset for AVS
+8c54017336c9 arm64: dts: r8a77951: Add cpg clock and reset for AVS
+f2a8944238bd dt-bindings: cpufreq: add AVS bindings for R-Car V4H
+541b03f98c80 soc: renesas: rcar-avs: Support AVS function for R8A779G0
+7aa6dec57f0b soc: renesas: rcar-avs: Release node pointer
+7cc188a06318 soc: renesas: rcar-avs: Add clock enable for AVS
+5797c9e12da5 soc: renesas: rcar-avs: Support AVS function
+ee208b708745 clk: renesas: r8a779{5,6}: Add AVS clock
+4c53ea03dbb4 arm64: dts: renesas: r8a779{51, 60, 61}: Add AVS support for GSX
+f215e41739a5 arm64: dts: renesas: r8a779{51, 60, 61}: Add AVS device node
