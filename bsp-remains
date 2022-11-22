@@ -276,13 +276,6 @@ a432a1010378 arm64: dts: r8a77970, r8a77980: Enable TMU and CMT
 d80707e0e447 arm64: dts: renesas: ulcb-kf: update for kernel v5.10
 2479c7da8049 arm64: dts: renesas: Update IMP LDMA device
 f7c6a43a94f6 arm64: dts: renesas: Comment out status ok in rpc node
-89068d303247 arm64: dts: renesas: Update IPMMU ID for VIN devices
-b758a30100a0 arm64: dts: renesas: Update IPMMU ID for FBA devices
-254db82a8ba6 arm64: dts: renesas: Update IPMMU ID for IVCP1E device
-cb6c56e74d27 arm64: dts: renesas: Update IPMMU ID for VIP devices
-0609abf1b522 arm64: dts: renesas: Update IPMMU ID for IMP devices
-5f1b9de7e82f arm64: dts: renesas: Update IPMMU ID for ISP devices
-0a215942b7fc arm64: dts: renesas: Update IPMMU ID for IMR devices
 605f94a22dc9 arm64: dts: renesas: r8a779a0: Add WWDT devices
 854069bcb2eb arm64: dts: renesas: r8a779a0: Add MFIS devices
 ecf7e4693ae4 arm64: dts: r8a779a0-falcon: Add TPU support
@@ -950,3 +943,10 @@ ee0b4dd3d4e2 arm64: dts: renesas: salvator-common: Add Media Clock Recovery Hand
 ecbb6cd00958 arm64: dts: renesas: r8a77950: Override VCP4 device nodes for R-Car H3 ES1.x
 4f9a347ebf94 arm64: dts: renesas: r8a779{51, 65, 90}: Add VCP4 device nodes
 5aed6ab53b6e arm64: dts: renesas: r8a7796{0,1}: Add VCP4 device nodes
+89068d303247 arm64: dts: renesas: Update IPMMU ID for VIN devices
+b758a30100a0 arm64: dts: renesas: Update IPMMU ID for FBA devices
+254db82a8ba6 arm64: dts: renesas: Update IPMMU ID for IVCP1E device
+cb6c56e74d27 arm64: dts: renesas: Update IPMMU ID for VIP devices
+0609abf1b522 arm64: dts: renesas: Update IPMMU ID for IMP devices
+5f1b9de7e82f arm64: dts: renesas: Update IPMMU ID for ISP devices
+0a215942b7fc arm64: dts: renesas: Update IPMMU ID for IMR devices
