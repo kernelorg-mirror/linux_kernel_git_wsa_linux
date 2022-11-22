@@ -69,7 +69,6 @@ fb425148fd4d arm64: dts: renesas: r8a779f0: Support DMA function for MSIOF
 26b45354f3f2 arm64: dts: renesas: r8a77980: Support HS400 on R8A77980 Ver 2.0
 7de2796423ab arm64: dts: renesas: r8a779g0: Fix naming for IMP VDSP
 be9f0127deeb arm64: dts: renesas: r8a779g0: Remove bus name and uTLB assignment IMP VDSP
-6e1527044e17 arm64: dts: renesas: r8a779g0: Remove FCPR fcpr{r,w,a} devices
 f945fad8745d arm64: dts: renesas: v3hsk: Add clock-skew for GEther's Micrel PHY
 747fd84b11fb arm64: dts: renesas: r8a779a0: Add psci node for R8A779A0
 4692813404f0 arm64: dts: renesas: r8a779f0: Update power_state parameter for psci suspend call
@@ -232,7 +231,6 @@ b00576ea6bf3 arm64: dts: renesas: r8a779m{1, 3, 5}: Do not support boost mode fo
 e4b92ad17739 Revert "arm64: dts: renesas: r8a77965: Add RPC device node"
 ec887e9beca3 Revert "arm64: dts: renesas: ulcb: Add RPC HyperFlash device node"
 df1b70b902a1 Revert "arm64: dts: renesas: salvator-common: Add RPC HyperFlash device node"
-2a74c8a6fb8f arm64: dts: renesas: r8a77961: Fix fcp channel number
 2b6d44cc2ba6 arm64: dts: renesas: ulcb: Enable IPMMU of SDHI2
 7c17cf98a2b7 arm64: dts: renesas: r8a77995-draak: Enable IPMMU of SDHI2
 d0389b66d30a arm64: dts: renesas: r8a77995: Enable IPMMU-DS1 and IPMMU-MM
@@ -271,7 +269,6 @@ f7c6a43a94f6 arm64: dts: renesas: Comment out status ok in rpc node
 854069bcb2eb arm64: dts: renesas: r8a779a0: Add MFIS devices
 ecf7e4693ae4 arm64: dts: r8a779a0-falcon: Add TPU support
 2be47417cee9 arm64: dts: renesas: r8a77990-es10-ebisu: add full-pwr-cycle-in-suspend into eMMC nodes
-c3f7a7606bd4 arm64: dts: renesas: r8a779a0: Add FCPR devices
 e257b37728a2 arm64: dts: renesas: r8a779a0: Add FBA devices
 c5901c556c2d arm64: dts: renesas: r8a779a0: Add FBC devices
 2c0506853cc2 arm64: dts: renesas: r8a779a0: Add remained IMP devices
@@ -359,7 +356,6 @@ c7b9de4f7b6a drm: rcar-du: Accessing to reserved registers at V3U is prohibited
 8e452962e251 drm: rcar-du: Add output checking in encoder for DSI port.
 d84aeb65f366 drm: rcar-du: Add DU device information for V3U
 bda8cf6a5bdc v4l: vsp1: Add new registers which are introduced in V3U
-395bb469c811 vsp1: rcar-fcp: Add FCPVD reset sequence for VSPD
 c63b0054608b drm: rcar-du: Add dev_type for dw-hdmi driver
 2ab3707b5051 drm: bridge/dw-hdmi: Fix offset address of register for R-Car
 0753f4c486a7 drm: bridge/dw-hdmi: Add re-write of vsync pulse width
@@ -627,7 +623,6 @@ fbf991b5bd28 clk: renesas: r8a77{95, 96, 965}: Replace PLL3 multiplication setti
 7ed8cce11f67 arm64: defconfig: Enable cpufreq configs for rcar
 a5758a3a06cd arm64: defconfig: Enable Renesas R-Car PCIe v4.0 host controller driver
 3df554353f04 arm64: dts: renesas: r8a77965-ulcb: Fix source clock for DU
-be06ac99bed2 arm64: dts: renesas: r8a77965: Fix power domain for FCPCS
 98ea5401ab70 arm64: dts: renesas: r8a77951-ulcb: Fix source clock for DU2
 870144dfc576 arm64: dts: renesas: r8a77990-ebisu{,-es10}: Enable IPMMU of SDHI3
 4f96fa23c03c arm64: dts: renesas: r8a7796{0,1}: Enable IPMMU-DS1 and IPMMU-MM
@@ -697,11 +692,9 @@ f371dfb0c1a9 arm64: dts: renesas: r8a779a0: Add SMD-PS and SMP-POST UIO devices
 ee2195015391 arm64: dts: renesas: r8a77970: Update naming of FBA UIO devices
 ca34f47f7898 arm64: dts: renesas: r8a77980-es2: Remove unsupported UIO devices
 abbb8b756750 arm64: dts: renesas: r8a77980: Update naming of IPMMU UIO devices
-6839e18998c0 arm64: dts: renesas: r8a77980: Update FCPR{R,W,A} UIO devices
 e15be81dcd90 arm64: dts: renesas: r8a77980: Update naming of RFSO UIO devices
 71d2a588e3d5 arm64: dts: renesas: r8a77970: Update naming of IPMMU UIO devices
 3ff40e27f73d arm64: dts: renesas: r8a77970: Update naming of RFSO UIO devices
-b622ab808a8b arm64: dts: renesas: r8a779a0: Update naming of FCPR{R,W,A} UIO devices
 e5b8380d42a9 arm64: dts: renesas: r8a779a0: Update naming of IPMMU UIO devices
 b37c6426cd20 arm64: dts: renesas: r8a779a0: Update naming of RFSO UIO devices
 79d47de70587 arm64: dts: renesas: r8a779a0: Fix typo in FBC UIO device
@@ -711,16 +704,13 @@ fed287e0e56a arm64: dts: renesas: r8a77980: Update naming of IPMMU UIO devices
 a4bc6c77050c arm64: dts: renesas: r8a779a0: Fix interrupt of UIO ISP devices
 14ed7d9a57aa arm64: dts: r8a77980: Fix uio imp node name
 f329cdc51fdd arm64: dts: r8a77980: Fix fbc_00 uio name in device node
-b61cae75f3e4 arm64: dts: renesas: r8a779a0: Update FCPRA UIO devices
 ce36edb18b9b arm64: dts: renesas: r8a779a0: Update FBC UIO devices
 b0499ac51a5c arm64: dts: renesas: r8a779a0: Update IPMMU UIO devices
-3957b0fb7d70 arm64: dts: renesas: r8a779a0: Update FCPR UIO devices
 f8236d92d540 arm64: dts: renesas: r8a779a0: Update RFSO UIO devices
 b8ea3923ce2b arm64: dts: renesas: r8a779a0: Update FBA UIO devices
 45dc63efd72a arm64: dts: renesas: r8a779a0: Update UIO IMP devices
 caf94148071f arm64: dts: renesas: r8a779a0: Update resets property in UIO devices
 2112b3e2f886 arm64: dts: renesas: r8a77980: Update IMP UIO device
-add6f2323ec3 arm64: dts: renesas: r8a77980: Update FCPR UIO devices
 708ed03096f4 arm64: dts: renesas: r8a77980: Add FBA CA53D/CA53 UIO devices
 d88e9479f7c9 arm64: dts: renesas: r8a77980: Update FBA IMP UIO devices
 1cf4b9a5ad3a arm64: dts: renesas: r8a77980: Update ISP UIO devices
@@ -761,7 +751,6 @@ c1816a3a25e0 arm64: dts: renesas: r8a779g0: Update VISION UIO devices
 1c27c7d3a754 arm64: dts: renesas: r8a779g0: Add VideoOutput/Input UIO devices
 6424254f5f84 arm64: dts: renesas: r8a779g0: Update WWDT UIO devices
 50e0cd3e8ca0 arm64: dts: renesas: r8a779g0: Add AESACC UIO devices
-14e1a7c5708f arm64: dts: renesas: r8a779g0: Update FCPR UIO devices
 830329547c10 arm64: dts: renesas: r8a779g0: Update naming IPMMU UIO devices
 9b802c22b5a1 arm64: dts: renesas: r8a779g0: Update support FieldBIST UIO devices
 ccbbf3af4fe8 arm64: dts: renesas: r8a779g0: Add ISP UIO devices
@@ -893,7 +882,6 @@ d45ea26fde42 arm64: dts: renesas: r8a779a0: Add RT-DMAC support
 67c712ca4318 clk: renesas: r8a77995: Add RT-DMAC clocks
 755a56e7c796 clk: renesas: r8a77{95, 96, 965, 990, 980}: Add RT-DMAC clocks
 42a071058dc9 arm64: dts: renesas: r8a77995: Detach IPMMU-DS1 from SDHI
-8e8b53933370 arm64: dts: renesas: r8a77995: Detach IPMMU-VI0 from FCPVD
 d26ecf8dae1b arm64: dts: renesas: r8a77995: Detach IPMMU-MP from AUDIO-DMAC0
 d66c36ce47e5 arm64: dts: renesas: r8a77995: Detach IPMMU-DS0 from Ethernet-AVB
 78ab046f9b98 arm64: dts: renesas: r8a779{51, 60, 65, 90}: Detach IPMMU-DS1 from SDHI
@@ -901,10 +889,8 @@ d66c36ce47e5 arm64: dts: renesas: r8a77995: Detach IPMMU-DS0 from Ethernet-AVB
 eae3c2d59f3d arm64: dts: renesas: r8a779{50, 51}: Detach IPMMU-VI from FCDVD
 6789a9fd36e1 arm64: dts: renesas: r8a779{51, 60, 65, 90, 95}: Detach IPMMU-DS from SYS-DMAC
 027c232cc182 arm64: dts: renesas: r8a779{51, 60, 61, 90}: Detach IPMMU-MP from Audio-DMAC
-1c6e58602374 arm64: dts: renesas: r8a77990: Detach IPMMU-VI0/1 from FCPVD
 10462af20dc2 arm64: dts: renesas: r8a77951: Detach IPMMU-DS0 from Ethernet-AVB
 b806480af6d6 arm64: dts: renesas: r8a77951: Detach IPMMU-HC from SATA
-e9e9f5ec040f arm64: dts: renesas: r8a7796{0,1}: Detach IPMMU-VI0 from FCPF
 10b608a15c26 arm64: dts: renesas: r8a77960: Detach IPMMU-DS0 from Ethernet-AVB
 c72f32a75e51 arm64: dts: renesas: r8a77995-draak: Add Media Clock Recovery Handler device node
 dadbd6f5b9f4 arm64: dts: renesas: ulcb: Add Media Clock Recovery Handler device node
@@ -950,3 +936,17 @@ d7c9cc6e1a2a clk: renesas: r8a7795: Add iVDP1C clocks to ES1.x
 c42b7504bd74 arm64: dts: renesas: r8a779f0/r8a779g0: Add QOS devices for S4/V4H Ver1.0
 21ffa2421578 arm64: dts: renesas: r8a779a0: Add QoS device
 31633efaaf13 arm64: dts: renesas: Add QoS device node for Gen3 devices
+6e1527044e17 arm64: dts: renesas: r8a779g0: Remove FCPR fcpr{r,w,a} devices
+2a74c8a6fb8f arm64: dts: renesas: r8a77961: Fix fcp channel number
+c3f7a7606bd4 arm64: dts: renesas: r8a779a0: Add FCPR devices
+395bb469c811 vsp1: rcar-fcp: Add FCPVD reset sequence for VSPD
+be06ac99bed2 arm64: dts: renesas: r8a77965: Fix power domain for FCPCS
+6839e18998c0 arm64: dts: renesas: r8a77980: Update FCPR{R,W,A} UIO devices
+b622ab808a8b arm64: dts: renesas: r8a779a0: Update naming of FCPR{R,W,A} UIO devices
+b61cae75f3e4 arm64: dts: renesas: r8a779a0: Update FCPRA UIO devices
+3957b0fb7d70 arm64: dts: renesas: r8a779a0: Update FCPR UIO devices
+add6f2323ec3 arm64: dts: renesas: r8a77980: Update FCPR UIO devices
+14e1a7c5708f arm64: dts: renesas: r8a779g0: Update FCPR UIO devices
+8e8b53933370 arm64: dts: renesas: r8a77995: Detach IPMMU-VI0 from FCPVD
+1c6e58602374 arm64: dts: renesas: r8a77990: Detach IPMMU-VI0/1 from FCPVD
+e9e9f5ec040f arm64: dts: renesas: r8a7796{0,1}: Detach IPMMU-VI0 from FCPF
