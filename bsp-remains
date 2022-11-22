@@ -118,7 +118,6 @@ dc7bf3a6181e arm64: dts: renesas: r8a779a0: add CA76_1 core
 261740113b98 arm64: dts: renesas: r8a779a0: Add FBA SMPS/SMES/SMPO devices
 7abb5f69ebec arm64: dts: renesas: r8a77980: Add RFSO devices
 e827b02ea457 arm64: dts: r8a779a0-falcon: Enable QSPI flash support
-99fe0c944b18 arm64: dts: r8a77970-eagle: Add reserved memory regions
 c465499cb613 arm64: dts: renesas: r8a779g0: Update bus name and uTLB assignment for DSI0
 4b1792f0d60f arm64: dts: renesas: r8a779g0: Add power domain property for system ram
 6c8555357227 arm64: dts: renesas: r8a779g0: Remove cpg and reset value of system ram node
@@ -251,12 +250,9 @@ b0aa94d65efb arm64: dts: renesas: Fix compatible name for MFIS node
 b8391f96ea13 arm64: dts: renesas: r8a77980-v3hsk: Disable MMC
 ded7fcd78c96 arm64: dts: renesas: r8a77995-draak: Remove endpoint of LVDS1
 3799f1e161c6 arm64: dts: Add MFISLock driver support
-688910e4b240 arm64: dts: r8a77995-draak: Add reserved memory region
 948df237125b arm64: dts: Makefile: Comment out compiling of dtbo
 d0ae50ec421f arm64: dts: r8a779a0: Delete ipmmu in mmc node
-76fa381026cd arm64: dts: r8a77970-eagle: Add reserved memory regions
 ceaebe58dff5 arm64: dts: r8a77980: Update name and reg size of IMP nodes
-f5b16e76077b arm64: dts: r8a77980-condor: Add reserved memory regions
 403876f7ff9a arm64: dts: renesas: Add missed ipmmu-id tags
 6ddabb5d936d arm64: dts: renesas: extend 'ipmmu-id' with micro-TLB index
 cf51e0adbe4a arm64: dts: renesas: r8a77980-es2: Add videobox boards support
@@ -642,7 +638,6 @@ a5758a3a06cd arm64: defconfig: Enable Renesas R-Car PCIe v4.0 host controller dr
 be06ac99bed2 arm64: dts: renesas: r8a77965: Fix power domain for FCPCS
 93b461eca6d1 arm64: dts: renesas: r8a7795: Fix clock, reset and power domain for iVDP1C
 98ea5401ab70 arm64: dts: renesas: r8a77951-ulcb: Fix source clock for DU2
-51eaa1c02ef0 arm64: dts: renesas: r8a77950-ulcb: Add reserved memory regions
 983c00ba9120 arm64: dts: renesas: Add DEVFREQ support for GSX in Gen3
 870144dfc576 arm64: dts: renesas: r8a77990-ebisu{,-es10}: Enable IPMMU of SDHI3
 4f96fa23c03c arm64: dts: renesas: r8a7796{0,1}: Enable IPMMU-DS1 and IPMMU-MM
@@ -655,7 +650,6 @@ eebb64a81da5 arm64: dts: renesas: r8a77965: Change default of all IPMMU devices 
 5024c4ce1d24 arm64: dts: renesas: r8a7796{0,1}: Disable IPMMU devices
 cf44aee9dfea arm64: dts: renesas: r8a779{51, 60, 61}-ulcb: Fix souce clock for DU
 a7afdde5f202 arm64: dts: renesas: r8a77960-ulcb: Disable CPUIdle support for CA53
-fc6bda37d4fe arm64: dts: renesas: r8a77951-ulcb: Add reserved memory regions
 9948cf8925ee arm64: dts: renesas: r8a77950-ulcb: Disable HS400 of SDHI2
 31633efaaf13 arm64: dts: renesas: Add QoS device node for Gen3 devices
 eff7c317af2e arm64: dts: renesas: Add optee node for Gen3 devices
@@ -665,7 +659,6 @@ c4ce249bb021 arm64: dts: renesas: Add MFIS Lock and MFIS devices node for gen3 d
 8ebc78fdd198 arm64: dts: renesas: Add GSX device node for Gen3 devices
 e0911d520034 arm64: dts: renesas: r8a77990-ebisu-4d: Add lossy descompress area
 6f426ef6c6a6 arm64: dts: renesas: r8a77990-ebisu: Add Ebisu-4D board support
-ed7948f00a4b arm64: dts: renesas: Add reserved memory regions for Gen3 devices
 3996d42d25db arm64: dts: renesas: r8a7796{0,1}: Add cpu capacity-dmips-mhz
 72addd5bf2ca arm64: dts: renesas: r8a77951: Add cpu capacity-dmips-mhz
 3b8f3cc5f237 arm64: dts: renesas: Add lvds node for du
@@ -950,3 +943,10 @@ a08c418f315f clk: renesas: r8a7795: Add ADSP clock
 34a1d67768fd arm64: dts: renesas: Enable ADSP module in Gen3
 82e80a25d15a arm64: dts: renesas: Add ADSP node for Gen3 devices
 b1c42820b4d5 arm64: dts: renesas: r8a779a0: Add more IMP RADSP UIO devices
+99fe0c944b18 arm64: dts: r8a77970-eagle: Add reserved memory regions
+688910e4b240 arm64: dts: r8a77995-draak: Add reserved memory region
+76fa381026cd arm64: dts: r8a77970-eagle: Add reserved memory regions
+f5b16e76077b arm64: dts: r8a77980-condor: Add reserved memory regions
+51eaa1c02ef0 arm64: dts: renesas: r8a77950-ulcb: Add reserved memory regions
+fc6bda37d4fe arm64: dts: renesas: r8a77951-ulcb: Add reserved memory regions
+ed7948f00a4b arm64: dts: renesas: Add reserved memory regions for Gen3 devices
