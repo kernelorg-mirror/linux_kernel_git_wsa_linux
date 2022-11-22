@@ -302,7 +302,6 @@ a432a1010378 arm64: dts: r8a77970, r8a77980: Enable TMU and CMT
 d80707e0e447 arm64: dts: renesas: ulcb-kf: update for kernel v5.10
 2479c7da8049 arm64: dts: renesas: Update IMP LDMA device
 f7c6a43a94f6 arm64: dts: renesas: Comment out status ok in rpc node
-ec2576686dc7 arm64: dts: renesas: Update Power Domain for VSPX devices
 89068d303247 arm64: dts: renesas: Update IPMMU ID for VIN devices
 b758a30100a0 arm64: dts: renesas: Update IPMMU ID for FBA devices
 254db82a8ba6 arm64: dts: renesas: Update IPMMU ID for IVCP1E device
@@ -321,7 +320,6 @@ c5901c556c2d arm64: dts: renesas: r8a779a0: Add FBC devices
 512ba8ad3bd5 arm64: dts: renesas: r8a779a0: Add VCPL4 devices
 e0e331940feb arm64: dts: renesas: r8a779a0: Add IMP RADSP devices
 26c27860764c arm64: dts: renesas: r8a779a0: Add RFSO devices
-719207b43e5f arm64: dts: renesas: r8a779a0: Add VSPX devices
 aa2552bb7c2e arm64: dts: renesas: r8a779a0-falcon: Reserve u-boot secure area
 75c6f4c7fb2d arm64: dts: r8a7796{0,1}: Add cpg clock and reset for AVS
 8c54017336c9 arm64: dts: r8a77951: Add cpg clock and reset for AVS
@@ -691,23 +689,14 @@ fbf991b5bd28 clk: renesas: r8a77{95, 96, 965}: Replace PLL3 multiplication setti
 7ed8cce11f67 arm64: defconfig: Enable cpufreq configs for rcar
 a5758a3a06cd arm64: defconfig: Enable Renesas R-Car PCIe v4.0 host controller driver
 3f707c202de4 arm64: dts: renesas: r8a77990-es10-ebisu: Enable ADSP
-d9f0265c8846 arm64: dts: renesas: r8a77990-es10-ebisu: Add vspb and vspi0 for VSP Manager
-0ab7708d3656 arm64: dts: renesas: r8a77990-ebisu: Add vspb and vspi0 for VSP Manager
-61dcd3b080dd arm64: dts: renesas: r8a77990: Add vspb and vspi0 node for VSP Manager
-82c2c8153047 arm64: dts: renesas: Enable vspm/vsp2 driver on Gen3
-cd4e39885553 arm64: dts: renesas: Add definition for vspm/vsp2 driver
 3df554353f04 arm64: dts: renesas: r8a77965-ulcb: Fix source clock for DU
-39ebe349a0d4 arm64: dts: renesas: r8a77965-ulcb: Add VSPM I/F driver node
 be06ac99bed2 arm64: dts: renesas: r8a77965: Fix power domain for FCPCS
 93b461eca6d1 arm64: dts: renesas: r8a7795: Fix clock, reset and power domain for iVDP1C
 ecbb6cd00958 arm64: dts: renesas: r8a77950: Override VCP4 device nodes for R-Car H3 ES1.x
 4f9a347ebf94 arm64: dts: renesas: r8a779{51, 65, 90}: Add VCP4 device nodes
 eae3c2d59f3d arm64: dts: renesas: r8a779{50, 51}: Detach IPMMU-VI from FCDVD
 98ea5401ab70 arm64: dts: renesas: r8a77951-ulcb: Fix source clock for DU2
-6852c7e3a173 arm64: dts: renesas: r8a7796{0,1}-ulcb: Add VSPM I/F driver node
-0b183cd80624 arm64: dts: renesas: r8a77950-ulcb: Add VSPM I/F driver node
 51eaa1c02ef0 arm64: dts: renesas: r8a77950-ulcb: Add reserved memory regions
-8b318e487b5c arm64: dts: renesas: r8a77951-ulcb: Add VSPM I/F driver node
 4c53ea03dbb4 arm64: dts: renesas: r8a779{51, 60, 61}: Add AVS support for GSX
 f215e41739a5 arm64: dts: renesas: r8a779{51, 60, 61}: Add AVS device node
 983c00ba9120 arm64: dts: renesas: Add DEVFREQ support for GSX in Gen3
@@ -950,3 +939,14 @@ d2baa51fc042 arm64: dts: renesas: r8a77951-ulcb: Add MMNGRBUF driver node
 def8ddb3ce26 arm64: dts: renesas: r8a77990-ebisu-4d: Add lossy phandle to MMNGR driver node
 108fcd53b512 arm64: dts: renesas: Add MMNGRBUF driver node for Gen3 devices
 8fd80032f621 arm64: dts: renesas: Add MMNGR driver support for Gen3 devices
+ec2576686dc7 arm64: dts: renesas: Update Power Domain for VSPX devices
+719207b43e5f arm64: dts: renesas: r8a779a0: Add VSPX devices
+d9f0265c8846 arm64: dts: renesas: r8a77990-es10-ebisu: Add vspb and vspi0 for VSP Manager
+0ab7708d3656 arm64: dts: renesas: r8a77990-ebisu: Add vspb and vspi0 for VSP Manager
+61dcd3b080dd arm64: dts: renesas: r8a77990: Add vspb and vspi0 node for VSP Manager
+82c2c8153047 arm64: dts: renesas: Enable vspm/vsp2 driver on Gen3
+cd4e39885553 arm64: dts: renesas: Add definition for vspm/vsp2 driver
+39ebe349a0d4 arm64: dts: renesas: r8a77965-ulcb: Add VSPM I/F driver node
+6852c7e3a173 arm64: dts: renesas: r8a7796{0,1}-ulcb: Add VSPM I/F driver node
+0b183cd80624 arm64: dts: renesas: r8a77950-ulcb: Add VSPM I/F driver node
+8b318e487b5c arm64: dts: renesas: r8a77951-ulcb: Add VSPM I/F driver node
