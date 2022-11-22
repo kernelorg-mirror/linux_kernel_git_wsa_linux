@@ -637,11 +637,9 @@ eebc4189c612 clk: renesas: r8a779a0: Extend number of supported module clocks
 22fcdce314a2 clk: renesas: r8a77{96, 965, 990}: Add ADG clock
 7199aef15459 clk: renesas: r8a77{96, 965, 990}: Add ADSP clock
 0b1537a0251b clk: renesas: r8a7796: Add iVDP1C clock
-81184e5f4a19 clk: renesas: r8a77{96, 965, 990}: Add VCP4 clocks
 c0ba44fdd4d9 clk: renesas: r8a7795: Add ADG clock
 a08c418f315f clk: renesas: r8a7795: Add ADSP clock
 d7c9cc6e1a2a clk: renesas: r8a7795: Add iVDP1C clocks to ES1.x
-1d7bc686acb9 clk: renesas: r8a7795: Add VCP4 clock
 f75384dbb2de clk: renesas: r8a77990: Add FDP1 clock
 128981aa3601 clk: renesas: rcar-gen3: Add support ZG clock divider for R8A77990
 d64955dcde0b clk: renesas: rcar-gen3: Add rounding for Z-clock frequency
@@ -654,8 +652,6 @@ a5758a3a06cd arm64: defconfig: Enable Renesas R-Car PCIe v4.0 host controller dr
 3df554353f04 arm64: dts: renesas: r8a77965-ulcb: Fix source clock for DU
 be06ac99bed2 arm64: dts: renesas: r8a77965: Fix power domain for FCPCS
 93b461eca6d1 arm64: dts: renesas: r8a7795: Fix clock, reset and power domain for iVDP1C
-ecbb6cd00958 arm64: dts: renesas: r8a77950: Override VCP4 device nodes for R-Car H3 ES1.x
-4f9a347ebf94 arm64: dts: renesas: r8a779{51, 65, 90}: Add VCP4 device nodes
 98ea5401ab70 arm64: dts: renesas: r8a77951-ulcb: Fix source clock for DU2
 51eaa1c02ef0 arm64: dts: renesas: r8a77950-ulcb: Add reserved memory regions
 983c00ba9120 arm64: dts: renesas: Add DEVFREQ support for GSX in Gen3
@@ -675,7 +671,6 @@ fc6bda37d4fe arm64: dts: renesas: r8a77951-ulcb: Add reserved memory regions
 34a1d67768fd arm64: dts: renesas: Enable ADSP module in Gen3
 82e80a25d15a arm64: dts: renesas: Add ADSP node for Gen3 devices
 31633efaaf13 arm64: dts: renesas: Add QoS device node for Gen3 devices
-5aed6ab53b6e arm64: dts: renesas: r8a7796{0,1}: Add VCP4 device nodes
 eff7c317af2e arm64: dts: renesas: Add optee node for Gen3 devices
 c4ce249bb021 arm64: dts: renesas: Add MFIS Lock and MFIS devices node for gen3 devices
 76cab2933b26 arm64: dts: renesas: r8a77990-ebisu{,-4D}: Add support for R-Car E3 ES1.0
@@ -950,3 +945,8 @@ dadbd6f5b9f4 arm64: dts: renesas: ulcb: Add Media Clock Recovery Handler device 
 12abc0783bd4 arm64: dts: renesas: r8a77990-es10-ebisu: Add Media Clock Recovery Handler device node
 1a63c2cb5f8c arm64: dts: renesas: r8a77990-ebisu: Add Media Clock Recovery Handler device node
 ee0b4dd3d4e2 arm64: dts: renesas: salvator-common: Add Media Clock Recovery Handler device node
+81184e5f4a19 clk: renesas: r8a77{96, 965, 990}: Add VCP4 clocks
+1d7bc686acb9 clk: renesas: r8a7795: Add VCP4 clock
+ecbb6cd00958 arm64: dts: renesas: r8a77950: Override VCP4 device nodes for R-Car H3 ES1.x
+4f9a347ebf94 arm64: dts: renesas: r8a779{51, 65, 90}: Add VCP4 device nodes
+5aed6ab53b6e arm64: dts: renesas: r8a7796{0,1}: Add VCP4 device nodes
