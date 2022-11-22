@@ -101,9 +101,6 @@ ebce499244e9 arm64: dts: renesas: r8a779f0: Fix naming to SYS-DMAC0 and SYS-DMAC
 fa2f9bc11e10 arm64: dts: renesas: r8a779g0: Fix naming to SYS-DMAC0 and SYS-DMAC1.
 e2b1f66f49ce arm64: dts: renesas: r8a779a0: Fix IO range of ICCOM
 465e978c9580 arm64: dts: renesas: r8a779a0: Remove clock definition of WWDT node
-9d8cec25a7ad arm64: dts: renesas: r8a77980{-es2}: Adding IPMMU assignments for OSAL-supported devices
-420e5be68974 arm64: dts: renesas: r8a77970: Adding IPMMU assignments for OSAL-supported devices
-8838e3eae67d arm64: dts: renesas: r8a779a0: Update IPMMU assignments for OSAL-supported devices
 e4d381728c0b arm64: dts: renesas: r8a779a0: Disable legacy devices
 21ffa2421578 arm64: dts: renesas: r8a779a0: Add QoS device
 c993d2cbdbae arm64: dts: r8a77980-es2-v3hsk-vbm: Create device tree for v3hsk vbm board
@@ -339,9 +336,6 @@ bd790e0bfe8e arm64: dts: renesas: falcon: Add HSCIF0 support
 c2833b47268e arm64: dts: renesas: r8a779a0: Update start address of IMPSPM
 3dad8bc4bc0f arm64: dts: renesas: r8a779a0: Fix clock and software reset of ISP nodes
 25665edddaa5 arm64: dts: renesas: Add resets property to IMP devices
-1b493f7b9f8c arm64: dts: renesas: r8a779a0: Update ISP device name to follow OSAL naming convention
-1e9e5dcbd2b6 arm64: dts: renesas: r8a779a0: Update IMP device name to follow OSAL naming convention
-cc6a080ec6d3 arm64: dts: renesas: r8a779a0: Update IMR device name to follow OSAL naming convention
 e4dbb4e98674 arm64: dts: renesas: r8a779a0: Separate memory and control regs of IMP SPM devices
 ae2a16c066dc arm64: dts: r8a779a0-falcon: Add reserved memory for CMA
 720d92e1190b arm64: dts: renesas: falcon: Enable CMT
@@ -576,7 +570,6 @@ a119b30ee6f6 PCI: dwc: renesas: Add Renesas R-Car PCIe v4.0 host controller driv
 8f12704115d0 dt-bindings: iommu: renesas,ipmmu-vmsa: add r8a779g0 support
 fcc3027a09a8 iommu/ipmmu-vmsa: Add R-Car V3H/V3M/D3 to IPMMU denylist
 eac56fb51d70 iommu/ipmmu-vmsa: Adding DMAC1/2 devices to IPMMU devices allowlist
-298d8c6800bb iommu/ipmmu-vmsa: Adding OSAL-supported devices to IPMMU devices allowlist
 3e7eb9450a5d iommu/ipmmu-vmsa: Adding ISP/IMP devices to IPMMU devices allowlist
 2ddd7cb2c54e iommu/ipmmu-vmsa: Add Renesas R8A779F0 (R-Car S4) support
 81363d213337 iommu/ipmmu-vmsa: Update IMSCTLR register offset address for R-Car Gen4
@@ -868,7 +861,6 @@ eef73382a219 arm64: dts: renesas: r8a779g0: Update IPMMU devices for UIO
 ed957c8351ec arm64: dts: renesas: r8a779g0: Add description for disable reset PAP devices of UIO
 68c997eaa19b arm64: dts: renesas: r8a779g0: Update VISION devices for UIO
 e3822af53b22 arm64: dts: renesas: r8a779f0: Update ICCOM UIO devices
-7ecf1f86a6fe arm64: dts: renesas: r8a779f0: Add OSAL (systemram) UIO devices
 a8808023acc0 arm64: dts: renesas: r8a779f0: Add AESACC UIO devices
 04fd55a3b80f arm64: dts: renesas: r8a779f0: Fix register range of ICCOM UIO
 3d19686376f8 arm64: dts: renesas: r8a779g0: Fix IO/address AESACC UIO devices
@@ -883,7 +875,6 @@ e4f03b4c6915 arm64: dts: renesas: r8a779g0: Update pm/POST FieldBIST UIO devices
 d6c28f34b1ea arm64: dts: renesas: r8a779g0: Update ENCODER UIO devices
 c1816a3a25e0 arm64: dts: renesas: r8a779g0: Update VISION UIO devices
 17ff7e7405e9 arm64: dts: renesas: r8a779g0: Update FieldBIST UIO compatible
-6c93b7630864 arm64: dts: renesas: r8a779g0: Add OSAL (systemram) UIO devices
 5622f2a06d00 arm64: dts: renesas: r8a779g0: Add PAP UIO devices
 1c27c7d3a754 arm64: dts: renesas: r8a779g0: Add VideoOutput/Input UIO devices
 6424254f5f84 arm64: dts: renesas: r8a779g0: Update WWDT UIO devices
@@ -950,3 +941,12 @@ e21494bf0175 uio: Add IPMMU info for user-space
 f4abd09012a2 uio: Fix SPDX identifier
 a11d168c6464 uio: Add PMA IOCTL to compat list
 6668f1736f72 uio: Add new ioctl for power management
+9d8cec25a7ad arm64: dts: renesas: r8a77980{-es2}: Adding IPMMU assignments for OSAL-supported devices
+420e5be68974 arm64: dts: renesas: r8a77970: Adding IPMMU assignments for OSAL-supported devices
+8838e3eae67d arm64: dts: renesas: r8a779a0: Update IPMMU assignments for OSAL-supported devices
+1b493f7b9f8c arm64: dts: renesas: r8a779a0: Update ISP device name to follow OSAL naming convention
+1e9e5dcbd2b6 arm64: dts: renesas: r8a779a0: Update IMP device name to follow OSAL naming convention
+cc6a080ec6d3 arm64: dts: renesas: r8a779a0: Update IMR device name to follow OSAL naming convention
+298d8c6800bb iommu/ipmmu-vmsa: Adding OSAL-supported devices to IPMMU devices allowlist
+7ecf1f86a6fe arm64: dts: renesas: r8a779f0: Add OSAL (systemram) UIO devices
+6c93b7630864 arm64: dts: renesas: r8a779g0: Add OSAL (systemram) UIO devices
