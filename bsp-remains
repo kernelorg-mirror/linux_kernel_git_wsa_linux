@@ -171,7 +171,6 @@ b0af5d2217fc arm64: dts: renesas: r8a779f0: Add PCIe device nodes for Renesas R8
 ede97b61cdd1 arm64: dts: renesas: r8a779f0: Add IPMMU main and caches nodes for Renesas R8A779F0 (R-Car S4)
 176ffc5b19b0 arm64: dts: renesas: Add Renesas R8A779F0 SoC support
 b5674d878b5f arm64: dts: renesas: r8a779g0: Fix power domains GFX
-6b6059699a47 arm64: dts: renesas: r8a779g0: Update compatible name for gsx device
 ddad10ced526 arm64: dts: renesas: r8a779g0: Disable duplicate reset propertie PAP
 7589a80058cd arm64: dts: renesas: r8a779g0: Update compatible and power domains GFX
 ebf0cf8420a8 arm64: dts: renesas: r8a779g0: Update IO/range for CSI devices
@@ -633,7 +632,6 @@ a5758a3a06cd arm64: defconfig: Enable Renesas R-Car PCIe v4.0 host controller dr
 3df554353f04 arm64: dts: renesas: r8a77965-ulcb: Fix source clock for DU
 be06ac99bed2 arm64: dts: renesas: r8a77965: Fix power domain for FCPCS
 98ea5401ab70 arm64: dts: renesas: r8a77951-ulcb: Fix source clock for DU2
-983c00ba9120 arm64: dts: renesas: Add DEVFREQ support for GSX in Gen3
 870144dfc576 arm64: dts: renesas: r8a77990-ebisu{,-es10}: Enable IPMMU of SDHI3
 4f96fa23c03c arm64: dts: renesas: r8a7796{0,1}: Enable IPMMU-DS1 and IPMMU-MM
 9e42169db8a0 arm64: dts: renesas: r8a7795{0,1}: Enable IPMMU-DS1 and IPMMU-MM
@@ -651,7 +649,6 @@ eff7c317af2e arm64: dts: renesas: Add optee node for Gen3 devices
 c4ce249bb021 arm64: dts: renesas: Add MFIS Lock and MFIS devices node for gen3 devices
 76cab2933b26 arm64: dts: renesas: r8a77990-ebisu{,-4D}: Add support for R-Car E3 ES1.0
 4dbb8c2e65e6 arm64: dts: renesas: r8a77990: Fixup power-domains of 3DGE for R-Car E3 ES1.0
-8ebc78fdd198 arm64: dts: renesas: Add GSX device node for Gen3 devices
 e0911d520034 arm64: dts: renesas: r8a77990-ebisu-4d: Add lossy descompress area
 6f426ef6c6a6 arm64: dts: renesas: r8a77990-ebisu: Add Ebisu-4D board support
 3996d42d25db arm64: dts: renesas: r8a7796{0,1}: Add cpu capacity-dmips-mhz
@@ -876,7 +873,6 @@ f2a8944238bd dt-bindings: cpufreq: add AVS bindings for R-Car V4H
 7cc188a06318 soc: renesas: rcar-avs: Add clock enable for AVS
 5797c9e12da5 soc: renesas: rcar-avs: Support AVS function
 ee208b708745 clk: renesas: r8a779{5,6}: Add AVS clock
-4c53ea03dbb4 arm64: dts: renesas: r8a779{51, 60, 61}: Add AVS support for GSX
 f215e41739a5 arm64: dts: renesas: r8a779{51, 60, 61}: Add AVS device node
 4d2f56a1c57b soc: renesas: rcar_ems_ctrl: Fix using cpu_up/down()
 9c5a4543f59b soc: renesas: rcar_ems_ctrl: Fix "Using plain integer as NULL pointer"
@@ -950,3 +946,7 @@ ed7948f00a4b arm64: dts: renesas: Add reserved memory regions for Gen3 devices
 0b1537a0251b clk: renesas: r8a7796: Add iVDP1C clock
 d7c9cc6e1a2a clk: renesas: r8a7795: Add iVDP1C clocks to ES1.x
 93b461eca6d1 arm64: dts: renesas: r8a7795: Fix clock, reset and power domain for iVDP1C
+6b6059699a47 arm64: dts: renesas: r8a779g0: Update compatible name for gsx device
+983c00ba9120 arm64: dts: renesas: Add DEVFREQ support for GSX in Gen3
+8ebc78fdd198 arm64: dts: renesas: Add GSX device node for Gen3 devices
+4c53ea03dbb4 arm64: dts: renesas: r8a779{51, 60, 61}: Add AVS support for GSX
