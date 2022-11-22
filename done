@@ -72,3 +72,4 @@ Not for upporting
 	Media Clock Recovery Handler: This is a local patch file for MMP. So we don't need to upport.
 	VCP4: This is a local patch file for MMP. So we don't need to upport.
 	Update IPMMU ID: UIO and OSAL are not intended for upstream.
+	ADSP: This is a local patch file for MMP. So we don't need to upport.

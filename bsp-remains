@@ -285,7 +285,6 @@ e257b37728a2 arm64: dts: renesas: r8a779a0: Add FBA devices
 c5901c556c2d arm64: dts: renesas: r8a779a0: Add FBC devices
 2c0506853cc2 arm64: dts: renesas: r8a779a0: Add remained IMP devices
 512ba8ad3bd5 arm64: dts: renesas: r8a779a0: Add VCPL4 devices
-e0e331940feb arm64: dts: renesas: r8a779a0: Add IMP RADSP devices
 26c27860764c arm64: dts: renesas: r8a779a0: Add RFSO devices
 aa2552bb7c2e arm64: dts: renesas: r8a779a0-falcon: Reserve u-boot secure area
 23c7e7f33c3d arm64: dts: renesas: r8a77990: Add VGA connector to DU
@@ -628,10 +627,8 @@ eebc4189c612 clk: renesas: r8a779a0: Extend number of supported module clocks
 151f27fccd60 clk: renesas: cpg-mssr: Fix Realtime Module Stop Control Register offsets
 7be570957b5f clk: renesas: r8a7796: Remove iVDP1C clock on ES3.0 or later
 22fcdce314a2 clk: renesas: r8a77{96, 965, 990}: Add ADG clock
-7199aef15459 clk: renesas: r8a77{96, 965, 990}: Add ADSP clock
 0b1537a0251b clk: renesas: r8a7796: Add iVDP1C clock
 c0ba44fdd4d9 clk: renesas: r8a7795: Add ADG clock
-a08c418f315f clk: renesas: r8a7795: Add ADSP clock
 d7c9cc6e1a2a clk: renesas: r8a7795: Add iVDP1C clocks to ES1.x
 f75384dbb2de clk: renesas: r8a77990: Add FDP1 clock
 128981aa3601 clk: renesas: rcar-gen3: Add support ZG clock divider for R8A77990
@@ -641,7 +638,6 @@ fbf991b5bd28 clk: renesas: r8a77{95, 96, 965}: Replace PLL3 multiplication setti
 23fcabf79226 clk: renesas: r8a77{95, 96, 965, 990}: Remove INTC-AP and INTC-EX clocks
 7ed8cce11f67 arm64: defconfig: Enable cpufreq configs for rcar
 a5758a3a06cd arm64: defconfig: Enable Renesas R-Car PCIe v4.0 host controller driver
-3f707c202de4 arm64: dts: renesas: r8a77990-es10-ebisu: Enable ADSP
 3df554353f04 arm64: dts: renesas: r8a77965-ulcb: Fix source clock for DU
 be06ac99bed2 arm64: dts: renesas: r8a77965: Fix power domain for FCPCS
 93b461eca6d1 arm64: dts: renesas: r8a7795: Fix clock, reset and power domain for iVDP1C
@@ -661,8 +657,6 @@ cf44aee9dfea arm64: dts: renesas: r8a779{51, 60, 61}-ulcb: Fix souce clock for D
 a7afdde5f202 arm64: dts: renesas: r8a77960-ulcb: Disable CPUIdle support for CA53
 fc6bda37d4fe arm64: dts: renesas: r8a77951-ulcb: Add reserved memory regions
 9948cf8925ee arm64: dts: renesas: r8a77950-ulcb: Disable HS400 of SDHI2
-34a1d67768fd arm64: dts: renesas: Enable ADSP module in Gen3
-82e80a25d15a arm64: dts: renesas: Add ADSP node for Gen3 devices
 31633efaaf13 arm64: dts: renesas: Add QoS device node for Gen3 devices
 eff7c317af2e arm64: dts: renesas: Add optee node for Gen3 devices
 c4ce249bb021 arm64: dts: renesas: Add MFIS Lock and MFIS devices node for gen3 devices
@@ -729,7 +723,6 @@ e15be81dcd90 arm64: dts: renesas: r8a77980: Update naming of RFSO UIO devices
 b622ab808a8b arm64: dts: renesas: r8a779a0: Update naming of FCPR{R,W,A} UIO devices
 e5b8380d42a9 arm64: dts: renesas: r8a779a0: Update naming of IPMMU UIO devices
 b37c6426cd20 arm64: dts: renesas: r8a779a0: Update naming of RFSO UIO devices
-b1c42820b4d5 arm64: dts: renesas: r8a779a0: Add more IMP RADSP UIO devices
 79d47de70587 arm64: dts: renesas: r8a779a0: Fix typo in FBC UIO device
 ea627d18e05d arm64: dts: renesas: r8a779a0: Update naming of IPMMU UIO devices
 fed287e0e56a arm64: dts: renesas: r8a77980: Update naming of IPMMU UIO devices
@@ -950,3 +943,10 @@ cb6c56e74d27 arm64: dts: renesas: Update IPMMU ID for VIP devices
 0609abf1b522 arm64: dts: renesas: Update IPMMU ID for IMP devices
 5f1b9de7e82f arm64: dts: renesas: Update IPMMU ID for ISP devices
 0a215942b7fc arm64: dts: renesas: Update IPMMU ID for IMR devices
+e0e331940feb arm64: dts: renesas: r8a779a0: Add IMP RADSP devices
+7199aef15459 clk: renesas: r8a77{96, 965, 990}: Add ADSP clock
+a08c418f315f clk: renesas: r8a7795: Add ADSP clock
+3f707c202de4 arm64: dts: renesas: r8a77990-es10-ebisu: Enable ADSP
+34a1d67768fd arm64: dts: renesas: Enable ADSP module in Gen3
+82e80a25d15a arm64: dts: renesas: Add ADSP node for Gen3 devices
+b1c42820b4d5 arm64: dts: renesas: r8a779a0: Add more IMP RADSP UIO devices
