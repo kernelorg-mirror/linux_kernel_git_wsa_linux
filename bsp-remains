@@ -109,8 +109,6 @@ c993d2cbdbae arm64: dts: r8a77980-es2-v3hsk-vbm: Create device tree for v3hsk vb
 19648fbc0572 arm64: renesas: r8a77970: Fix the model series for R8A77970
 c3383c67f3d6 arm64: dts: renesas: r8a77980: Disable legacy IPMMU driver
 626100fa9b86 arm64: dts: renesas: r8a77970: Disable legacy IPMMU driver
-1917ce594039 arm64: dts: renesas: r8a779a0-falcon: Add mmngrbuf node
-ff1280e2cdce arm64: dts: renesas: r8a779a0-falcon: Add mmngr node
 9350ec47f53a arm64: dts: renesas: r8a77970-eagle: Remove lossy decompress
 2edd7396c028 arm64: dts: renesas: r8a77980-condor: Remove lossy decompress
 e52c00d6ee49 arm64: dts: renesas: r8a77970-v3msk: Adjust reserved memory layout
@@ -292,7 +290,6 @@ e5e89c4837f7 arm64: dts: renesas: v3x: update videoboxes for Yocto4.1.0
 205cd02cfe01 arm64: dts: renesas: r8a77980: Add ES2 boards
 a432a1010378 arm64: dts: r8a77970, r8a77980: Enable TMU and CMT
 9b52276be392 arm64: dts: renesas: r8a77970: Add ES1 and Eagle Function boards
-3e9df6fdd140 arm64: dts: renesas: Add MMNGR nodes for V3X boards
 8a3097afe858 arm64: dts: renesas: Add ulcb-kf-imx219 overlay
 499956c799e7 arm64: dts: renesas: ulcb-kf: Add ov5647 support
 54eaa9cd5aae arm64: boot: dts: rcar-gen3: Fix MLP IRQ order
@@ -701,9 +698,6 @@ d9f0265c8846 arm64: dts: renesas: r8a77990-es10-ebisu: Add vspb and vspi0 for VS
 cd4e39885553 arm64: dts: renesas: Add definition for vspm/vsp2 driver
 3df554353f04 arm64: dts: renesas: r8a77965-ulcb: Fix source clock for DU
 39ebe349a0d4 arm64: dts: renesas: r8a77965-ulcb: Add VSPM I/F driver node
-145b384c0b38 arm64: dts: renesas: r8a77965-ulcb: Add MMNGRBUF driver node
-939c8077551d arm64: dts: renesas: r8a77965-ulcb: Add MMNGR support
-700e1ba7345b arm64: dts: renesas: r8a77965-ulcb: Add reserved mem for MMNGR
 be06ac99bed2 arm64: dts: renesas: r8a77965: Fix power domain for FCPCS
 93b461eca6d1 arm64: dts: renesas: r8a7795: Fix clock, reset and power domain for iVDP1C
 ecbb6cd00958 arm64: dts: renesas: r8a77950: Override VCP4 device nodes for R-Car H3 ES1.x
@@ -711,20 +705,9 @@ ecbb6cd00958 arm64: dts: renesas: r8a77950: Override VCP4 device nodes for R-Car
 eae3c2d59f3d arm64: dts: renesas: r8a779{50, 51}: Detach IPMMU-VI from FCDVD
 98ea5401ab70 arm64: dts: renesas: r8a77951-ulcb: Fix source clock for DU2
 6852c7e3a173 arm64: dts: renesas: r8a7796{0,1}-ulcb: Add VSPM I/F driver node
-4492938e4bb8 arm64: dts: renesas: r8a7796{0,1}-ulcb: Add MMNGRBUF driver node
-7348f86819d3 arm64: dts: renesas: r8a7796{0,1}-ulcb: Add MMNGR support
-b63f3771d6cd arm64: dts: renesas: r8a7796{0,1}-ulcb: Add reserve mem for MMNGR
 0b183cd80624 arm64: dts: renesas: r8a77950-ulcb: Add VSPM I/F driver node
-178a93e632eb arm64: dts: renesas: r8a77950-ulcb: Add MMNGRBUF driver node
-9fe42994a6c6 arm64: dts: renesas: r8a77950-ulcb: Add MMNGR driver node
 51eaa1c02ef0 arm64: dts: renesas: r8a77950-ulcb: Add reserved memory regions
 8b318e487b5c arm64: dts: renesas: r8a77951-ulcb: Add VSPM I/F driver node
-d2baa51fc042 arm64: dts: renesas: r8a77951-ulcb: Add MMNGRBUF driver node
-0995f2ce4dff arm64: dts: renesas: r8a77951-ulcb: Add MMNGR driver node
-4f93e12f2a9e arm64: dts: renesas: r8a77990-es10-ebisu-4d: Add lossy phandle to MMNGR driver node
-def8ddb3ce26 arm64: dts: renesas: r8a77990-ebisu-4d: Add lossy phandle to MMNGR driver node
-108fcd53b512 arm64: dts: renesas: Add MMNGRBUF driver node for Gen3 devices
-8fd80032f621 arm64: dts: renesas: Add MMNGR driver support for Gen3 devices
 4c53ea03dbb4 arm64: dts: renesas: r8a779{51, 60, 61}: Add AVS support for GSX
 f215e41739a5 arm64: dts: renesas: r8a779{51, 60, 61}: Add AVS device node
 983c00ba9120 arm64: dts: renesas: Add DEVFREQ support for GSX in Gen3
@@ -950,3 +933,20 @@ cc6a080ec6d3 arm64: dts: renesas: r8a779a0: Update IMR device name to follow OSA
 298d8c6800bb iommu/ipmmu-vmsa: Adding OSAL-supported devices to IPMMU devices allowlist
 7ecf1f86a6fe arm64: dts: renesas: r8a779f0: Add OSAL (systemram) UIO devices
 6c93b7630864 arm64: dts: renesas: r8a779g0: Add OSAL (systemram) UIO devices
+1917ce594039 arm64: dts: renesas: r8a779a0-falcon: Add mmngrbuf node
+ff1280e2cdce arm64: dts: renesas: r8a779a0-falcon: Add mmngr node
+3e9df6fdd140 arm64: dts: renesas: Add MMNGR nodes for V3X boards
+145b384c0b38 arm64: dts: renesas: r8a77965-ulcb: Add MMNGRBUF driver node
+939c8077551d arm64: dts: renesas: r8a77965-ulcb: Add MMNGR support
+700e1ba7345b arm64: dts: renesas: r8a77965-ulcb: Add reserved mem for MMNGR
+4492938e4bb8 arm64: dts: renesas: r8a7796{0,1}-ulcb: Add MMNGRBUF driver node
+7348f86819d3 arm64: dts: renesas: r8a7796{0,1}-ulcb: Add MMNGR support
+b63f3771d6cd arm64: dts: renesas: r8a7796{0,1}-ulcb: Add reserve mem for MMNGR
+178a93e632eb arm64: dts: renesas: r8a77950-ulcb: Add MMNGRBUF driver node
+9fe42994a6c6 arm64: dts: renesas: r8a77950-ulcb: Add MMNGR driver node
+d2baa51fc042 arm64: dts: renesas: r8a77951-ulcb: Add MMNGRBUF driver node
+0995f2ce4dff arm64: dts: renesas: r8a77951-ulcb: Add MMNGR driver node
+4f93e12f2a9e arm64: dts: renesas: r8a77990-es10-ebisu-4d: Add lossy phandle to MMNGR driver node
+def8ddb3ce26 arm64: dts: renesas: r8a77990-ebisu-4d: Add lossy phandle to MMNGR driver node
+108fcd53b512 arm64: dts: renesas: Add MMNGRBUF driver node for Gen3 devices
+8fd80032f621 arm64: dts: renesas: Add MMNGR driver support for Gen3 devices
