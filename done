@@ -69,3 +69,4 @@ Not for upporting
 	rcar_ems_ctrl: This is just internal code.
 	RT-DMAC: not used by BSP DTs.
 	Detach IPMMU: used only for BSP backward compatibility.
+	Media Clock Recovery Handler: This is a local patch file for MMP. So we don't need to upport.
