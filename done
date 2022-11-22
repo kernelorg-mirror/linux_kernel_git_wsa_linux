@@ -67,3 +67,4 @@ Not for upporting
 	VSP[XBSA2M]: This is a local patch file for MMP. So we don't need to upport.
 	AVS: AVS code now is just in-house code.
 	rcar_ems_ctrl: This is just internal code.
+	RT-DMAC: not used by BSP DTs.

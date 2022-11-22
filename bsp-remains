@@ -170,7 +170,6 @@ ab16060d9483 arm64: dts: renesas: r8a779f0: Add power-domains and resets propert
 7f9c406a3507 arm64: dts: renesas: r8a779f0: Enable IPMMU for SYS-DMAC1/2
 b0af5d2217fc arm64: dts: renesas: r8a779f0: Add PCIe device nodes for Renesas R8A779F0 (R-Car S4)
 ede97b61cdd1 arm64: dts: renesas: r8a779f0: Add IPMMU main and caches nodes for Renesas R8A779F0 (R-Car S4)
-bc5e425c240e arm64: dts: renesas: r8a779f0: Add SYS-DMAC and RT-DMAC support
 176ffc5b19b0 arm64: dts: renesas: Add Renesas R8A779F0 SoC support
 b5674d878b5f arm64: dts: renesas: r8a779g0: Fix power domains GFX
 6b6059699a47 arm64: dts: renesas: r8a779g0: Update compatible name for gsx device
@@ -219,7 +218,6 @@ ee0f12ad4427 arm64: dts: renesas: whitehawk: Add CANFD support
 60d2ca1b2284 arm64: dts: renesas: whitehawk-cpu: Add SPI flash via RPC
 147ebbfee80e arm64: dts: renesas: r8a779g0: Add RPC node
 08a14c13c737 arm64: dts: renesas: r8a779g0: Add IPMMU for SYS-DMAC
-b6076c86c706 arm64: dts: renesas: r8a779g0: Add RT-DMAC nodes
 61b117c4d2c8 arm64: dts: renesas: r8a779g0: Add IPMMU nodes
 ccddcd6cef07 arm64: dts: renesas: r8a779g0: Add MSIOF device node
 6d2224b4f404 arm64: dts: renesas: r8a779g0: Add PWM device node
@@ -255,18 +253,12 @@ d66c36ce47e5 arm64: dts: renesas: r8a77995: Detach IPMMU-DS0 from Ethernet-AVB
 e047235afc80 arm64: dts: r8a77995-draak: Move option definition of vin node
 7e2ffb68ad2f arm64: dts: renesas: r8a77995-draak: Set HDMI mode as defaul mode for VIN driver
 c72f32a75e51 arm64: dts: renesas: r8a77995-draak: Add Media Clock Recovery Handler device node
-7e4b34b1d60e arm64: dts: r8a77995: Add RT-DMAC nodes
 b0aa94d65efb arm64: dts: renesas: Fix compatible name for MFIS node
 b8391f96ea13 arm64: dts: renesas: r8a77980-v3hsk: Disable MMC
 ded7fcd78c96 arm64: dts: renesas: r8a77995-draak: Remove endpoint of LVDS1
 3799f1e161c6 arm64: dts: Add MFISLock driver support
 688910e4b240 arm64: dts: r8a77995-draak: Add reserved memory region
 948df237125b arm64: dts: Makefile: Comment out compiling of dtbo
-2de601c39008 arm64: dts: r8a77980: Add RT-DMAC nodes
-95c4344384df arm64: dts: r8a77990: Add RT-DMAC nodes
-dc61c068a644 arm64: dts: r8a77965: Add RT-DMAC nodes
-b1aad629cfc7 arm64: dts: r8a7796{0,1}: Add RT-DMAC node
-baaf58183c59 arm64: dts: r8a77951: Add RT-DMAC nodes
 d0ae50ec421f arm64: dts: r8a779a0: Delete ipmmu in mmc node
 76fa381026cd arm64: dts: r8a77970-eagle: Add reserved memory regions
 ceaebe58dff5 arm64: dts: r8a77980: Update name and reg size of IMP nodes
@@ -328,7 +320,6 @@ fae4aeaf8b56 arm64: dts: r8a779a0-falcon: Enable fakra connector
 dd621acea624 arm64: dts: renesas: falcon: Enable PCIe
 34da8764ad92 arm64: dts: renesas: r8a779a0: Add PCIe device node
 ccb1316bf6d0 arm64: dts: renesas: r8a779a0-falcon: Enable TMU
-d45ea26fde42 arm64: dts: renesas: r8a779a0: Add RT-DMAC support
 667534413db9 arm64: dts: renesas: r8a779a0-falcon: Add missing Ethernet-AVB in Falcon board
 e10bdcf232ff arm64: dts: renesas: r8a7799a0: Add MSIOF parent clock frequency settings support
 1ab838e03cc5 arm64: dts: renesas: r8a779{51, 60, 61, 65, 90}: Add the emergency node in thermal-zones
@@ -638,7 +629,6 @@ f858706da84c clk: renesas: r8a779g0: Fix DSI0 clocks
 a4894d9c44bf clk: renesas: rcar-gen3: Use max_rate as maximum rate for normal clock instead max_freq
 5343772b5063 clk: renesas: r8a77995: Add ADG clock for R8A77995
 cf32acf13d9f clk: renesas: r8a77990: Add IMR clock
-67c712ca4318 clk: renesas: r8a77995: Add RT-DMAC clocks
 65b50fc476f6 clk: renesas: r8a779a0: Support missing module clocks for R8A779A0
 6e430a6a2fb1 clk: renesas: r8a77980: Add VIP clocks
 a232d9186d2b clk: renesas: r8a779{70, 80}: Add ISP clock
@@ -646,7 +636,6 @@ a232d9186d2b clk: renesas: r8a779{70, 80}: Add ISP clock
 60d4d536778e clk: renesas: r8a77980: Add VIN clocks
 dc644df9f22b clk: renesas: r8a779{5, 6, 70, 80}: add IMP clock
 3a0afce3d903 clk: renesas: r8a779{70, 80}: Add POST clock
-755a56e7c796 clk: renesas: r8a77{95, 96, 965, 990, 980}: Add RT-DMAC clocks
 43ca51590fa0 clk: renesas: r8a779{70, 80}: Add CPU operation points.
 280b7c5cc56b clk: renesas: rcar-gen3: Fix revision of R8A7796 for applying SD_SKIP_FIRST
 eebc4189c612 clk: renesas: r8a779a0: Extend number of supported module clocks
@@ -950,3 +939,14 @@ b6d6f18fff02 soc: renesas: rcar_ems_ctrl: Exclude A53 out of targeted frequency 
 023e7888f326 soc: renesas: rcar_ems_ctrl: Fetch targeted shutdown cpu from DT
 6e7cec9a6cf5 soc: renesas: rcar_ems_ctrl: Fix coding error when initializing static var to false
 abfa058da577 soc: renesas: rcar_ems_ctrl: Move Emergency shutdown to platform driver
+bc5e425c240e arm64: dts: renesas: r8a779f0: Add SYS-DMAC and RT-DMAC support
+b6076c86c706 arm64: dts: renesas: r8a779g0: Add RT-DMAC nodes
+7e4b34b1d60e arm64: dts: r8a77995: Add RT-DMAC nodes
+2de601c39008 arm64: dts: r8a77980: Add RT-DMAC nodes
+95c4344384df arm64: dts: r8a77990: Add RT-DMAC nodes
+dc61c068a644 arm64: dts: r8a77965: Add RT-DMAC nodes
+b1aad629cfc7 arm64: dts: r8a7796{0,1}: Add RT-DMAC node
+baaf58183c59 arm64: dts: r8a77951: Add RT-DMAC nodes
+d45ea26fde42 arm64: dts: renesas: r8a779a0: Add RT-DMAC support
+67c712ca4318 clk: renesas: r8a77995: Add RT-DMAC clocks
+755a56e7c796 clk: renesas: r8a77{95, 96, 965, 990, 980}: Add RT-DMAC clocks
