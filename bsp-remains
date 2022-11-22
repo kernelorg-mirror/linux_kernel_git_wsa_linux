@@ -241,13 +241,8 @@ df1b70b902a1 Revert "arm64: dts: renesas: salvator-common: Add RPC HyperFlash de
 2b6d44cc2ba6 arm64: dts: renesas: ulcb: Enable IPMMU of SDHI2
 7c17cf98a2b7 arm64: dts: renesas: r8a77995-draak: Enable IPMMU of SDHI2
 d0389b66d30a arm64: dts: renesas: r8a77995: Enable IPMMU-DS1 and IPMMU-MM
-42a071058dc9 arm64: dts: renesas: r8a77995: Detach IPMMU-DS1 from SDHI
-8e8b53933370 arm64: dts: renesas: r8a77995: Detach IPMMU-VI0 from FCPVD
-d26ecf8dae1b arm64: dts: renesas: r8a77995: Detach IPMMU-MP from AUDIO-DMAC0
-d66c36ce47e5 arm64: dts: renesas: r8a77995: Detach IPMMU-DS0 from Ethernet-AVB
 70db35c3bbf4 arm64: dts: renesas: r8a77995: Change IPMMU-MM and IPMMU-caches order in DT for R-Car D3
 0ed94ce71f04 arm64: dts: renesas: r8a77995: Change default of all IPMMU devices to disable
-78ab046f9b98 arm64: dts: renesas: r8a779{51, 60, 65, 90}: Detach IPMMU-DS1 from SDHI
 36bed5ebf563 arm64: dts: renesas: r8a779{50,51,60,65,m1}: Move nodes of du and lvds
 0b7a348463a1 arm64: dts: renesas: r8a779{65,90}: Add iVDP1C device nodes
 e047235afc80 arm64: dts: r8a77995-draak: Move option definition of vin node
@@ -326,7 +321,6 @@ e10bdcf232ff arm64: dts: renesas: r8a7799a0: Add MSIOF parent clock frequency se
 346e96545b78 arm64: dts: renesas: r8a779{51, 60, 61, 65, 90}: Create thermal zone to support IPA
 2952a9503e49 arm64: dts: renesas: r8a779{51, 60, 61, 65}: Enable interrupt mode for THS by default
 846e5bebe28c arm64: dts: renesas: r8a779{51, 60, 61, 65, 90}: Use default clock and reset property for secure public core
-8963a175d2c4 arm64: dts: renesas: r8a779{65, 90}: Detach IPMMU-DS0 from Ethernet-AVB
 0425608ea3b2 arm64: dts: renesas: r8a77995-draak: Enable display driver relation node
 92cd6c6087f9 arm64: dts: renesas: r8a77990-ebisu: Enable simultaneous output of VGA and HDMI
 70a541215a75 arm64: dts: renesas: r8a77990-ebisu: Add LVDS panel nodes
@@ -663,25 +657,17 @@ be06ac99bed2 arm64: dts: renesas: r8a77965: Fix power domain for FCPCS
 93b461eca6d1 arm64: dts: renesas: r8a7795: Fix clock, reset and power domain for iVDP1C
 ecbb6cd00958 arm64: dts: renesas: r8a77950: Override VCP4 device nodes for R-Car H3 ES1.x
 4f9a347ebf94 arm64: dts: renesas: r8a779{51, 65, 90}: Add VCP4 device nodes
-eae3c2d59f3d arm64: dts: renesas: r8a779{50, 51}: Detach IPMMU-VI from FCDVD
 98ea5401ab70 arm64: dts: renesas: r8a77951-ulcb: Fix source clock for DU2
 51eaa1c02ef0 arm64: dts: renesas: r8a77950-ulcb: Add reserved memory regions
 983c00ba9120 arm64: dts: renesas: Add DEVFREQ support for GSX in Gen3
 870144dfc576 arm64: dts: renesas: r8a77990-ebisu{,-es10}: Enable IPMMU of SDHI3
 4f96fa23c03c arm64: dts: renesas: r8a7796{0,1}: Enable IPMMU-DS1 and IPMMU-MM
 9e42169db8a0 arm64: dts: renesas: r8a7795{0,1}: Enable IPMMU-DS1 and IPMMU-MM
-6789a9fd36e1 arm64: dts: renesas: r8a779{51, 60, 65, 90, 95}: Detach IPMMU-DS from SYS-DMAC
-027c232cc182 arm64: dts: renesas: r8a779{51, 60, 61, 90}: Detach IPMMU-MP from Audio-DMAC
 6b6933f7f35c arm64: dts: renesas: Support IPMMU(MMU mode) for IPMMU-VP0/1 and IPMMU VC0/1
 857def3629da arm64: dts: renesas: Change IPMMU-MM and IPMMU-caches order in DT
 033e8e11aad6 arm64: dts: renesas: r8a77990: Change default of all IPMMU devices to disable
 eebb64a81da5 arm64: dts: renesas: r8a77965: Change default of all IPMMU devices to disable
-1c6e58602374 arm64: dts: renesas: r8a77990: Detach IPMMU-VI0/1 from FCPVD
-10462af20dc2 arm64: dts: renesas: r8a77951: Detach IPMMU-DS0 from Ethernet-AVB
-b806480af6d6 arm64: dts: renesas: r8a77951: Detach IPMMU-HC from SATA
 8accde359759 arm64: dts: renesas: r8a779{50, 51}: Disable IPMMU devices
-e9e9f5ec040f arm64: dts: renesas: r8a7796{0,1}: Detach IPMMU-VI0 from FCPF
-10b608a15c26 arm64: dts: renesas: r8a77960: Detach IPMMU-DS0 from Ethernet-AVB
 5024c4ce1d24 arm64: dts: renesas: r8a7796{0,1}: Disable IPMMU devices
 cf44aee9dfea arm64: dts: renesas: r8a779{51, 60, 61}-ulcb: Fix souce clock for DU
 a7afdde5f202 arm64: dts: renesas: r8a77960-ulcb: Disable CPUIdle support for CA53
@@ -950,3 +936,17 @@ baaf58183c59 arm64: dts: r8a77951: Add RT-DMAC nodes
 d45ea26fde42 arm64: dts: renesas: r8a779a0: Add RT-DMAC support
 67c712ca4318 clk: renesas: r8a77995: Add RT-DMAC clocks
 755a56e7c796 clk: renesas: r8a77{95, 96, 965, 990, 980}: Add RT-DMAC clocks
+42a071058dc9 arm64: dts: renesas: r8a77995: Detach IPMMU-DS1 from SDHI
+8e8b53933370 arm64: dts: renesas: r8a77995: Detach IPMMU-VI0 from FCPVD
+d26ecf8dae1b arm64: dts: renesas: r8a77995: Detach IPMMU-MP from AUDIO-DMAC0
+d66c36ce47e5 arm64: dts: renesas: r8a77995: Detach IPMMU-DS0 from Ethernet-AVB
+78ab046f9b98 arm64: dts: renesas: r8a779{51, 60, 65, 90}: Detach IPMMU-DS1 from SDHI
+8963a175d2c4 arm64: dts: renesas: r8a779{65, 90}: Detach IPMMU-DS0 from Ethernet-AVB
+eae3c2d59f3d arm64: dts: renesas: r8a779{50, 51}: Detach IPMMU-VI from FCDVD
+6789a9fd36e1 arm64: dts: renesas: r8a779{51, 60, 65, 90, 95}: Detach IPMMU-DS from SYS-DMAC
+027c232cc182 arm64: dts: renesas: r8a779{51, 60, 61, 90}: Detach IPMMU-MP from Audio-DMAC
+1c6e58602374 arm64: dts: renesas: r8a77990: Detach IPMMU-VI0/1 from FCPVD
+10462af20dc2 arm64: dts: renesas: r8a77951: Detach IPMMU-DS0 from Ethernet-AVB
+b806480af6d6 arm64: dts: renesas: r8a77951: Detach IPMMU-HC from SATA
+e9e9f5ec040f arm64: dts: renesas: r8a7796{0,1}: Detach IPMMU-VI0 from FCPF
+10b608a15c26 arm64: dts: renesas: r8a77960: Detach IPMMU-DS0 from Ethernet-AVB

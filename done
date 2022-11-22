@@ -68,3 +68,4 @@ Not for upporting
 	AVS: AVS code now is just in-house code.
 	rcar_ems_ctrl: This is just internal code.
 	RT-DMAC: not used by BSP DTs.
+	Detach IPMMU: used only for BSP backward compatibility.
