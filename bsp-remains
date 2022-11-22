@@ -243,7 +243,6 @@ d0389b66d30a arm64: dts: renesas: r8a77995: Enable IPMMU-DS1 and IPMMU-MM
 70db35c3bbf4 arm64: dts: renesas: r8a77995: Change IPMMU-MM and IPMMU-caches order in DT for R-Car D3
 0ed94ce71f04 arm64: dts: renesas: r8a77995: Change default of all IPMMU devices to disable
 36bed5ebf563 arm64: dts: renesas: r8a779{50,51,60,65,m1}: Move nodes of du and lvds
-0b7a348463a1 arm64: dts: renesas: r8a779{65,90}: Add iVDP1C device nodes
 e047235afc80 arm64: dts: r8a77995-draak: Move option definition of vin node
 7e2ffb68ad2f arm64: dts: renesas: r8a77995-draak: Set HDMI mode as defaul mode for VIN driver
 b0aa94d65efb arm64: dts: renesas: Fix compatible name for MFIS node
@@ -621,11 +620,8 @@ dc644df9f22b clk: renesas: r8a779{5, 6, 70, 80}: add IMP clock
 280b7c5cc56b clk: renesas: rcar-gen3: Fix revision of R8A7796 for applying SD_SKIP_FIRST
 eebc4189c612 clk: renesas: r8a779a0: Extend number of supported module clocks
 151f27fccd60 clk: renesas: cpg-mssr: Fix Realtime Module Stop Control Register offsets
-7be570957b5f clk: renesas: r8a7796: Remove iVDP1C clock on ES3.0 or later
 22fcdce314a2 clk: renesas: r8a77{96, 965, 990}: Add ADG clock
-0b1537a0251b clk: renesas: r8a7796: Add iVDP1C clock
 c0ba44fdd4d9 clk: renesas: r8a7795: Add ADG clock
-d7c9cc6e1a2a clk: renesas: r8a7795: Add iVDP1C clocks to ES1.x
 f75384dbb2de clk: renesas: r8a77990: Add FDP1 clock
 128981aa3601 clk: renesas: rcar-gen3: Add support ZG clock divider for R8A77990
 d64955dcde0b clk: renesas: rcar-gen3: Add rounding for Z-clock frequency
@@ -636,7 +632,6 @@ fbf991b5bd28 clk: renesas: r8a77{95, 96, 965}: Replace PLL3 multiplication setti
 a5758a3a06cd arm64: defconfig: Enable Renesas R-Car PCIe v4.0 host controller driver
 3df554353f04 arm64: dts: renesas: r8a77965-ulcb: Fix source clock for DU
 be06ac99bed2 arm64: dts: renesas: r8a77965: Fix power domain for FCPCS
-93b461eca6d1 arm64: dts: renesas: r8a7795: Fix clock, reset and power domain for iVDP1C
 98ea5401ab70 arm64: dts: renesas: r8a77951-ulcb: Fix source clock for DU2
 983c00ba9120 arm64: dts: renesas: Add DEVFREQ support for GSX in Gen3
 870144dfc576 arm64: dts: renesas: r8a77990-ebisu{,-es10}: Enable IPMMU of SDHI3
@@ -950,3 +945,8 @@ f5b16e76077b arm64: dts: r8a77980-condor: Add reserved memory regions
 51eaa1c02ef0 arm64: dts: renesas: r8a77950-ulcb: Add reserved memory regions
 fc6bda37d4fe arm64: dts: renesas: r8a77951-ulcb: Add reserved memory regions
 ed7948f00a4b arm64: dts: renesas: Add reserved memory regions for Gen3 devices
+0b7a348463a1 arm64: dts: renesas: r8a779{65,90}: Add iVDP1C device nodes
+7be570957b5f clk: renesas: r8a7796: Remove iVDP1C clock on ES3.0 or later
+0b1537a0251b clk: renesas: r8a7796: Add iVDP1C clock
+d7c9cc6e1a2a clk: renesas: r8a7795: Add iVDP1C clocks to ES1.x
+93b461eca6d1 arm64: dts: renesas: r8a7795: Fix clock, reset and power domain for iVDP1C
