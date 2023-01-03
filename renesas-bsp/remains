@@ -40,8 +40,6 @@ c726edac6887 thermal: rcar_gen3_thermal: Use generic name for resources
 af51d5309f8c arm64: dts: renesas: r8a779g0: Add compatible string for R-Car V4H
 b5bccf1fc37c arm64: dts: renesas: r8a779f0: Disable CDM check
 9fd7d9ee7993 arm64: dts: renesas: r8a779g0: Disable CDM check
-d10133565b53 mmc: core: mmc_ops: Enable stop command
-bc75d8c5907a mmc: core: Issue power off notification in mmc_remove()
 57ccb1c20a4a soc: renesas: rcar-sysc: Add CR7 domain for r8a77980 in quirks_match
 6c2fe82cca83 soc: renesas: rcar-sysc: Support to handle PDMODE for R-Car V3H ES2.x
 cf48489076a2 dt-bindings: power: Add SYSC power domain definitions

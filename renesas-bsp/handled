@@ -555,3 +555,5 @@ ce3936b34bc3 dt-bindings: mmc: renesas,sdhi: Add r8a779g0 support
 ce747db93e14 mmc: tmio: Add internal DMA transfer end
 f04e295cd388 mmc: renesas_sdhi: reset calibration register
 de9461ece1fa mmc: renesas_sdhi: scc_ctl is always set in after R-Car Gen3
+d10133565b53 mmc: core: mmc_ops: Enable stop command
+bc75d8c5907a mmc: core: Issue power off notification in mmc_remove()
