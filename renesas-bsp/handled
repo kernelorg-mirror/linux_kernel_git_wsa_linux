@@ -550,3 +550,8 @@ a8a852b85e90 clk: renesas: r8a779g0: Fix TPU clk source of RCar V4H
 e827b02ea457 arm64: dts: r8a779a0-falcon: Enable QSPI flash support
 3607e145db47 i2c: rcar: Add fast mode plus support
 a4894d9c44bf clk: renesas: rcar-gen3: Use max_rate as maximum rate for normal clock instead max_freq
+ce3936b34bc3 dt-bindings: mmc: renesas,sdhi: Add r8a779g0 support
+755f55eac38a mmc: renesas_sdhi: Add internal DMA transfer end
+ce747db93e14 mmc: tmio: Add internal DMA transfer end
+f04e295cd388 mmc: renesas_sdhi: reset calibration register
+de9461ece1fa mmc: renesas_sdhi: scc_ctl is always set in after R-Car Gen3
