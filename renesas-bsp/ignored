@@ -151,6 +151,8 @@ Control Domain
 		751ac8024a13 pinctrl: renesas: r8a779f0: Fix pfc addresses of Control domain
 		e028d91dadf4 arm64: dts: renesas: r8a779f0: Fix pfc addresses of Control domain
 		9ce764f07715 dts: renesas: r8a779f0: Add channel information
+		debcaf2c0296 thermal: rcar_gen3_thermal: Add support ECM
+		903cb8238415 arm64: dts: r8a779f0: Support Thermal interrupt mode
 
 CSI2
 	The CSI-2 block is not documented in Hardware User's Manual

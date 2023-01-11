@@ -744,3 +744,8 @@ ad70433f1eda soc: renesas: rcar-sysc: Support S2RAM
 e07b497cf41e soc: renesas: rcar-sysc: Improve power domains always on implementation
 ea52a14c9748 soc: renesas: rcar-sysc: Add wait 1us before turning off power domain
 118bfc69fe4d soc: renesas: rcar-sysc: Adjust the waiting time to cover the worst case
+# lore: 20230208190333.3159879-1-niklas.soderlund+renesas@ragnatech.se
+cd0513b0a8be thermal: rcar_gen3_thermal: Fix rcar_gen3_thermal_mcelsius_to_temp() return 0
+# lore: 20230211084728.27832-1-wsa+renesas@sang-engineering.com
+c726edac6887 thermal: rcar_gen3_thermal: Use generic name for resources
+6a7cc61fed35 thermal: rcar_gen3_thermal: Read calibration from hardware on R-Car S4

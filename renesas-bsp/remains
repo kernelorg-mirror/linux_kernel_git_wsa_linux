@@ -23,10 +23,6 @@ e37c8d37dd3c ravb: Remove TX internal delay setting
 d276493fd6c2 ravb: Issue gpio reset to AVB1/AVB2 PHYs
 68c8cf248f51 arm64: dts: renesas: whitehawk: Add phy-reset-gpios to reset PHYs before initialization
 51cb5f1f83b6 net: ethernet: renesas: rcar_gen4_ptp: Revise R-Car V4H gPTP's clock frequency
-cd0513b0a8be thermal: rcar_gen3_thermal: Fix rcar_gen3_thermal_mcelsius_to_temp() return 0
-debcaf2c0296 thermal: rcar_gen3_thermal: Add support ECM
-6a7cc61fed35 thermal: rcar_gen3_thermal: Read calibration from hardware on R-Car S4
-c726edac6887 thermal: rcar_gen3_thermal: Use generic name for resources
 b5bccf1fc37c arm64: dts: renesas: r8a779f0: Disable CDM check
 9fd7d9ee7993 arm64: dts: renesas: r8a779g0: Disable CDM check
 c0cbae905c8a arm64: dts: renesas: whitehawk: Add AVB1/AVB2 support
@@ -34,7 +30,6 @@ d387cc45dbbd arm64: dts: renesas: r8a779g0: Update Ethernet-TSN0 device node
 46aa3d2a438d arm64: dts: renesas: r8a779g0: Add max96789 node
 4f1b9a37b774 arm64: dts: renesas: r8a77970-eagle: Add input-justification options to adv7511
 55dee8f01bfc arm64: dts: renesas: r8a779g0-whitehawk: Disable rtsn0
-903cb8238415 arm64: dts: r8a779f0: Support Thermal interrupt mode
 cb1263abb7a2 arm64: dts: renesas: r8a779g0: Add use_extal_clk option
 2daefde67813 arm64: dts: renesas: r8a779g0: Add C-PHY option to gsml node
 86ed3e15856f arm64: dts: renesas: r8a779f0: Fix PCIe clock and support PCIe1 endpoint
