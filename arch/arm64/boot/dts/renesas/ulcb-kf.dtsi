@@ -32,11 +32,13 @@
 		};
 	};
 
-	hdmi_1v8: regulator-hdmi-1v8 {
+	t1v8: regulator-t1v8 {
 		compatible = "regulator-fixed";
-		regulator-name = "hdmi-1v8";
+		regulator-name = "t1v8";
 		regulator-min-microvolt = <1800000>;
 		regulator-max-microvolt = <1800000>;
+		regulator-boot-on;
+		regulator-always-on;
 	};
 
 	pcie_1v5: regulator-pcie-1v5 {
@@ -154,11 +156,11 @@
 
 				pd-gpios = <&gpio_exp_75 5 GPIO_ACTIVE_LOW>;
 
-				avdd-supply = <&hdmi_1v8>;
-				dvdd-supply = <&hdmi_1v8>;
-				pvdd-supply = <&hdmi_1v8>;
+				avdd-supply = <&t1v8>;
+				dvdd-supply = <&t1v8>;
+				pvdd-supply = <&t1v8>;
 				dvdd-3v-supply = <&reg_3p3v>;
-				bgvdd-supply = <&hdmi_1v8>;
+				bgvdd-supply = <&t1v8>;
 
 				adi,input-depth = <8>;
 				adi,input-colorspace = "rgb";
