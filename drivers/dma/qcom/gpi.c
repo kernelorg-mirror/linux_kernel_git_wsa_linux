@@ -681,7 +681,7 @@ static int gpi_send_cmd(struct gpii *gpii, struct gchan *gchan,
 			enum gpi_cmd gpi_cmd)
 {
 	u32 chid = MAX_CHANNELS_PER_GPII;
-	unsigned long timeout;
+	unsigned long time_left;
 	void __iomem *cmd_reg;
 	u32 cmd;
 
@@ -701,9 +701,9 @@ static int gpi_send_cmd(struct gpii *gpii, struct gchan *gchan,
 	cmd = IS_CHAN_CMD(gpi_cmd) ? GPII_n_CH_CMD(gpi_cmd_info[gpi_cmd].opcode, chid) :
 				     GPII_n_EV_CMD(gpi_cmd_info[gpi_cmd].opcode, 0);
 	gpi_write_reg(gpii, cmd_reg, cmd);
-	timeout = wait_for_completion_timeout(&gpii->cmd_completion,
-					      msecs_to_jiffies(CMD_TIMEOUT_MS));
-	if (!timeout) {
+	time_left = wait_for_completion_timeout(&gpii->cmd_completion,
+						msecs_to_jiffies(CMD_TIMEOUT_MS));
+	if (!time_left) {
 		dev_err(gpii->gpi_dev->dev, "cmd: %s completion timeout:%u\n",
 			TO_GPI_CMD_STR(gpi_cmd), chid);
 		return -EIO;
