@@ -479,7 +479,7 @@ static int vbg_hgcm_do_call(struct vbg_dev *gdev, struct vmmdev_hgcm_call *call,
 			    u32 timeout_ms, bool interruptible, bool *leak_it)
 {
 	int rc, cancel_rc, ret;
-	long timeout;
+	long time_left;
 
 	*leak_it = false;
 
@@ -499,25 +499,25 @@ static int vbg_hgcm_do_call(struct vbg_dev *gdev, struct vmmdev_hgcm_call *call,
 
 	/* Host decided to process the request asynchronously, wait for it */
 	if (timeout_ms == U32_MAX)
-		timeout = MAX_SCHEDULE_TIMEOUT;
+		time_left = MAX_SCHEDULE_TIMEOUT;
 	else
-		timeout = msecs_to_jiffies(timeout_ms);
+		time_left = msecs_to_jiffies(timeout_ms);
 
 	if (interruptible) {
-		timeout = wait_event_interruptible_timeout(gdev->hgcm_wq,
-							   hgcm_req_done(gdev, &call->header),
-							   timeout);
+		time_left = wait_event_interruptible_timeout(gdev->hgcm_wq,
+							     hgcm_req_done(gdev, &call->header),
+							     time_left);
 	} else {
-		timeout = wait_event_timeout(gdev->hgcm_wq,
-					     hgcm_req_done(gdev, &call->header),
-					     timeout);
+		time_left = wait_event_timeout(gdev->hgcm_wq,
+					       hgcm_req_done(gdev, &call->header),
+					       time_left);
 	}
 
 	/* timeout > 0 means hgcm_req_done has returned true, so success */
-	if (timeout > 0)
+	if (time_left > 0)
 		return 0;
 
-	if (timeout == 0)
+	if (time_left == 0)
 		ret = -ETIMEDOUT;
 	else
 		ret = -EINTR;
@@ -532,15 +532,15 @@ static int vbg_hgcm_do_call(struct vbg_dev *gdev, struct vmmdev_hgcm_call *call,
 	 * race with normal completion, wait while the host completes it.
 	 */
 	if (cancel_rc == VERR_NOT_FOUND || cancel_rc == VERR_SEM_DESTROYED)
-		timeout = msecs_to_jiffies(500);
+		time_left = msecs_to_jiffies(500);
 	else
-		timeout = msecs_to_jiffies(2000);
+		time_left = msecs_to_jiffies(2000);
 
-	timeout = wait_event_timeout(gdev->hgcm_wq,
-				     hgcm_req_done(gdev, &call->header),
-				     timeout);
+	time_left = wait_event_timeout(gdev->hgcm_wq,
+				       hgcm_req_done(gdev, &call->header),
+				       time_left);
 
-	if (WARN_ON(timeout == 0)) {
+	if (WARN_ON(time_left == 0)) {
 		/* We really should never get here */
 		vbg_err("%s: Call timedout and cancellation failed, leaking the request\n",
 			__func__);
