@@ -657,7 +657,7 @@ static bool ef4_check_tx_flush_complete(struct ef4_nic *efx)
  * are no more RX and TX events left on any channel. */
 static int ef4_farch_do_flush(struct ef4_nic *efx)
 {
-	unsigned timeout = msecs_to_jiffies(5000); /* 5s for all flushes and drains */
+	long time_left = msecs_to_jiffies(5000); /* 5s for all flushes and drains */
 	struct ef4_channel *channel;
 	struct ef4_rx_queue *rx_queue;
 	struct ef4_tx_queue *tx_queue;
@@ -673,7 +673,7 @@ static int ef4_farch_do_flush(struct ef4_nic *efx)
 		}
 	}
 
-	while (timeout && atomic_read(&efx->active_queues) > 0) {
+	while (time_left && atomic_read(&efx->active_queues) > 0) {
 		/* The hardware supports four concurrent rx flushes, each of
 		 * which may need to be retried if there is an outstanding
 		 * descriptor fetch
@@ -693,9 +693,9 @@ static int ef4_farch_do_flush(struct ef4_nic *efx)
 			}
 		}
 
-		timeout = wait_event_timeout(efx->flush_wq,
-					     ef4_farch_flush_wake(efx),
-					     timeout);
+		time_left = wait_event_timeout(efx->flush_wq,
+					       ef4_farch_flush_wake(efx),
+					       time_left);
 	}
 
 	if (atomic_read(&efx->active_queues) &&
