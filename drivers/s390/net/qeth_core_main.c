@@ -2029,7 +2029,7 @@ static int qeth_send_control_data(struct qeth_card *card,
 {
 	struct qeth_channel *channel = iob->channel;
 	struct qeth_reply *reply = &iob->reply;
-	long timeout = iob->timeout;
+	long time_left = iob->timeout;
 	int rc;
 
 	QETH_CARD_TEXT(card, 2, "sendctl");
@@ -2037,12 +2037,12 @@ static int qeth_send_control_data(struct qeth_card *card,
 	reply->callback = reply_cb;
 	reply->param = reply_param;
 
-	timeout = wait_event_interruptible_timeout(card->wait_q,
-						   qeth_trylock_channel(channel, iob),
-						   timeout);
-	if (timeout <= 0) {
+	time_left = wait_event_interruptible_timeout(card->wait_q,
+						     qeth_trylock_channel(channel, iob),
+						     time_left);
+	if (time_left <= 0) {
 		qeth_put_cmd(iob);
-		return (timeout == -ERESTARTSYS) ? -EINTR : -ETIME;
+		return (time_left == -ERESTARTSYS) ? -EINTR : -ETIME;
 	}
 
 	if (iob->finalize)
@@ -2057,7 +2057,7 @@ static int qeth_send_control_data(struct qeth_card *card,
 	QETH_CARD_TEXT(card, 6, "noirqpnd");
 	spin_lock_irq(get_ccwdev_lock(channel->ccwdev));
 	rc = ccw_device_start_timeout(channel->ccwdev, __ccw_from_cmd(iob),
-				      (addr_t) iob, 0, 0, timeout);
+				      (addr_t) iob, 0, 0, time_left);
 	spin_unlock_irq(get_ccwdev_lock(channel->ccwdev));
 	if (rc) {
 		QETH_DBF_MESSAGE(2, "qeth_send_control_data on device %x: ccw_device_start rc = %i\n",
@@ -2069,10 +2069,10 @@ static int qeth_send_control_data(struct qeth_card *card,
 		goto out;
 	}
 
-	timeout = wait_for_completion_interruptible_timeout(&iob->done,
-							    timeout);
-	if (timeout <= 0)
-		rc = (timeout == -ERESTARTSYS) ? -EINTR : -ETIME;
+	time_left = wait_for_completion_interruptible_timeout(&iob->done,
+							      time_left);
+	if (time_left <= 0)
+		rc = (time_left == -ERESTARTSYS) ? -EINTR : -ETIME;
 
 	qeth_dequeue_cmd(card, iob);
 
