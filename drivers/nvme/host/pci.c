@@ -2466,10 +2466,10 @@ static int nvme_delete_queue(struct nvme_queue *nvmeq, u8 opcode)
 static bool __nvme_delete_io_queues(struct nvme_dev *dev, u8 opcode)
 {
 	int nr_queues = dev->online_queues - 1, sent = 0;
-	unsigned long timeout;
+	unsigned long time_left;
 
  retry:
-	timeout = NVME_ADMIN_TIMEOUT;
+	time_left = NVME_ADMIN_TIMEOUT;
 	while (nr_queues > 0) {
 		if (nvme_delete_queue(&dev->queues[nr_queues], opcode))
 			break;
@@ -2479,9 +2479,9 @@ static bool __nvme_delete_io_queues(struct nvme_dev *dev, u8 opcode)
 	while (sent) {
 		struct nvme_queue *nvmeq = &dev->queues[nr_queues + sent];
 
-		timeout = wait_for_completion_io_timeout(&nvmeq->delete_done,
-				timeout);
-		if (timeout == 0)
+		time_left = wait_for_completion_io_timeout(&nvmeq->delete_done,
+							   time_left);
+		if (time_left == 0)
 			return false;
 
 		sent--;
