@@ -882,7 +882,7 @@ static long tw_chrdev_ioctl(struct file *file, unsigned int cmd, unsigned long a
 	unsigned long data_buffer_length_adjusted = 0;
 	struct inode *inode = file_inode(file);
 	unsigned long *cpu_addr;
-	long timeout;
+	long time_left;
 	TW_New_Ioctl *tw_ioctl;
 	TW_Passthru *passthru;
 	TW_Device_Extension *tw_dev = tw_device_extension_list[iminor(inode)];
@@ -985,10 +985,11 @@ static long tw_chrdev_ioctl(struct file *file, unsigned int cmd, unsigned long a
 			tw_post_command_packet(tw_dev, request_id);
 			spin_unlock_irqrestore(tw_dev->host->host_lock, flags);
 
-			timeout = TW_IOCTL_CHRDEV_TIMEOUT*HZ;
+			time_left = TW_IOCTL_CHRDEV_TIMEOUT*HZ;
 
 			/* Now wait for the command to complete */
-			timeout = wait_event_timeout(tw_dev->ioctl_wqueue, tw_dev->chrdev_request_id == TW_IOCTL_CHRDEV_FREE, timeout);
+			time_left = wait_event_timeout(tw_dev->ioctl_wqueue, tw_dev->chrdev_request_id == TW_IOCTL_CHRDEV_FREE,
+						       time_left);
 
 			/* We timed out, and didn't get an interrupt */
 			if (tw_dev->chrdev_request_id != TW_IOCTL_CHRDEV_FREE) {
