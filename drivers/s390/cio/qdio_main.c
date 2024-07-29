@@ -837,7 +837,7 @@ EXPORT_SYMBOL_GPL(qdio_get_ssqd_desc);
 static int qdio_cancel_ccw(struct qdio_irq *irq, int how)
 {
 	struct ccw_device *cdev = irq->cdev;
-	long timeout;
+	long time_left;
 	int rc;
 
 	spin_lock_irq(get_ccwdev_lock(cdev));
@@ -854,12 +854,12 @@ static int qdio_cancel_ccw(struct qdio_irq *irq, int how)
 		return rc;
 	}
 
-	timeout = wait_event_interruptible_timeout(cdev->private->wait_q,
-						   irq->state == QDIO_IRQ_STATE_INACTIVE ||
-						   irq->state == QDIO_IRQ_STATE_ERR,
-						   10 * HZ);
-	if (timeout <= 0)
-		rc = (timeout == -ERESTARTSYS) ? -EINTR : -ETIME;
+	time_left = wait_event_interruptible_timeout(cdev->private->wait_q,
+						     irq->state == QDIO_IRQ_STATE_INACTIVE ||
+						     irq->state == QDIO_IRQ_STATE_ERR,
+						     10 * HZ);
+	if (time_left <= 0)
+		rc = (time_left == -ERESTARTSYS) ? -EINTR : -ETIME;
 
 	return rc;
 }
@@ -1043,7 +1043,7 @@ int qdio_establish(struct ccw_device *cdev,
 	struct qdio_irq *irq_ptr = cdev->private->qdio_data;
 	struct subchannel_id schid;
 	struct ciw *ciw;
-	long timeout;
+	long time_left;
 	int rc;
 
 	ccw_device_get_schid(cdev, &schid);
@@ -1101,11 +1101,11 @@ int qdio_establish(struct ccw_device *cdev,
 		goto err_ccw_start;
 	}
 
-	timeout = wait_event_interruptible_timeout(cdev->private->wait_q,
-						   irq_ptr->state == QDIO_IRQ_STATE_ESTABLISHED ||
-						   irq_ptr->state == QDIO_IRQ_STATE_ERR, HZ);
-	if (timeout <= 0) {
-		rc = (timeout == -ERESTARTSYS) ? -EINTR : -ETIME;
+	time_left = wait_event_interruptible_timeout(cdev->private->wait_q,
+						     irq_ptr->state == QDIO_IRQ_STATE_ESTABLISHED ||
+						     irq_ptr->state == QDIO_IRQ_STATE_ERR, HZ);
+	if (time_left <= 0) {
+		rc = (time_left == -ERESTARTSYS) ? -EINTR : -ETIME;
 		goto err_ccw_timeout;
 	}
 
