@@ -3939,14 +3939,14 @@ static int udma_terminate_all(struct dma_chan *chan)
 static void udma_synchronize(struct dma_chan *chan)
 {
 	struct udma_chan *uc = to_udma_chan(chan);
-	unsigned long timeout = msecs_to_jiffies(1000);
+	unsigned long time_left = msecs_to_jiffies(1000);
 
 	vchan_synchronize(&uc->vc);
 
 	if (uc->state == UDMA_CHAN_IS_TERMINATING) {
-		timeout = wait_for_completion_timeout(&uc->teardown_completed,
-						      timeout);
-		if (!timeout) {
+		time_left = wait_for_completion_timeout(&uc->teardown_completed,
+							time_left);
+		if (!time_left) {
 			dev_warn(uc->ud->dev, "chan%d teardown timeout!\n",
 				 uc->id);
 			udma_dump_chan_stdata(uc);
