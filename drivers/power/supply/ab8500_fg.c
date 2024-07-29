@@ -610,15 +610,15 @@ int ab8500_fg_inst_curr_finalize(struct ab8500_fg *di, int *curr_ua)
 	u8 low, high;
 	int val;
 	int ret;
-	unsigned long timeout;
+	unsigned long time_left;
 
 	if (!completion_done(&di->ab8500_fg_complete)) {
-		timeout = wait_for_completion_timeout(
+		time_left = wait_for_completion_timeout(
 			&di->ab8500_fg_complete,
 			INS_CURR_TIMEOUT);
 		dev_dbg(di->dev, "Finalize time: %d ms\n",
-			jiffies_to_msecs(INS_CURR_TIMEOUT - timeout));
-		if (!timeout) {
+			jiffies_to_msecs(INS_CURR_TIMEOUT - time_left));
+		if (!time_left) {
 			ret = -ETIME;
 			disable_irq(di->irq);
 			di->nbr_cceoc_irq_cnt = 0;
@@ -703,7 +703,7 @@ fail:
 int ab8500_fg_inst_curr_blocking(struct ab8500_fg *di)
 {
 	int ret;
-	unsigned long timeout;
+	unsigned long time_left;
 	int curr_ua = 0;
 
 	ret = ab8500_fg_inst_curr_start(di);
@@ -714,12 +714,12 @@ int ab8500_fg_inst_curr_blocking(struct ab8500_fg *di)
 
 	/* Wait for CC to actually start */
 	if (!completion_done(&di->ab8500_fg_started)) {
-		timeout = wait_for_completion_timeout(
+		time_left = wait_for_completion_timeout(
 			&di->ab8500_fg_started,
 			INS_CURR_TIMEOUT);
 		dev_dbg(di->dev, "Start time: %d ms\n",
-			jiffies_to_msecs(INS_CURR_TIMEOUT - timeout));
-		if (!timeout) {
+			jiffies_to_msecs(INS_CURR_TIMEOUT - time_left));
+		if (!time_left) {
 			ret = -ETIME;
 			dev_err(di->dev, "completion timed out [%d]\n",
 				__LINE__);
