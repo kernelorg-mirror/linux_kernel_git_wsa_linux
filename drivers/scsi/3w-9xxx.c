@@ -638,7 +638,7 @@ out:
 static long twa_chrdev_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 {
 	struct inode *inode = file_inode(file);
-	long timeout;
+	long time_left;
 	unsigned long *cpu_addr, data_buffer_length_adjusted = 0, flags = 0;
 	dma_addr_t dma_handle;
 	int request_id = 0;
@@ -714,10 +714,11 @@ static long twa_chrdev_ioctl(struct file *file, unsigned int cmd, unsigned long 
 		twa_post_command_packet(tw_dev, request_id, 1);
 		spin_unlock_irqrestore(tw_dev->host->host_lock, flags);
 
-		timeout = TW_IOCTL_CHRDEV_TIMEOUT*HZ;
+		time_left = TW_IOCTL_CHRDEV_TIMEOUT*HZ;
 
 		/* Now wait for command to complete */
-		timeout = wait_event_timeout(tw_dev->ioctl_wqueue, tw_dev->chrdev_request_id == TW_IOCTL_CHRDEV_FREE, timeout);
+		time_left = wait_event_timeout(tw_dev->ioctl_wqueue, tw_dev->chrdev_request_id == TW_IOCTL_CHRDEV_FREE,
+					       time_left);
 
 		/* We timed out, and didn't get an interrupt */
 		if (tw_dev->chrdev_request_id != TW_IOCTL_CHRDEV_FREE) {
