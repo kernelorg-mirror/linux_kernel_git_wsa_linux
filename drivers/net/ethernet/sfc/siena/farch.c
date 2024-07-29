@@ -645,7 +645,7 @@ static bool efx_check_tx_flush_complete(struct efx_nic *efx)
  * are no more RX and TX events left on any channel. */
 static int efx_farch_do_flush(struct efx_nic *efx)
 {
-	unsigned timeout = msecs_to_jiffies(5000); /* 5s for all flushes and drains */
+	long time_left = msecs_to_jiffies(5000); /* 5s for all flushes and drains */
 	struct efx_channel *channel;
 	struct efx_rx_queue *rx_queue;
 	struct efx_tx_queue *tx_queue;
@@ -661,7 +661,7 @@ static int efx_farch_do_flush(struct efx_nic *efx)
 		}
 	}
 
-	while (timeout && atomic_read(&efx->active_queues) > 0) {
+	while (time_left && atomic_read(&efx->active_queues) > 0) {
 		/* If SRIOV is enabled, then offload receive queue flushing to
 		 * the firmware (though we will still have to poll for
 		 * completion). If that fails, fall back to the old scheme.
@@ -692,9 +692,9 @@ static int efx_farch_do_flush(struct efx_nic *efx)
 		}
 
 	wait:
-		timeout = wait_event_timeout(efx->flush_wq,
-					     efx_farch_flush_wake(efx),
-					     timeout);
+		time_left = wait_event_timeout(efx->flush_wq,
+					       efx_farch_flush_wake(efx),
+					       time_left);
 	}
 
 	if (atomic_read(&efx->active_queues) &&
