@@ -681,7 +681,7 @@ static int efx_vfdi_fini_all_queues(struct siena_vf *vf)
 	efx_oword_t reg;
 	unsigned count = efx_vf_size(efx);
 	unsigned vf_offset = EFX_VI_BASE + vf->index * efx_vf_size(efx);
-	unsigned timeout = HZ;
+	long time_left = HZ;
 	unsigned index, rxqs_count;
 	MCDI_DECLARE_BUF(inbuf, MC_CMD_FLUSH_RX_QUEUES_IN_LENMAX);
 	int rc;
@@ -712,15 +712,15 @@ static int efx_vfdi_fini_all_queues(struct siena_vf *vf)
 	}
 
 	atomic_set(&vf->rxq_retry_count, 0);
-	while (timeout && (vf->rxq_count || vf->txq_count)) {
+	while (time_left && (vf->rxq_count || vf->txq_count)) {
 		rc = efx_siena_mcdi_rpc(efx, MC_CMD_FLUSH_RX_QUEUES, inbuf,
 				  MC_CMD_FLUSH_RX_QUEUES_IN_LEN(rxqs_count),
 				  NULL, 0, NULL);
 		WARN_ON(rc < 0);
 
-		timeout = wait_event_timeout(vf->flush_waitq,
-					     efx_vfdi_flush_wake(vf),
-					     timeout);
+		time_left = wait_event_timeout(vf->flush_waitq,
+					       efx_vfdi_flush_wake(vf),
+					       time_left);
 		rxqs_count = 0;
 		for (index = 0; index < count; ++index) {
 			if (test_and_clear_bit(index, vf->rxq_retry_mask)) {
@@ -755,7 +755,7 @@ static int efx_vfdi_fini_all_queues(struct siena_vf *vf)
 
 	vf->evq0_count = 0;
 
-	return timeout ? 0 : VFDI_RC_ETIMEDOUT;
+	return time_left ? 0 : VFDI_RC_ETIMEDOUT;
 }
 
 static int efx_vfdi_insert_filter(struct siena_vf *vf)
