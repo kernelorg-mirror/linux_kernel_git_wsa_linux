@@ -358,10 +358,10 @@ static void xenbus_reset_backend_state_changed(struct xenbus_watch *w,
 
 static void xenbus_reset_wait_for_backend(char *be, int expected)
 {
-	long timeout;
-	timeout = wait_event_interruptible_timeout(backend_state_wq,
-			backend_state == expected, 5 * HZ);
-	if (timeout <= 0)
+	long time_left;
+	time_left = wait_event_interruptible_timeout(backend_state_wq,
+						     backend_state == expected, 5 * HZ);
+	if (time_left <= 0)
 		pr_info("backend %s timed out\n", be);
 }
 
