@@ -556,7 +556,7 @@ int xen_blkif_schedule(void *arg)
 	struct xen_blkif_ring *ring = arg;
 	struct xen_blkif *blkif = ring->blkif;
 	struct xen_vbd *vbd = &blkif->vbd;
-	unsigned long timeout;
+	long time_left;
 	int ret;
 	bool do_eoi;
 	unsigned int eoi_flags = XEN_EOI_FLAG_SPURIOUS;
@@ -568,20 +568,20 @@ int xen_blkif_schedule(void *arg)
 		if (unlikely(vbd->size != vbd_sz(vbd)))
 			xen_vbd_resize(blkif);
 
-		timeout = msecs_to_jiffies(LRU_INTERVAL);
+		time_left = msecs_to_jiffies(LRU_INTERVAL);
 
-		timeout = wait_event_interruptible_timeout(
+		time_left = wait_event_interruptible_timeout(
 			ring->wq,
 			ring->waiting_reqs || kthread_should_stop(),
-			timeout);
-		if (timeout == 0)
+			time_left);
+		if (time_left == 0)
 			goto purge_gnt_list;
-		timeout = wait_event_interruptible_timeout(
+		time_left = wait_event_interruptible_timeout(
 			ring->pending_free_wq,
 			!list_empty(&ring->pending_free) ||
 			kthread_should_stop(),
-			timeout);
-		if (timeout == 0)
+			time_left);
+		if (time_left == 0)
 			goto purge_gnt_list;
 
 		do_eoi = ring->waiting_reqs;
