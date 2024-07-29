@@ -396,10 +396,10 @@ static int wait_resp(struct afu *afu, struct afu_cmd *cmd)
 	struct cxlflash_cfg *cfg = afu->parent;
 	struct device *dev = &cfg->dev->dev;
 	int rc = 0;
-	ulong timeout = msecs_to_jiffies(cmd->rcb.timeout * 2 * 1000);
+	ulong time_left = msecs_to_jiffies(cmd->rcb.timeout * 2 * 1000);
 
-	timeout = wait_for_completion_timeout(&cmd->cevent, timeout);
-	if (!timeout)
+	time_left = wait_for_completion_timeout(&cmd->cevent, time_left);
+	if (!time_left)
 		rc = -ETIMEDOUT;
 
 	if (cmd->cmd_aborted)
