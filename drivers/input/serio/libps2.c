@@ -264,7 +264,7 @@ static int ps2_adjust_timeout(struct ps2dev *ps2dev,
  */
 int __ps2_command(struct ps2dev *ps2dev, u8 *param, unsigned int command)
 {
-	unsigned int timeout;
+	long time_left;
 	unsigned int send = (command >> 12) & 0xf;
 	unsigned int receive = (command >> 8) & 0xf;
 	int rc;
@@ -320,9 +320,9 @@ int __ps2_command(struct ps2dev *ps2dev, u8 *param, unsigned int command)
 	 * ACKing the reset command, and so it can take a long
 	 * time before the ACK arrives.
 	 */
-	timeout = command == PS2_CMD_RESET_BAT ? 1000 : 200;
+	time_left = command == PS2_CMD_RESET_BAT ? 1000 : 200;
 
-	rc = ps2_do_sendbyte(ps2dev, command & 0xff, timeout, 2);
+	rc = ps2_do_sendbyte(ps2dev, command & 0xff, time_left, 2);
 	if (rc)
 		goto out_reset_flags;
 
@@ -338,16 +338,17 @@ int __ps2_command(struct ps2dev *ps2dev, u8 *param, unsigned int command)
 	/*
 	 * The reset command takes a long time to execute.
 	 */
-	timeout = msecs_to_jiffies(command == PS2_CMD_RESET_BAT ? 4000 : 500);
+	time_left = msecs_to_jiffies(command == PS2_CMD_RESET_BAT ? 4000 : 500);
 
-	timeout = wait_event_timeout(ps2dev->wait,
-				     !(ps2dev->flags & PS2_FLAG_CMD1), timeout);
+	time_left = wait_event_timeout(ps2dev->wait,
+				       !(ps2dev->flags & PS2_FLAG_CMD1),
+				       time_left);
 
 	if (ps2dev->cmdcnt && !(ps2dev->flags & PS2_FLAG_CMD1)) {
 
-		timeout = ps2_adjust_timeout(ps2dev, command, timeout);
+		time_left = ps2_adjust_timeout(ps2dev, command, time_left);
 		wait_event_timeout(ps2dev->wait,
-				   !(ps2dev->flags & PS2_FLAG_CMD), timeout);
+				   !(ps2dev->flags & PS2_FLAG_CMD), time_left);
 	}
 
 	serio_pause_rx(ps2dev->serio);
