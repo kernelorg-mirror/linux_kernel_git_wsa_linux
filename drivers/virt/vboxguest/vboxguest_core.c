@@ -1215,29 +1215,29 @@ static int vbg_ioctl_wait_for_events(struct vbg_dev *gdev,
 	u32 timeout_ms = wait->u.in.timeout_ms;
 	u32 event_mask = wait->u.in.events;
 	unsigned long flags;
-	long timeout;
+	long time_left;
 	int ret = 0;
 
 	if (vbg_ioctl_chk(&wait->hdr, sizeof(wait->u.in), sizeof(wait->u.out)))
 		return -EINVAL;
 
 	if (timeout_ms == U32_MAX)
-		timeout = MAX_SCHEDULE_TIMEOUT;
+		time_left = MAX_SCHEDULE_TIMEOUT;
 	else
-		timeout = msecs_to_jiffies(timeout_ms);
+		time_left = msecs_to_jiffies(timeout_ms);
 
 	wait->u.out.events = 0;
 	do {
-		timeout = wait_event_interruptible_timeout(
+		time_left = wait_event_interruptible_timeout(
 				gdev->event_wq,
 				vbg_wait_event_cond(gdev, session, event_mask),
-				timeout);
+				time_left);
 
 		spin_lock_irqsave(&gdev->event_spinlock, flags);
 
-		if (timeout < 0 || session->cancel_waiters) {
+		if (time_left < 0 || session->cancel_waiters) {
 			ret = -EINTR;
-		} else if (timeout == 0) {
+		} else if (time_left == 0) {
 			ret = -ETIMEDOUT;
 		} else {
 			wait->u.out.events =
