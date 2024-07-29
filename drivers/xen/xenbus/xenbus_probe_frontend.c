@@ -128,7 +128,7 @@ static int xenbus_frontend_dev_probe(struct device *dev)
 static void xenbus_frontend_dev_shutdown(struct device *_dev)
 {
 	struct xenbus_device *dev = to_xenbus_device(_dev);
-	unsigned long timeout = 5*HZ;
+	unsigned long time_left = 5*HZ;
 
 	DPRINTK("%s", dev->nodename);
 
@@ -139,8 +139,8 @@ static void xenbus_frontend_dev_shutdown(struct device *_dev)
 		goto out;
 	}
 	xenbus_switch_state(dev, XenbusStateClosing);
-	timeout = wait_for_completion_timeout(&dev->down, timeout);
-	if (!timeout)
+	time_left = wait_for_completion_timeout(&dev->down, time_left);
+	if (!time_left)
 		pr_info("%s: %s timeout closing device\n",
 			__func__, dev->nodename);
  out:
