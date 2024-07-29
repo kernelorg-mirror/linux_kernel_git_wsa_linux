@@ -106,7 +106,7 @@ static int imx6ul_adc_init(struct imx6ul_tsc *tsc)
 	u32 adc_gc;
 	u32 adc_gs;
 	u32 adc_cfg;
-	unsigned long timeout;
+	unsigned long time_left;
 
 	reinit_completion(&tsc->completion);
 
@@ -134,9 +134,9 @@ static int imx6ul_adc_init(struct imx6ul_tsc *tsc)
 		adc_gc |= ADC_AVGE;
 	writel(adc_gc, tsc->adc_regs + REG_ADC_GC);
 
-	timeout = wait_for_completion_timeout
+	time_left = wait_for_completion_timeout
 			(&tsc->completion, ADC_TIMEOUT);
-	if (timeout == 0) {
+	if (time_left == 0) {
 		dev_err(tsc->dev, "Timeout for adc calibration\n");
 		return -ETIMEDOUT;
 	}
