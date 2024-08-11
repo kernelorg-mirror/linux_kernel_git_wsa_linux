@@ -26,15 +26,22 @@ properties:
               - renesas,r8a779h0-wwdt  # R-Car V4M
           - const: renesas,rcar-gen4-wwdt
 
+      - items:
+          - enum:
+              - renesas,r8a78000-wwdt  # R-Car X5H
+          - const: renesas,rcar-gen5-wwdt
+
   reg:
     maxItems: 1
 
   interrupts:
+    minItems: 1
     items:
       - description: Pretimeout, 75% of overflow reached
       - description: Error occurred
 
   interrupt-names:
+    minItems: 1
     items:
       - const: pretimeout
       - const: error
@@ -60,7 +67,14 @@ properties:
       - const: bus
 
   power-domains:
-    maxItems: 1
+    minItems: 1
+    maxItems: 2
+
+  power-domain-names:
+    minItems: 1
+    items:
+      - const: cnt
+      - const: bus
 
 required:
   - compatible
@@ -83,12 +97,47 @@ allOf:
             enum:
               - renesas,r8a779a0-wwdt
               - renesas,r8a779f0-wwdt
+              - renesas,rcar-gen5-wwdt
     then:
       properties:
         resets:
           minItems: 2
         reset-names:
           minItems: 2
+
+  - if:
+      properties:
+        compatible:
+          contains:
+            enum:
+              - renesas,rcar-gen5-wwdt
+    then:
+      properties:
+        power-domains:
+          minItems: 2
+        power-domain-names:
+          minItems: 2
+      required:
+        - power-domain-names
+    else:
+      properties:
+        power-domains:
+          maxItems: 1
+        power-domain-names:
+          maxItems: 1
+
+  - if:
+      properties:
+        compatible:
+          contains:
+            enum:
+              - renesas,rcar-gen5-wwdt
+    then:
+      properties:
+        interrupts:
+          maxItems: 1
+        interrupt-names:
+          maxItems: 1
 
 additionalProperties: false
 
