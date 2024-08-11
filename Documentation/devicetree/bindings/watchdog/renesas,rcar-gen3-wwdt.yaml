@@ -25,6 +25,10 @@ properties:
               - renesas,r8a779g0-wwdt  # R-Car V4H
               - renesas,r8a779h0-wwdt  # R-Car V4M
           - const: renesas,rcar-gen4-wwdt
+      - items:
+          - enum:
+              - renesas,r8a78000-wwdt  # R-Car X5H
+          - const: renesas,rcar-gen5-wwdt
 
   reg:
     maxItems: 1
