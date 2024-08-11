@@ -145,6 +145,7 @@ static int wwdt_probe(struct platform_device *pdev)
 static const struct of_device_id renesas_wwdt_ids[] = {
 	{ .compatible = "renesas,rcar-gen3-wwdt", },
 	{ .compatible = "renesas,rcar-gen4-wwdt", },
+	{ .compatible = "renesas,rcar-gen5-wwdt", },
 	{ /* sentinel */ }
 };
 MODULE_DEVICE_TABLE(of, renesas_wwdt_ids);
