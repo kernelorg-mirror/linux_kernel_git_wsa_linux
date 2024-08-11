@@ -30,6 +30,10 @@
 #define WDTA0ERM	BIT(2)
 #define WDTA0WS(x)	FIELD_GET(GENMASK(1, 0), x)
 
+struct wwdt_of_data {
+	bool has_real_err_irq;
+};
+
 struct wwdt_priv {
 	void __iomem *base;
 	struct watchdog_device wdev;
@@ -74,6 +78,7 @@ static int wwdt_probe(struct platform_device *pdev)
 	struct device *dev = &pdev->dev;
 	struct wwdt_priv *priv;
 	struct watchdog_device *wdev;
+	const struct wwdt_of_data *of_data;
 	struct clk *clk;
 	unsigned long rate;
 	unsigned int interval, window_size;
@@ -97,6 +102,7 @@ static int wwdt_probe(struct platform_device *pdev)
 		return -EINVAL;
 
 	wdev = &priv->wdev;
+	of_data = of_device_get_match_data(dev);
 
 	val = readb(priv->base + WDTA0WDTE);
 	if (val & WDTA0RUN)
@@ -115,7 +121,7 @@ static int wwdt_probe(struct platform_device *pdev)
 	wdev->timeout = DIV_ROUND_UP(wdev->max_hw_heartbeat_ms, 1000);
 	watchdog_set_nowayout(wdev, true);
 
-	if (!(val & WDTA0ERM)) {
+	if (of_data->has_real_err_irq && !(val & WDTA0ERM)) {
 		ret = platform_get_irq_byname(pdev, "error");
 		if (ret < 0)
 			return ret;
@@ -142,9 +148,19 @@ static int wwdt_probe(struct platform_device *pdev)
 	return 0;
 }
 
+static const struct wwdt_of_data wwdt_with_err_data = {
+	.has_real_err_irq = true,
+};
+
+static const struct wwdt_of_data wwdt_wo_err_data = {
+	.has_real_err_irq = false,
+};
+
 static const struct of_device_id renesas_wwdt_ids[] = {
-	{ .compatible = "renesas,rcar-gen3-wwdt", },
-	{ .compatible = "renesas,rcar-gen4-wwdt", },
+	{ .compatible = "renesas,rcar-gen3-wwdt", .data = &wwdt_with_err_data },
+	{ .compatible = "renesas,rcar-gen4-wwdt", .data = &wwdt_with_err_data },
+	/* error_irq is routed to the ECM module instead */
+	{ .compatible = "renesas,rcar-gen5-wwdt", .data = &wwdt_wo_err_data },
 	{ /* sentinel */ }
 };
 MODULE_DEVICE_TABLE(of, renesas_wwdt_ids);
