@@ -51,6 +51,11 @@ properties:
               - renesas,r8a779h0-wdt     # R-Car V4M
           - const: renesas,rcar-gen4-wdt # R-Car Gen4
 
+      - items:
+          - enum:
+              - renesas,r8a78000-wdt     # R-Car X5H
+          - const: renesas,rcar-gen5-wdt # R-Car Gen5
+
   reg:
     maxItems: 1
 
@@ -58,13 +63,36 @@ properties:
     maxItems: 1
 
   clocks:
-    maxItems: 1
+    minItems: 1
+    items:
+      - description: Counting clock
+      - description: Bus clock
+
+  clock-names:
+    minItems: 1
+    items:
+      - const: cnt
+      - const: bus
 
   power-domains:
-    maxItems: 1
+    minItems: 1
+    maxItems: 2
+
+  power-domain-names:
+    minItems: 1
+    items:
+      - const: cnt
+      - const: bus
 
   resets:
-    maxItems: 1
+    minItems: 1
+    maxItems: 2
+
+  reset-names:
+    minItems: 1
+    items:
+      - const: cnt
+      - const: bus
 
   timeout-sec: true
 
@@ -87,6 +115,31 @@ allOf:
     then:
       required:
         - resets
+
+  - if:
+      properties:
+        compatible:
+          contains:
+            enum:
+              - renesas,rcar-gen5-wdt
+    then:
+      properties:
+        clocks:
+          minItems: 2
+        clock-names:
+          minItems: 2
+        power-domains:
+          minItems: 2
+        power-domain-names:
+          minItems: 2
+        resets:
+          minItems: 2
+        reset-names:
+          minItems: 2
+      required:
+        - clock-names
+        - power-domain-names
+        - reset-names
 
 additionalProperties: false
 
