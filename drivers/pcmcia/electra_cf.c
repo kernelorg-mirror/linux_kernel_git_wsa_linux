@@ -297,7 +297,7 @@ fail1:
 
 	iounmap(cf->gpio_base);
 out_unmap_virt:
-	device_init_wakeup(&ofdev->dev, 0);
+	device_init_wakeup(&ofdev->dev, false);
 	iounmap(cf->io_virt);
 out_unmap_mem:
 	iounmap(cf->mem_base);
