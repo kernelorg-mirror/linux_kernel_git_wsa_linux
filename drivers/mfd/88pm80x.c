@@ -95,7 +95,7 @@ int pm80x_init(struct i2c_client *client)
 		return -EINVAL;
 	}
 
-	device_init_wakeup(&client->dev, 1);
+	device_init_wakeup(&client->dev, true);
 
 	/*
 	 * workaround: set g_pm80x_chip to the first probed chip. if the

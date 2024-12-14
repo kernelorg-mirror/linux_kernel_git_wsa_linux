@@ -189,7 +189,7 @@ static int max8925_probe(struct i2c_client *client)
 	}
 	i2c_set_clientdata(chip->adc, chip);
 
-	device_init_wakeup(&client->dev, 1);
+	device_init_wakeup(&client->dev, true);
 
 	max8925_device_init(chip, pdata);
 

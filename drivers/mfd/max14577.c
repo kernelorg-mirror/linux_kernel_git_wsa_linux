@@ -439,7 +439,7 @@ static int max14577_i2c_probe(struct i2c_client *i2c)
 	if (ret < 0)
 		goto err_mfd;
 
-	device_init_wakeup(max14577->dev, 1);
+	device_init_wakeup(max14577->dev, true);
 
 	return 0;
 

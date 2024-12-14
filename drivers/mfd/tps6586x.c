@@ -374,7 +374,7 @@ static int tps6586x_irq_init(struct tps6586x *tps6586x, int irq,
 				   "tps6586x", tps6586x);
 
 	if (!ret)
-		device_init_wakeup(tps6586x->dev, 1);
+		device_init_wakeup(tps6586x->dev, true);
 
 	return ret;
 }

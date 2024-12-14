@@ -1101,7 +1101,7 @@ static inline void menelaus_rtc_init(struct menelaus_chip *m)
 			dev_err(&m->client->dev, "can't handle RTC alarm\n");
 			return;
 		}
-		device_init_wakeup(&m->client->dev, 1);
+		device_init_wakeup(&m->client->dev, true);
 	}
 
 	/* be sure RTC is enabled; allow 1/sec irqs; leave 12hr mode alone */
@@ -1122,7 +1122,7 @@ static inline void menelaus_rtc_init(struct menelaus_chip *m)
 	if (err) {
 		if (alarm) {
 			menelaus_remove_irq_work(MENELAUS_RTCALM_IRQ);
-			device_init_wakeup(&m->client->dev, 0);
+			device_init_wakeup(&m->client->dev, false);
 		}
 		the_menelaus->rtc = NULL;
 	}
