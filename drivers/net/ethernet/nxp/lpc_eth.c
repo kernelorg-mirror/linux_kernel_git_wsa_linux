@@ -1389,7 +1389,7 @@ static int lpc_eth_drv_probe(struct platform_device *pdev)
 	netdev_info(ndev, "LPC mac at 0x%08lx irq %d\n",
 	       (unsigned long)res->start, ndev->irq);
 
-	device_init_wakeup(dev, 1);
+	device_init_wakeup(dev, true);
 	device_set_wakeup_enable(dev, 0);
 
 	return 0;
