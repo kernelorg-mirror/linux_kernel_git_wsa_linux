@@ -2943,7 +2943,7 @@ static int atmel_serial_probe(struct platform_device *pdev)
 	if (ret)
 		goto err_add_port;
 
-	device_init_wakeup(&pdev->dev, 1);
+	device_init_wakeup(&pdev->dev, true);
 	platform_set_drvdata(pdev, atmel_port);
 
 	if (rs485_enabled) {
@@ -2993,7 +2993,7 @@ static void atmel_serial_remove(struct platform_device *pdev)
 	tasklet_kill(&atmel_port->tasklet_rx);
 	tasklet_kill(&atmel_port->tasklet_tx);
 
-	device_init_wakeup(&pdev->dev, 0);
+	device_init_wakeup(&pdev->dev, false);
 
 	uart_remove_one_port(&atmel_uart, port);
 
