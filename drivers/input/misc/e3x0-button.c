@@ -106,7 +106,7 @@ static int e3x0_button_probe(struct platform_device *pdev)
 		return error;
 	}
 
-	device_init_wakeup(&pdev->dev, 1);
+	device_init_wakeup(&pdev->dev, true);
 	return 0;
 }
 

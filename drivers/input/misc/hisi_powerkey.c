@@ -111,7 +111,7 @@ static int hi65xx_powerkey_probe(struct platform_device *pdev)
 		return error;
 	}
 
-	device_init_wakeup(dev, 1);
+	device_init_wakeup(dev, true);
 
 	return 0;
 }

@@ -249,7 +249,7 @@ static int sh_keysc_probe(struct platform_device *pdev)
 		       pdata->scan_timing);
 	sh_keysc_level_mode(priv, 0);
 
-	device_init_wakeup(&pdev->dev, 1);
+	device_init_wakeup(&pdev->dev, true);
 
 	return 0;
 

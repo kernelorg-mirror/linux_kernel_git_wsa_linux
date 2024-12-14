@@ -237,7 +237,7 @@ static int max7359_probe(struct i2c_client *client)
 	/* Initialize MAX7359 */
 	max7359_initialize(client);
 
-	device_init_wakeup(&client->dev, 1);
+	device_init_wakeup(&client->dev, true);
 
 	return 0;
 }

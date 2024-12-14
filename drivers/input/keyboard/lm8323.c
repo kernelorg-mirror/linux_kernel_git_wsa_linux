@@ -734,7 +734,7 @@ static int lm8323_probe(struct i2c_client *client)
 
 	i2c_set_clientdata(client, lm);
 
-	device_init_wakeup(&client->dev, 1);
+	device_init_wakeup(&client->dev, true);
 	enable_irq_wake(client->irq);
 
 	return 0;

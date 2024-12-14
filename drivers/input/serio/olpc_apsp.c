@@ -225,7 +225,7 @@ static int olpc_apsp_probe(struct platform_device *pdev)
 		goto err_irq;
 	}
 
-	device_init_wakeup(priv->dev, 1);
+	device_init_wakeup(priv->dev, true);
 	platform_set_drvdata(pdev, priv);
 
 	dev_dbg(&pdev->dev, "probed successfully.\n");

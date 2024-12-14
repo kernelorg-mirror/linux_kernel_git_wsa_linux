@@ -260,7 +260,7 @@ static int spear_kbd_probe(struct platform_device *pdev)
 		return error;
 	}
 
-	device_init_wakeup(&pdev->dev, 1);
+	device_init_wakeup(&pdev->dev, true);
 	platform_set_drvdata(pdev, kbd);
 
 	return 0;

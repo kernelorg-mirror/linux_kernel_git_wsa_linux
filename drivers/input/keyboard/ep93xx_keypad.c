@@ -259,7 +259,7 @@ static int ep93xx_keypad_probe(struct platform_device *pdev)
 
 	platform_set_drvdata(pdev, keypad);
 
-	device_init_wakeup(&pdev->dev, 1);
+	device_init_wakeup(&pdev->dev, true);
 	err = dev_pm_set_wake_irq(&pdev->dev, keypad->irq);
 	if (err)
 		dev_warn(&pdev->dev, "failed to set up wakeup irq: %d\n", err);

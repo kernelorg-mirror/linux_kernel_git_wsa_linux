@@ -114,7 +114,7 @@ static int pm80x_onkey_probe(struct platform_device *pdev)
 			   PM800_LONKEY_PRESS_TIME_MASK,
 			   PM800_LONKEY_PRESS_TIME);
 
-	device_init_wakeup(&pdev->dev, 1);
+	device_init_wakeup(&pdev->dev, true);
 	return 0;
 
 out_irq:
