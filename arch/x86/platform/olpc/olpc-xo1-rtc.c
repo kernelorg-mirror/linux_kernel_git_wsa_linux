@@ -74,7 +74,7 @@ static int __init xo1_rtc_init(void)
 
 	x86_platform.legacy.rtc = 0;
 
-	device_init_wakeup(&xo1_rtc_device.dev, 1);
+	device_init_wakeup(&xo1_rtc_device.dev, true);
 	return 0;
 }
 arch_initcall(xo1_rtc_init);

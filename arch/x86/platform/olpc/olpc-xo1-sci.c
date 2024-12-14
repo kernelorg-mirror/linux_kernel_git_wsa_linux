@@ -447,7 +447,7 @@ static int setup_power_button(struct platform_device *pdev)
 	set_bit(KEY_POWER, power_button_idev->keybit);
 
 	power_button_idev->dev.parent = &pdev->dev;
-	device_init_wakeup(&power_button_idev->dev, 1);
+	device_init_wakeup(&power_button_idev->dev, true);
 
 	r = input_register_device(power_button_idev);
 	if (r) {
