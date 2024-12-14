@@ -1118,7 +1118,7 @@ wbcir_probe(struct pnp_dev *device, const struct pnp_device_id *dev_id)
 		goto exit_release_sbase;
 	}
 
-	device_init_wakeup(&device->dev, 1);
+	device_init_wakeup(&device->dev, true);
 
 	wbcir_init_hw(data);
 

@@ -1095,7 +1095,7 @@ int img_ir_probe_hw(struct img_ir_priv *priv)
 	 */
 	rdev->change_protocol = img_ir_change_protocol;
 
-	device_init_wakeup(priv->dev, 1);
+	device_init_wakeup(priv->dev, true);
 
 	return 0;
 
