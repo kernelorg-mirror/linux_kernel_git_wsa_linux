@@ -358,7 +358,7 @@ static int __init egpio_probe(struct platform_device *pdev)
 						 egpio_handler, ei);
 		ack_irqs(ei);
 
-		device_init_wakeup(&pdev->dev, 1);
+		device_init_wakeup(&pdev->dev, true);
 	}
 
 	return 0;

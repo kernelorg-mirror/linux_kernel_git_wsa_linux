@@ -984,7 +984,7 @@ static int zynq_gpio_probe(struct platform_device *pdev)
 	}
 
 	irq_set_status_flags(gpio->irq, IRQ_DISABLE_UNLAZY);
-	device_init_wakeup(&pdev->dev, 1);
+	device_init_wakeup(&pdev->dev, true);
 	pm_runtime_put(&pdev->dev);
 
 	return 0;
