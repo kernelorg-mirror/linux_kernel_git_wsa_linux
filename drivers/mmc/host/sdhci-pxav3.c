@@ -452,7 +452,7 @@ static int sdhci_pxav3_probe(struct platform_device *pdev)
 		goto err_add_host;
 
 	if (host->mmc->pm_caps & MMC_PM_WAKE_SDIO_IRQ)
-		device_init_wakeup(&pdev->dev, 1);
+		device_init_wakeup(&pdev->dev, true);
 
 	pm_runtime_put_autosuspend(&pdev->dev);
 
