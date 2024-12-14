@@ -154,7 +154,7 @@ static int adc_jack_probe(struct platform_device *pdev)
 	}
 
 	if (data->wakeup_source)
-		device_init_wakeup(&pdev->dev, 1);
+		device_init_wakeup(&pdev->dev, true);
 
 	adc_jack_handler(&data->handler.work);
 	return 0;
