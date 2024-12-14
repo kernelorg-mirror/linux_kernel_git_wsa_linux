@@ -411,7 +411,7 @@ static int collie_bat_probe(struct ucb1x00_dev *dev)
 	if (ret)
 		goto err_irq;
 
-	device_init_wakeup(&ucb->dev, 1);
+	device_init_wakeup(&ucb->dev, true);
 	schedule_work(&bat_work);
 
 	return 0;

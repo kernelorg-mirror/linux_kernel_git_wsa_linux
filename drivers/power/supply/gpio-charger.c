@@ -345,7 +345,7 @@ static int gpio_charger_probe(struct platform_device *pdev)
 
 	platform_set_drvdata(pdev, gpio_charger);
 
-	device_init_wakeup(dev, 1);
+	device_init_wakeup(dev, true);
 
 	return 0;
 }
