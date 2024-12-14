@@ -592,7 +592,7 @@ static int ohci_hcd_at91_drv_probe(struct platform_device *pdev)
 			dev_info(&pdev->dev, "failed to request gpio \"overcurrent\" IRQ\n");
 	}
 
-	device_init_wakeup(&pdev->dev, 1);
+	device_init_wakeup(&pdev->dev, true);
 	return usb_hcd_at91_probe(&ohci_at91_hc_driver, pdev);
 }
 
@@ -606,7 +606,7 @@ static void ohci_hcd_at91_drv_remove(struct platform_device *pdev)
 			ohci_at91_usb_set_power(pdata, i, 0);
 	}
 
-	device_init_wakeup(&pdev->dev, 0);
+	device_init_wakeup(&pdev->dev, false);
 	usb_hcd_at91_remove(platform_get_drvdata(pdev), pdev);
 }
 

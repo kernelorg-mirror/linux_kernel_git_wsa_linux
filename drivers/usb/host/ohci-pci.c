@@ -34,7 +34,7 @@ static const char hcd_name[] = "ohci-pci";
 
 static int broken_suspend(struct usb_hcd *hcd)
 {
-	device_init_wakeup(&hcd->self.root_hub->dev, 0);
+	device_init_wakeup(&hcd->self.root_hub->dev, false);
 	return 0;
 }
 

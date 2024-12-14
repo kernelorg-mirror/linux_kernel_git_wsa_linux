@@ -1355,7 +1355,7 @@ static int isp116x_start(struct usb_hcd *hcd)
 	val = 0;
 	if (board->remote_wakeup_enable) {
 		if (!device_can_wakeup(hcd->self.controller))
-			device_init_wakeup(hcd->self.controller, 1);
+			device_init_wakeup(hcd->self.controller, true);
 		val |= RH_HS_DRWE;
 	}
 	isp116x_write_reg32(isp116x, HCRHSTATUS, val);

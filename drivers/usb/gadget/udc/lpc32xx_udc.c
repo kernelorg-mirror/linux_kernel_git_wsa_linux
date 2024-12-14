@@ -3145,7 +3145,7 @@ static int lpc32xx_udc_probe(struct platform_device *pdev)
 		goto add_gadget_fail;
 
 	dev_set_drvdata(dev, udc);
-	device_init_wakeup(dev, 1);
+	device_init_wakeup(dev, true);
 	create_debug_file(udc);
 
 	/* Disable clocks for now */
@@ -3182,7 +3182,7 @@ static void lpc32xx_udc_remove(struct platform_device *pdev)
 	udc_disable(udc);
 	pullup(udc, 0);
 
-	device_init_wakeup(&pdev->dev, 0);
+	device_init_wakeup(&pdev->dev, false);
 	remove_debug_file(udc);
 
 	dma_pool_destroy(udc->dd_cache);

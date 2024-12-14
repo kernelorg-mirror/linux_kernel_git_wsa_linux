@@ -2513,7 +2513,7 @@ musb_init_controller(struct device *dev, int nIrq, void __iomem *ctrl)
 	/* FIXME this handles wakeup irqs wrong */
 	if (enable_irq_wake(nIrq) == 0) {
 		musb->irq_wake = 1;
-		device_init_wakeup(dev, 1);
+		device_init_wakeup(dev, true);
 	} else {
 		musb->irq_wake = 0;
 	}
@@ -2585,7 +2585,7 @@ err_usb_phy_init:
 
 fail2:
 	if (musb->irq_wake)
-		device_init_wakeup(dev, 0);
+		device_init_wakeup(dev, false);
 	musb_platform_exit(musb);
 
 fail1:
@@ -2655,7 +2655,7 @@ static void musb_remove(struct platform_device *pdev)
 		musb_dma_controller_destroy(musb->dma_controller);
 	usb_phy_shutdown(musb->xceiv);
 	musb_free(musb);
-	device_init_wakeup(dev, 0);
+	device_init_wakeup(dev, false);
 }
 
 #ifdef	CONFIG_PM

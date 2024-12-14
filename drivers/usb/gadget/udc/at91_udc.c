@@ -1908,7 +1908,7 @@ static int at91udc_probe(struct platform_device *pdev)
 	if (retval)
 		goto err_unprepare_iclk;
 	dev_set_drvdata(dev, udc);
-	device_init_wakeup(dev, 1);
+	device_init_wakeup(dev, true);
 	create_debug_file(udc);
 
 	INFO("%s version %s\n", driver_name, DRIVER_VERSION);
@@ -1942,7 +1942,7 @@ static void at91udc_remove(struct platform_device *pdev)
 	pullup(udc, 0);
 	spin_unlock_irqrestore(&udc->lock, flags);
 
-	device_init_wakeup(&pdev->dev, 0);
+	device_init_wakeup(&pdev->dev, false);
 	remove_debug_file(udc);
 	clk_unprepare(udc->fclk);
 	clk_unprepare(udc->iclk);
