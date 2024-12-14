@@ -1249,7 +1249,7 @@ static int acpi_battery_add(struct acpi_device *device)
 	if (result)
 		goto fail;
 
-	device_init_wakeup(&device->dev, 1);
+	device_init_wakeup(&device->dev, true);
 
 	result = acpi_dev_install_notify_handler(device, ACPI_ALL_NOTIFY,
 						 acpi_battery_notify, device);
@@ -1259,7 +1259,7 @@ static int acpi_battery_add(struct acpi_device *device)
 	return 0;
 
 fail_pm:
-	device_init_wakeup(&device->dev, 0);
+	device_init_wakeup(&device->dev, false);
 	unregister_pm_notifier(&battery->pm_nb);
 fail:
 	sysfs_remove_battery(battery);
@@ -1279,7 +1279,7 @@ static void acpi_battery_remove(struct acpi_device *device)
 	acpi_dev_remove_notify_handler(device, ACPI_ALL_NOTIFY,
 				       acpi_battery_notify);
 
-	device_init_wakeup(&device->dev, 0);
+	device_init_wakeup(&device->dev, false);
 	unregister_pm_notifier(&battery->pm_nb);
 	sysfs_remove_battery(battery);
 }
