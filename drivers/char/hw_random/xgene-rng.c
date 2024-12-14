@@ -350,7 +350,7 @@ static int xgene_rng_probe(struct platform_device *pdev)
 	if (rc)
 		return dev_err_probe(&pdev->dev, rc, "RNG registering failed\n");
 
-	rc = device_init_wakeup(&pdev->dev, 1);
+	rc = device_init_wakeup(&pdev->dev, true);
 	if (rc)
 		return dev_err_probe(&pdev->dev, rc, "RNG device_init_wakeup failed\n");
 
@@ -361,7 +361,7 @@ static void xgene_rng_remove(struct platform_device *pdev)
 {
 	int rc;
 
-	rc = device_init_wakeup(&pdev->dev, 0);
+	rc = device_init_wakeup(&pdev->dev, false);
 	if (rc)
 		dev_err(&pdev->dev, "RNG init wakeup failed error %d\n", rc);
 }
