@@ -543,7 +543,7 @@ static int iadc_probe(struct platform_device *pdev)
 		else
 			return ret;
 	} else {
-		device_init_wakeup(iadc->dev, 1);
+		device_init_wakeup(iadc->dev, true);
 	}
 
 	ret = iadc_update_offset(iadc);
