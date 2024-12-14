@@ -156,7 +156,7 @@ static int uml_rtc_probe(struct platform_device *pdev)
 
 	uml_rtc->ops = &uml_rtc_ops;
 
-	device_init_wakeup(&pdev->dev, 1);
+	device_init_wakeup(&pdev->dev, true);
 
 	err = devm_rtc_register_device(uml_rtc);
 	if (err)
@@ -170,7 +170,7 @@ cleanup:
 
 static void uml_rtc_remove(struct platform_device *pdev)
 {
-	device_init_wakeup(&pdev->dev, 0);
+	device_init_wakeup(&pdev->dev, false);
 	uml_rtc_cleanup();
 }
 
