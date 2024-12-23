@@ -1,6 +1,7 @@
 /* SPDX-License-Identifier: GPL-2.0 */
 #ifndef __LINUX_BITMAP_H
 #define __LINUX_BITMAP_H
+#define __LINUX_INSIDE_BITMAP_H
 
 #ifndef __ASSEMBLY__
 
@@ -896,4 +897,5 @@ void bitmap_write(unsigned long *map, unsigned long value,
 
 #endif /* __ASSEMBLY__ */
 
+#undef __LINUX_INSIDE_BITMAP_H
 #endif /* __LINUX_BITMAP_H */

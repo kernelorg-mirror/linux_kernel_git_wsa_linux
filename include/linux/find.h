@@ -1,10 +1,10 @@
 /* SPDX-License-Identifier: GPL-2.0 */
+#ifndef __LINUX_INSIDE_BITMAP_H
+#error "only <linux/bitmap.h> can be included directly"
+#endif
+
 #ifndef __LINUX_FIND_H_
 #define __LINUX_FIND_H_
-
-#ifndef __LINUX_BITMAP_H
-#error only <linux/bitmap.h> can be included directly
-#endif
 
 #include <linux/bitops.h>
 
