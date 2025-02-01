@@ -33,6 +33,8 @@
 		apb {
 			dbgu: serial@ffffee00 {
 				status = "okay";
+				atmel,use-dma-rx;
+				atmel,use-dma-tx;
 			};
 
 			tcb0: timer@fff7c000 {
