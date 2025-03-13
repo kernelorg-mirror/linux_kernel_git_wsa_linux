@@ -17,6 +17,7 @@
 #include <linux/iopoll.h>
 #include <linux/module.h>
 #include <linux/mod_devicetable.h>
+#include <linux/of.h>
 #include <linux/platform_device.h>
 #include <linux/pm_runtime.h>
 #include <linux/rtc.h>
@@ -70,6 +71,10 @@ struct rzn1_rtc {
 	 */
 	spinlock_t ctl1_access_lock;
 	struct rtc_time tm_alarm;
+};
+
+struct rzn1_rtc_conf {
+	unsigned int force_scmp:1;
 };
 
 static void rzn1_rtc_get_time_snapshot(struct rzn1_rtc *rtc, struct rtc_time *tm)
@@ -380,6 +385,7 @@ static const struct rtc_class_ops rzn1_rtc_ops_scmp = {
 static int rzn1_rtc_probe(struct platform_device *pdev)
 {
 	struct rzn1_rtc *rtc;
+	const struct rzn1_rtc_conf *config;
 	u32 val, scmp_val = 0;
 	struct clk *xtal;
 	unsigned long rate;
@@ -414,7 +420,12 @@ static int rzn1_rtc_probe(struct platform_device *pdev)
 	if (ret < 0)
 		return ret;
 
-	/* Only switch to scmp if we have an xtal clock with a valid rate and != 32768 */
+	config = of_device_get_match_data(&pdev->dev);
+
+	/*
+	 * Only switch to scmp if we have an xtal clock with a valid rate plus
+	 * either not equal to 32768 or if it is forced in the config
+	 */
 	xtal = devm_clk_get_optional(&pdev->dev, "xtal");
 	if (IS_ERR(xtal)) {
 		ret = PTR_ERR(xtal);
@@ -427,8 +438,14 @@ static int rzn1_rtc_probe(struct platform_device *pdev)
 			goto dis_runtime_pm;
 		}
 
-		if (rate != 32768)
+		if (rate != 32768 || config->force_scmp)
 			scmp_val = RZN1_RTC_CTL0_SLSB_SCMP;
+	} else {
+		/* We need xtal if force_scmp is set */
+		if (config->force_scmp) {
+			ret = -ENOENT;
+			goto dis_runtime_pm;
+		}
 	}
 
 	/* Disable controller during SUBU/SCMP setup */
@@ -496,8 +513,17 @@ static void rzn1_rtc_remove(struct platform_device *pdev)
 	pm_runtime_put(&pdev->dev);
 }
 
+static const struct rzn1_rtc_conf rzn1_rtc_conf = {
+	.force_scmp = 0,
+};
+
+static const struct rzn1_rtc_conf rzn1_rtc_conf_gen5 = {
+	.force_scmp = 1,
+};
+
 static const struct of_device_id rzn1_rtc_of_match[] = {
-	{ .compatible	= "renesas,rzn1-rtc" },
+	{ .compatible = "renesas,rzn1-rtc", .data = &rzn1_rtc_conf },
+	{ .compatible = "renesas,rcar-gen5-rtc", .data = &rzn1_rtc_conf_gen5 },
 	{},
 };
 MODULE_DEVICE_TABLE(of, rzn1_rtc_of_match);
