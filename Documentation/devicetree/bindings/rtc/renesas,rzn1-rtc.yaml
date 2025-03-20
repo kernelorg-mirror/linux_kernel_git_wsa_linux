@@ -12,12 +12,27 @@ maintainers:
 allOf:
   - $ref: rtc.yaml#
 
+  - if:
+      properties:
+        compatible:
+          contains:
+            const: renesas,rcar-gen5-rtc
+    then:
+      properties:
+        clocks:
+          minItems: 2
+
 properties:
   compatible:
-    items:
-      - enum:
-          - renesas,r9a06g032-rtc
-      - const: renesas,rzn1-rtc
+    oneOf:
+      - items:
+          - enum:
+            - renesas,r8a78000-rtc
+          - const: renesas,rcar-gen5-rtc
+          - const: renesas,rzn1-uart
+      - items:
+          - const: renesas,r9a06g032-rtc
+          - const: renesas,rzn1-rtc
 
   reg:
     maxItems: 1
