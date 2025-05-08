@@ -466,3 +466,83 @@
 
 	//status = "okay";	// Mutually-exclusive with pwm4 and pwm5
 };
+
+&wwdt0 {
+	status = "okay";
+};
+
+&wwdt1 {
+	status = "okay";
+};
+
+&wwdt2 {
+	status = "okay";
+};
+
+&wwdt3 {
+	status = "okay";
+};
+
+&wwdt4 {
+	status = "okay";
+};
+
+&wwdt5 {
+	status = "okay";
+};
+
+&wwdt6 {
+	status = "okay";
+};
+
+&wwdt7 {
+	status = "okay";
+};
+
+&wwdt8 {
+	status = "okay";
+};
+
+&wwdt9 {
+	status = "okay";
+};
+
+&wwdt10 {
+	status = "okay";
+};
+
+&wwdt11 {
+	status = "okay";
+};
+
+&wwdt12 {
+	status = "okay";
+};
+
+&wwdt13 {
+	status = "okay";
+};
+
+&wwdt14 {
+	status = "okay";
+};
+
+&wwdt15 {
+	status = "okay";
+};
+
+&wwdt16 {
+	status = "okay";
+};
+
+&wwdt17 {
+	status = "okay";
+};
+
+&wwdt18 {
+	status = "okay";
+};
+
+&wwdt19 {
+	status = "okay";
+};
