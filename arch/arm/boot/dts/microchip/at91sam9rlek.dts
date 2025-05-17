@@ -266,11 +266,11 @@
 		};
 	};
 
-	i2c-gpio-0 {
+	i2c-gpio0 {
 		status = "okay";
 	};
 
-	i2c-gpio-1 {
+	i2c-gpio1 {
 		status = "okay";
 	};
 };

@@ -217,7 +217,7 @@
 		};
 	};
 
-	i2c-gpio-0 {
+	i2c-gpio0 {
 		status = "okay";
 
 		eeprom@50 {
