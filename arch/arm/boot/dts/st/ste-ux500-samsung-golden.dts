@@ -55,7 +55,7 @@
 		#thermal-sensor-cells = <0>;
 	};
 
-	i2c-gpio-0 {
+	i2c-gpio0 {
 		compatible = "i2c-gpio";
 		sda-gpios = <&gpio2 14 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
 		scl-gpios = <&gpio2 13 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
@@ -81,7 +81,7 @@
 		};
 	};
 
-	i2c-gpio-1 {
+	i2c-gpio1 {
 		compatible = "i2c-gpio";
 		sda-gpios = <&gpio4 24 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
 		scl-gpios = <&gpio4 23 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
@@ -553,7 +553,7 @@
 		};
 	};
 
-	i2c-gpio-0 {
+	i2c-gpio0 {
 		i2c_gpio_0_default: i2c_gpio_0 {
 			golden_cfg1 {
 				pins = "GPIO77",	/* TOUCHKEY_SCL */
@@ -572,7 +572,7 @@
 		};
 	};
 
-	i2c-gpio-1 {
+	i2c-gpio1 {
 		i2c_gpio_1_default: i2c_gpio_1 {
 			golden_cfg1 {
 				pins = "GPIO151",	/* COMP_SCL */

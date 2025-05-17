@@ -249,7 +249,7 @@
 	};
 
 	/* Bit-banged I2C on GPIO143 and GPIO144 also called "SUBPMU I2C" */
-	i2c-gpio-0 {
+	i2c-gpio0 {
 		compatible = "i2c-gpio";
 		sda-gpios = <&gpio4 16 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
 		scl-gpios = <&gpio4 15 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
@@ -321,7 +321,7 @@
 	};
 
 	/* Bit-banged I2C on GPIO201 and GPIO202 also called "MOT_I2C" */
-	i2c-gpio-2 {
+	i2c-gpio2 {
 		compatible = "i2c-gpio";
 		sda-gpios = <&gpio6 10 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
 		scl-gpios = <&gpio6 9 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
@@ -333,7 +333,7 @@
 	};
 
 	/* Bit-banged I2C on GPIO196 and GPIO197 also called "MPR_I2C" */
-	i2c-gpio-3 {
+	i2c-gpio3 {
 		compatible = "i2c-gpio";
 		sda-gpios = <&gpio6 5 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
 		scl-gpios = <&gpio6 4 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
@@ -796,7 +796,7 @@
 		};
 	};
 	/* GPIO-based I2C bus for magnetometer and NCP6914 */
-	i2c-gpio-0 {
+	i2c-gpio0 {
 		i2c_gpio_0_default: i2c_gpio_0 {
 			gavini_cfg1 {
 				pins = "GPIO143_D12", "GPIO144_B13";
@@ -805,7 +805,7 @@
 		};
 	};
 	/* GPIO-based I2C bus for the Immersion ISA1200 */
-	i2c-gpio-2 {
+	i2c-gpio2 {
 		i2c_gpio_2_default: i2c_gpio_2 {
 			gavini_cfg1 {
 				pins = "GPIO201_AF24", "GPIO202_AF25";
@@ -814,7 +814,7 @@
 		};
 	};
 	/* GPIO-based I2C bus for the TI DPP2601 */
-	i2c-gpio-3 {
+	i2c-gpio3 {
 		i2c_gpio_3_default: i2c_gpio_3 {
 			gavini_cfg1 {
 				pins = "GPIO196_AG26", "GPIO197_AH24";

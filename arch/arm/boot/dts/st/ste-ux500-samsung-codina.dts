@@ -285,7 +285,7 @@
 	};
 
 	/* Bit-banged I2C on GPIO143 and GPIO144 also called "SUBPMU I2C" */
-	i2c-gpio-0 {
+	i2c-gpio0 {
 		compatible = "i2c-gpio";
 		sda-gpios = <&gpio4 16 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
 		scl-gpios = <&gpio4 15 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
@@ -306,7 +306,7 @@
 	};
 
 	/* Bit-banged I2C on GPIO151 and GPIO152 also called "NFC I2C" */
-	i2c-gpio-1 {
+	i2c-gpio1 {
 		compatible = "i2c-gpio";
 		sda-gpios = <&gpio4 24 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
 		scl-gpios = <&gpio4 23 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
@@ -816,7 +816,7 @@
 		};
 	};
 	/* GPIO-based I2C bus for subpmu */
-	i2c-gpio-0 {
+	i2c-gpio0 {
 		i2c_gpio_0_default: i2c_gpio_0 {
 			codina_cfg1 {
 				pins = "GPIO143_D12", "GPIO144_B13";
@@ -825,7 +825,7 @@
 		};
 	};
 	/* GPIO-based I2C bus for the NFC */
-	i2c-gpio-1 {
+	i2c-gpio1 {
 		i2c_gpio_1_default: i2c_gpio_1 {
 			codina_cfg1 {
 				pins = "GPIO151_D17", "GPIO152_D16";
