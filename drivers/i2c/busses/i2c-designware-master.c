@@ -199,7 +199,7 @@ static void i2c_dw_xfer_init(struct dw_i2c_dev *dev)
 	i2c_dw_set_mode(dev, DW_IC_MASTER);
 
 	/* If the slave address is ten bit address, enable 10BITADDR */
-	if (msgs[dev->msg_write_idx].flags & I2C_M_TEN) {
+	if (msgs[0].flags & I2C_M_TEN) {
 		ic_con = DW_IC_CON_10BITADDR_MASTER;
 		/*
 		 * If I2C_DYNAMIC_TAR_UPDATE is set, the 10-bit addressing
@@ -217,8 +217,7 @@ static void i2c_dw_xfer_init(struct dw_i2c_dev *dev)
 	 * Set the slave (target) address and enable 10-bit addressing mode
 	 * if applicable.
 	 */
-	regmap_write(dev->map, DW_IC_TAR,
-		     msgs[dev->msg_write_idx].addr | ic_tar);
+	regmap_write(dev->map, DW_IC_TAR, msgs[0].addr | ic_tar);
 
 	/* Enforce disabled interrupts (due to HW issues) */
 	__i2c_dw_write_intr_mask(dev, 0);
@@ -311,7 +310,6 @@ static int amd_i2c_dw_xfer_quirk(struct dw_i2c_dev *dev, struct i2c_msg *msgs, i
 
 	dev->msgs = msgs;
 	dev->msgs_num = num_msgs;
-	dev->msg_write_idx = 0;
 	i2c_dw_xfer_init(dev);
 
 	/* Initiate messages read/write transaction */
