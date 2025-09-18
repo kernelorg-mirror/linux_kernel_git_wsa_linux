@@ -247,8 +247,8 @@ struct dw_i2c_dev {
 #define ARBITRATION_SEMAPHORE			BIT(2)
 #define ACCESS_POLLING				BIT(3)
 
-#define MODEL_AMD_NAVI_GPU			BIT(10)
-#define MODEL_WANGXUN_SP			BIT(11)
+#define MODEL_AMD_NAVI_GPU			(1U << 8)
+#define MODEL_WANGXUN_SP			(2U << 8)
 #define MODEL_MASK				GENMASK(11, 8)
 
 /*
