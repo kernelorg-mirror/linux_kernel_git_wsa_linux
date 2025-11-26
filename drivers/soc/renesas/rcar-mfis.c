@@ -164,7 +164,7 @@ static u32 mfis_mb_r8a779g0_calc_reg(u32 chan_num, bool tx_uses_eicr, bool is_on
 	i = chan_num & 3;
 	k = chan_num >> 2;
 
-	if (is_only_rx) {
+	if (is_only_rx ^ tx_uses_eicr) {
 		if (k < 2)
 			reg = 0x9404 + 0x1020 * k + 0x08 * i;
 		else
@@ -339,6 +339,7 @@ static int mfis_probe(struct platform_device *pdev)
 static const struct mfis_info mfis_info_r8a779g0 = {
 	.unprotect_mask	= 0x0000ffff,
 	.mb_num_channels = 12,
+	.mb_reg_comes_from_dt = true,	//FIXME: only for testing
 	.mb_channels_are_unidir = true,
 	.mb_calc_reg = mfis_mb_r8a779g0_calc_reg,
 };

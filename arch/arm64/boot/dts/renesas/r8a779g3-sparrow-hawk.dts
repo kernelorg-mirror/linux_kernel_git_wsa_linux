@@ -38,6 +38,7 @@
 
 /dts-v1/;
 #include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/soc/renesas,r8a78000-mfis.h>
 #include <dt-bindings/thermal/thermal.h>
 
 #include "r8a779g3.dtsi"
@@ -199,6 +200,102 @@
 		gpios-states = <1>;
 		states = <1800000 0>, <3300000 1>;
 	};
+
+	mailbox_test_0rs {
+		compatible = "mailbox-test";
+		reg = <0x0 0xe6300000 0x0 0x100>;
+		mboxes = <&mfis 0 (MFIS_CHANNEL_EICR | MFIS_CHANNEL_TX)>,
+			 <&mfis 0 (MFIS_CHANNEL_IICR | MFIS_CHANNEL_RX)>;
+		mbox-names = "tx", "rx";
+	 };
+
+	mailbox_test_1rs {
+		compatible = "mailbox-test";
+		reg = <0x0 0xe6300000 0x0 0x100>;
+		mboxes = <&mfis 1 (MFIS_CHANNEL_EICR | MFIS_CHANNEL_TX)>,
+			 <&mfis 1 (MFIS_CHANNEL_IICR | MFIS_CHANNEL_RX)>;
+		mbox-names = "tx", "rx";
+	 };
+
+	mailbox_test_2rs {
+		compatible = "mailbox-test";
+		reg = <0x0 0xe6300000 0x0 0x100>;
+		mboxes = <&mfis 2 (MFIS_CHANNEL_EICR | MFIS_CHANNEL_TX)>,
+			 <&mfis 2 (MFIS_CHANNEL_IICR | MFIS_CHANNEL_RX)>;
+		mbox-names = "tx", "rx";
+	 };
+
+	mailbox_test_3rs {
+		compatible = "mailbox-test";
+		reg = <0x0 0xe6300000 0x0 0x300>;
+		mboxes = <&mfis 3 (MFIS_CHANNEL_EICR | MFIS_CHANNEL_TX)>,
+			 <&mfis 3 (MFIS_CHANNEL_IICR | MFIS_CHANNEL_RX)>;
+		mbox-names = "tx", "rx";
+	 };
+
+	mailbox_test_4rs {
+		compatible = "mailbox-test";
+		reg = <0x0 0xe6300000 0x0 0x400>;
+		mboxes = <&mfis 4 (MFIS_CHANNEL_EICR | MFIS_CHANNEL_TX)>,
+			 <&mfis 4 (MFIS_CHANNEL_IICR | MFIS_CHANNEL_RX)>;
+		mbox-names = "tx", "rx";
+	 };
+
+	mailbox_test_5rs {
+		compatible = "mailbox-test";
+		reg = <0x0 0xe6300000 0x0 0x500>;
+		mboxes = <&mfis 5 (MFIS_CHANNEL_EICR | MFIS_CHANNEL_TX)>,
+			 <&mfis 5 (MFIS_CHANNEL_IICR | MFIS_CHANNEL_RX)>;
+		mbox-names = "tx", "rx";
+	 };
+
+	mailbox_test_6rs {
+		compatible = "mailbox-test";
+		reg = <0x0 0xe6300000 0x0 0x600>;
+		mboxes = <&mfis 6 (MFIS_CHANNEL_EICR | MFIS_CHANNEL_TX)>,
+			 <&mfis 6 (MFIS_CHANNEL_IICR | MFIS_CHANNEL_RX)>;
+		mbox-names = "tx", "rx";
+	 };
+
+	mailbox_test_7rs {
+		compatible = "mailbox-test";
+		reg = <0x0 0xe6300000 0x0 0x700>;
+		mboxes = <&mfis 7 (MFIS_CHANNEL_EICR | MFIS_CHANNEL_TX)>,
+			 <&mfis 7 (MFIS_CHANNEL_IICR | MFIS_CHANNEL_RX)>;
+		mbox-names = "tx", "rx";
+	 };
+
+	mailbox_test_8rs {
+		compatible = "mailbox-test";
+		reg = <0x0 0xe6300000 0x0 0x800>;
+		mboxes = <&mfis 8 (MFIS_CHANNEL_EICR | MFIS_CHANNEL_TX)>,
+			 <&mfis 8 (MFIS_CHANNEL_IICR | MFIS_CHANNEL_RX)>;
+		mbox-names = "tx", "rx";
+	 };
+
+	mailbox_test_9rs {
+		compatible = "mailbox-test";
+		reg = <0x0 0xe6300000 0x0 0x900>;
+		mboxes = <&mfis 9 (MFIS_CHANNEL_EICR | MFIS_CHANNEL_TX)>,
+			 <&mfis 9 (MFIS_CHANNEL_IICR | MFIS_CHANNEL_RX)>;
+		mbox-names = "tx", "rx";
+	 };
+
+	mailbox_test_10rs {
+		compatible = "mailbox-test";
+		reg = <0x0 0xe6300000 0x0 0x1000>;
+		mboxes = <&mfis 10 (MFIS_CHANNEL_EICR | MFIS_CHANNEL_TX)>,
+			 <&mfis 10 (MFIS_CHANNEL_IICR | MFIS_CHANNEL_RX)>;
+		mbox-names = "tx", "rx";
+	 };
+
+	mailbox_test_11rs {
+		compatible = "mailbox-test";
+		reg = <0x0 0xe6300000 0x0 0x1100>;
+		mboxes = <&mfis 11 (MFIS_CHANNEL_EICR | MFIS_CHANNEL_TX)>,
+			 <&mfis 11 (MFIS_CHANNEL_IICR | MFIS_CHANNEL_RX)>;
+		mbox-names = "tx", "rx";
+	 };
 };
 
 /* Use thermal-idle cooling for all SoC cores */
@@ -514,6 +611,10 @@
 	#size-cells = <0>;
 	pinctrl-0 = <&i2c5_pins>;
 	pinctrl-names = "default";
+};
+
+&mfis {
+	status = "okay";
 };
 
 /* Page 17 uSD-Slot */
