@@ -322,8 +322,19 @@ static const struct clk_map_in r8a78000_cpg_fw_4_28_0[] = {
 	{ -1 }
 };
 
+static const struct clk_map_in r8a78000_cpg_fw_4_31_0[] = {
+	{ R8A78000_CPG_SGASYNCD4_PERW_BUS,	FIXED_CLK(266M) },
+	{ R8A78000_CPG_SGASYNCD8_PERW_BUS,	FIXED_CLK(133M) },
+	{ R8A78000_CPG_SGASYNCD16_PERW_BUS,	FIXED_CLK(66M) },
+	{ R8A78000_CPG_S0D4_PERE_MAIN,		FIXED_CLK(200M) },
+	{ R8A78000_CPG_MSO_SCP_MAIN,		1459 },
+	{ R8A78000_CPG_MSOCK_PERW_BUS,		1667 },
+	{ -1 }
+};
+
 static const struct fw_map r8a78000_cpg_fw_map[] = {
 	{ 0x010a0000, r8a78000_cpg_fw_4_28_0 },	/* SCP FW SDKv4.28.0 */
+	{ 0x010d0000, r8a78000_cpg_fw_4_31_0 },	/* SCP FW SDKv4.31.0 */
 	{ /* sentinel */ }
 };
 
