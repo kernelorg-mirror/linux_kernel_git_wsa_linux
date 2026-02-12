@@ -350,9 +350,9 @@ API for implementors
 
 ::
 
-  int hwspin_lock_register(struct hwspinlock_device *bank, struct device *dev,
-			   const struct hwspinlock_ops *ops, int base_id,
-			   int num_locks, void *init_data);
+  struct hwspinlock_device *hwspin_lock_register(struct device *dev,
+				const struct hwspinlock_ops *ops,
+				int base_id, int num_locks, void *init_data);
 
 To be called from the underlying platform-specific implementation, in
 order to register a new hwspinlock device (which is usually a bank of
