@@ -15,6 +15,7 @@
 
 	aliases {
 		serial0 = &hscif0;
+		serial1 = &hscif1;
 	};
 
 	chosen {
@@ -183,6 +184,11 @@
 };
 
 &hscif0 {
+	uart-has-rtscts;
+	status = "okay";
+};
+
+&hscif1 {
 	uart-has-rtscts;
 	status = "okay";
 };
