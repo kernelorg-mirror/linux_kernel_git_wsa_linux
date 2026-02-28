@@ -108,6 +108,24 @@
 			no-map;
 		};
 	};
+
+	mailbox_test_send_to_recv@c1000000 {
+		compatible = "mailbox-test";
+		broken-usage-of-incorrect-compatible;
+		reg = <0x0 0xc1000000 0x0 0x100>;
+		mboxes = <&mfis 0 (MFIS_CHANNEL_IICR | MFIS_CHANNEL_TX)>,
+			 <&mfis 0 (MFIS_CHANNEL_EICR | MFIS_CHANNEL_RX)>;
+		mbox-names = "tx", "rx";
+	 };
+
+	mailbox_test_recv_to_send@c1000100 {
+		compatible = "mailbox-test";
+		broken-usage-of-incorrect-compatible;
+		reg = <0x0 0xc1000100 0x0 0x100>;
+		mboxes = <&mfis 0 (MFIS_CHANNEL_EICR | MFIS_CHANNEL_TX)>,
+			 <&mfis 0 (MFIS_CHANNEL_IICR | MFIS_CHANNEL_RX)>;
+		mbox-names = "tx", "rx";
+	 };
 };
 
 &extal_clk {
@@ -120,6 +138,10 @@
 
 &hscif0 {
 	uart-has-rtscts;
+	status = "okay";
+};
+
+&mfis {
 	status = "okay";
 };
 
