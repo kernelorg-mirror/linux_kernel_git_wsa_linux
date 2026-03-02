@@ -164,6 +164,10 @@
 	status = "okay";
 };
 
+&mfis {
+	status = "okay";
+};
+
 &mfis_scp {
 	status = "okay";
 };

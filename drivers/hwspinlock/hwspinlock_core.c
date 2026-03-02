@@ -919,7 +919,7 @@ DEFINE_SEQ_ATTRIBUTE(hwspinlock);
  * configuration option for this feature.
  * People who want to use this will need to modify the source code directly.
  */
-#undef HWSPINLOCK_LOW_LEVEL_DEBUG
+#define HWSPINLOCK_LOW_LEVEL_DEBUG
 #ifdef HWSPINLOCK_LOW_LEVEL_DEBUG
 
 static int fops_request_set(void *data, u64 id)
