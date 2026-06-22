@@ -16,7 +16,7 @@
 #include <linux/types.h>
 #include <linux/err.h>
 #include <linux/jiffies.h>
-#include <linux/radix-tree.h>
+#include <linux/xarray.h>
 #include <linux/hwspinlock.h>
 #include <linux/pm_runtime.h>
 #include <linux/mutex.h>
@@ -27,35 +27,21 @@
 /* retry delay used in atomic context */
 #define HWSPINLOCK_RETRY_DELAY_US	100
 
-/* radix tree tags */
-#define HWSPINLOCK_UNUSED	(0) /* tags an hwspinlock as unused */
+/* XArray search mark */
+#define HWSPINLOCK_UNUSED	XA_MARK_0 /* marks a hwspinlock as unused */
 
 /*
- * A radix tree is used to maintain the available hwspinlock instances.
+ * An XArray is used to maintain the available hwspinlock instances.
  * The tree associates hwspinlock pointers with their integer key id,
  * and provides easy-to-use API which makes the hwspinlock core code simple
  * and easy to read.
  *
- * Radix trees are quick on lookups, and reasonably efficient in terms of
+ * XArrays are quick on lookups, and reasonably efficient in terms of
  * storage, especially with high density usages such as this framework
  * requires (a continuous range of integer keys, beginning with zero, is
- * used as the ID's of the hwspinlock instances).
- *
- * The radix tree API supports tagging items in the tree, which this
- * framework uses to mark unused hwspinlock instances (see the
- * HWSPINLOCK_UNUSED tag above). As a result, the process of querying the
- * tree, looking for an unused hwspinlock instance, is now reduced to a
- * single radix tree API call.
+ * used as the ID of the hwspinlock instances).
  */
-static RADIX_TREE(hwspinlock_tree, GFP_KERNEL);
-
-/*
- * Synchronization of access to the tree is achieved using this mutex,
- * as the radix-tree API requires that users provide all synchronisation.
- * A mutex is needed because we're using non-atomic radix tree allocations.
- */
-static DEFINE_MUTEX(hwspinlock_tree_lock);
-
+static DEFINE_XARRAY(hwspinlocks);
 
 /**
  * __hwspin_trylock() - attempt to lock a specific hwspinlock
@@ -369,10 +355,9 @@ of_hwspin_lock_simple_xlate(const struct of_phandle_args *hwlock_spec)
  */
 int of_hwspin_lock_get_id(struct device_node *np, int index)
 {
+	XA_STATE(xas, &hwspinlocks, 0);
 	struct of_phandle_args args;
 	struct hwspinlock *hwlock;
-	struct radix_tree_iter iter;
-	void **slot;
 	int id;
 	int ret;
 
@@ -389,15 +374,9 @@ int of_hwspin_lock_get_id(struct device_node *np, int index)
 	/* Find the hwspinlock device: we need its base_id */
 	ret = -EPROBE_DEFER;
 	rcu_read_lock();
-	radix_tree_for_each_slot(slot, &hwspinlock_tree, &iter, 0) {
-		hwlock = radix_tree_deref_slot(slot);
-		if (unlikely(!hwlock))
+	xas_for_each(&xas, hwlock, ULONG_MAX) {
+		if (xas_retry(&xas, hwlock))
 			continue;
-		if (radix_tree_deref_retry(hwlock)) {
-			slot = radix_tree_iter_retry(&iter);
-			continue;
-		}
-
 		if (device_match_of_node(hwlock->bank->dev, args.np)) {
 			ret = 0;
 			break;
@@ -452,51 +431,50 @@ EXPORT_SYMBOL_GPL(of_hwspin_lock_get_id_byname);
 
 static int hwspin_lock_register_single(struct hwspinlock *hwlock, int id)
 {
-	struct hwspinlock *tmp;
+	XA_STATE(xas, &hwspinlocks, id);
+	struct hwspinlock *existing;
 	int ret;
 
-	mutex_lock(&hwspinlock_tree_lock);
-
-	ret = radix_tree_insert(&hwspinlock_tree, id, hwlock);
-	if (ret) {
-		if (ret == -EEXIST)
+	do {
+		xas_lock(&xas);
+		existing = xas_load(&xas);
+		if (existing) {
 			pr_err("hwspinlock id %d already exists!\n", id);
-		goto out;
-	}
+			xas_set_err(&xas, -EBUSY);
+		}
+		xas_store(&xas, hwlock);
 
-	/* mark this hwspinlock as available */
-	tmp = radix_tree_tag_set(&hwspinlock_tree, id, HWSPINLOCK_UNUSED);
+		/* mark this hwspinlock as available */
+		xas_set_mark(&xas, HWSPINLOCK_UNUSED);
+		ret = xas_error(&xas);
+		xas_unlock(&xas);
+	} while (xas_nomem(&xas, GFP_KERNEL));
 
-	/* self-sanity check which should never fail */
-	WARN_ON(tmp != hwlock);
-
-out:
-	mutex_unlock(&hwspinlock_tree_lock);
 	return ret;
 }
 
 static struct hwspinlock *hwspin_lock_unregister_single(unsigned int id)
 {
+	XA_STATE(xas, &hwspinlocks, id);
 	struct hwspinlock *hwlock = NULL;
-	int ret;
+	bool unused;
 
-	mutex_lock(&hwspinlock_tree_lock);
+	xas_lock(&xas);
+	xas_load(&xas);
 
-	/* make sure the hwspinlock is not in use (tag is set) */
-	ret = radix_tree_tag_get(&hwspinlock_tree, id, HWSPINLOCK_UNUSED);
-	if (ret == 0) {
+	/* make sure the hwspinlock is not in use (mark is set) */
+	unused = xas_get_mark(&xas, HWSPINLOCK_UNUSED);
+	if (!unused) {
 		pr_err("hwspinlock %d still in use (or not present)\n", id);
 		goto out;
 	}
 
-	hwlock = radix_tree_delete(&hwspinlock_tree, id);
-	if (!hwlock) {
-		pr_err("failed to delete hwspinlock %d\n", id);
-		goto out;
-	}
+	hwlock = xas_store(&xas, NULL);
+	if (!hwlock)
+		pr_err("hwspinlock %d already deleted\n", id);
 
 out:
-	mutex_unlock(&hwspinlock_tree_lock);
+	xas_unlock(&xas);
 	return hwlock;
 }
 
@@ -666,20 +644,18 @@ int devm_hwspin_lock_register(struct device *dev,
 EXPORT_SYMBOL_GPL(devm_hwspin_lock_register);
 
 /**
- * __hwspin_lock_request() - tag an hwspinlock as used and power it up
+ * hwspin_lock_prepare() - prepare a hwspinlock
  * @hwlock: the target hwspinlock
  *
  * This is an internal function that prepares an hwspinlock instance
- * before it is given to the user. The function assumes that
- * hwspinlock_tree_lock is taken.
+ * before it is given to the user.
  *
  * Returns: %0 or positive to indicate success, and a negative value to
  * indicate an error (with the appropriate error code)
  */
-static int __hwspin_lock_request(struct hwspinlock *hwlock)
+static int hwspin_lock_prepare(struct hwspinlock *hwlock)
 {
 	struct device *dev = hwlock->bank->dev;
-	struct hwspinlock *tmp;
 	int ret;
 
 	/* prevent underlying implementation from being removed */
@@ -697,16 +673,7 @@ static int __hwspin_lock_request(struct hwspinlock *hwlock)
 		return ret;
 	}
 
-	ret = 0;
-
-	/* mark hwspinlock as used, should not fail */
-	tmp = radix_tree_tag_clear(&hwspinlock_tree, hwlock_to_id(hwlock),
-							HWSPINLOCK_UNUSED);
-
-	/* self-sanity check that should never fail */
-	WARN_ON(tmp != hwlock);
-
-	return ret;
+	return 0;
 }
 
 /**
@@ -724,36 +691,43 @@ static int __hwspin_lock_request(struct hwspinlock *hwlock)
  */
 struct hwspinlock *hwspin_lock_request_specific(unsigned int id)
 {
+	XA_STATE(xas, &hwspinlocks, id);
 	struct hwspinlock *hwlock;
+	bool unused;
 	int ret;
 
-	mutex_lock(&hwspinlock_tree_lock);
+	xas_lock(&xas);
 
-	/* make sure this hwspinlock exists */
-	hwlock = radix_tree_lookup(&hwspinlock_tree, id);
+	hwlock = xas_load(&xas);
 	if (!hwlock) {
+		xas_unlock(&xas);
 		pr_warn("hwspinlock %u does not exist\n", id);
-		goto out;
+		return NULL;
 	}
 
 	/* sanity check (this shouldn't happen) */
 	WARN_ON(hwlock_to_id(hwlock) != id);
 
-	/* make sure this hwspinlock is unused */
-	ret = radix_tree_tag_get(&hwspinlock_tree, id, HWSPINLOCK_UNUSED);
-	if (ret == 0) {
+	unused = xas_get_mark(&xas, HWSPINLOCK_UNUSED);
+	if (!unused) {
+		xas_unlock(&xas);
 		pr_warn("hwspinlock %u is already in use\n", id);
-		hwlock = NULL;
-		goto out;
+		return NULL;
 	}
 
-	/* mark as used and power up */
-	ret = __hwspin_lock_request(hwlock);
-	if (ret < 0)
-		hwlock = NULL;
+	xas_clear_mark(&xas, HWSPINLOCK_UNUSED);
+	xas_unlock(&xas);
 
-out:
-	mutex_unlock(&hwspinlock_tree_lock);
+	ret = hwspin_lock_prepare(hwlock);
+	if (ret < 0) {
+		xas_lock(&xas);
+		xas_set(&xas, hwlock_to_id(hwlock));
+		xas_load(&xas);
+		xas_set_mark(&xas, HWSPINLOCK_UNUSED);
+		xas_unlock(&xas);
+		return NULL;
+	}
+
 	return hwlock;
 }
 EXPORT_SYMBOL_GPL(hwspin_lock_request_specific);
@@ -772,9 +746,10 @@ EXPORT_SYMBOL_GPL(hwspin_lock_request_specific);
  */
 int hwspin_lock_free(struct hwspinlock *hwlock)
 {
+	XA_STATE(xas, &hwspinlocks, 0);
 	struct device *dev;
-	struct hwspinlock *tmp;
-	int ret;
+	bool unused;
+	int ret = 0;
 
 	if (!hwlock) {
 		pr_err("invalid hwlock\n");
@@ -782,12 +757,13 @@ int hwspin_lock_free(struct hwspinlock *hwlock)
 	}
 
 	dev = hwlock->bank->dev;
-	mutex_lock(&hwspinlock_tree_lock);
+	xas_lock(&xas);
+	xas_set(&xas, hwlock_to_id(hwlock));
+	xas_load(&xas);
 
 	/* make sure the hwspinlock is used */
-	ret = radix_tree_tag_get(&hwspinlock_tree, hwlock_to_id(hwlock),
-							HWSPINLOCK_UNUSED);
-	if (ret == 1) {
+	unused = xas_get_mark(&xas, HWSPINLOCK_UNUSED);
+	if (unused) {
 		dev_err(dev, "%s: hwlock is already free\n", __func__);
 		dump_stack();
 		ret = -EINVAL;
@@ -798,16 +774,12 @@ int hwspin_lock_free(struct hwspinlock *hwlock)
 	pm_runtime_put(dev);
 
 	/* mark this hwspinlock as available */
-	tmp = radix_tree_tag_set(&hwspinlock_tree, hwlock_to_id(hwlock),
-							HWSPINLOCK_UNUSED);
-
-	/* sanity check (this shouldn't happen) */
-	WARN_ON(tmp != hwlock);
+	xas_set_mark(&xas, HWSPINLOCK_UNUSED);
 
 	module_put(dev->driver->owner);
 
 out:
-	mutex_unlock(&hwspinlock_tree_lock);
+	xas_unlock(&xas);
 	return ret;
 }
 EXPORT_SYMBOL_GPL(hwspin_lock_free);
