@@ -8,7 +8,6 @@
 #include <linux/bitmap.h>
 #include <linux/container_of.h>
 #include <linux/device.h>
-#include <linux/find.h>
 #include <linux/input.h>
 #include <linux/input/matrix_keypad.h>
 #include <linux/mfd/adp5585.h>
