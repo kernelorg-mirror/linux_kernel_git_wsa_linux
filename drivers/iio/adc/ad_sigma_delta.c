@@ -14,7 +14,6 @@
 #include <linux/device.h>
 #include <linux/err.h>
 #include <linux/export.h>
-#include <linux/find.h>
 #include <linux/gpio/consumer.h>
 #include <linux/interrupt.h>
 #include <linux/module.h>
