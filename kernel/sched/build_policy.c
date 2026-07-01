@@ -59,7 +59,7 @@
 
 #ifdef CONFIG_SCHED_CLASS_EXT
 # include <linux/btf_ids.h>
-# include <linux/find.h>
+# include <linux/bitmap.h>
 # include <linux/genalloc.h>
 # include "ext/types.h"
 # include "ext/internal.h"
