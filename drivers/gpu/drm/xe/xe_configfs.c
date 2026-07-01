@@ -7,7 +7,7 @@
 #include <linux/ctype.h>
 #include <linux/configfs.h>
 #include <linux/cleanup.h>
-#include <linux/find.h>
+#include <linux/bitmap.h>
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/pci.h>
