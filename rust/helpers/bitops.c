@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0
 
 #include <linux/bitops.h>
-#include <linux/find.h>
+#include <linux/bitmap.h>
 
 __rust_helper
 void rust_helper___set_bit(unsigned long nr, unsigned long *addr)
