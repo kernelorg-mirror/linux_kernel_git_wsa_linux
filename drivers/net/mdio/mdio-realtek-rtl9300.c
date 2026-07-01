@@ -40,7 +40,6 @@
 #include <linux/bitfield.h>
 #include <linux/bitmap.h>
 #include <linux/bits.h>
-#include <linux/find.h>
 #include <linux/mdio.h>
 #include <linux/mfd/syscon.h>
 #include <linux/mod_devicetable.h>
