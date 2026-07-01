@@ -3,7 +3,6 @@
 #define __KVM_X86_VMX_POSTED_INTR_H
 
 #include <linux/bitmap.h>
-#include <linux/find.h>
 #include <linux/kvm_host.h>
 
 #include <asm/posted_intr.h>
