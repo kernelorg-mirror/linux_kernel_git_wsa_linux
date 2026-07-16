@@ -1087,6 +1087,150 @@
 			/* actual transport nodes must be set per board file */
 		};
 
+		i2c1: i2c@c06c0000 {
+			compatible = "renesas,i2c-r8a78000",
+				     "renesas,rcar-gen5-i2c";
+			reg = <0 0xc06c0000 0 0x40>;
+			interrupts = <GIC_SPI 956 IRQ_TYPE_LEVEL_HIGH>;
+			dmas = <&sys_dmac10 0x93>, <&sys_dmac10 0x92>,
+			       <&sys_dmac11 0x93>, <&sys_dmac11 0x92>,
+			       <&sys_dmac12 0x93>, <&sys_dmac12 0x92>;
+			dma-names = "tx", "rx", "tx", "rx", "tx", "rx";
+			i2c-scl-internal-delay-ns = <110>;
+			clocks = <&cpg R8A78000_CPG_SGASYNCD8_PERW_BUS>;
+			power-domains = <&mdlc_perw R8A78000_MDLC_PD_APL 0x44>;
+			resets = <&mdlc_perw 0x44>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			status = "disabled";
+		};
+
+		i2c2: i2c@c06c8000 {
+			compatible = "renesas,i2c-r8a78000",
+				     "renesas,rcar-gen5-i2c";
+			reg = <0 0xc06c8000 0 0x40>;
+			interrupts = <GIC_SPI 957 IRQ_TYPE_LEVEL_HIGH>;
+			dmas = <&sys_dmac10 0x95>, <&sys_dmac10 0x94>,
+			       <&sys_dmac11 0x95>, <&sys_dmac11 0x94>,
+			       <&sys_dmac12 0x95>, <&sys_dmac12 0x94>;
+			dma-names = "tx", "rx", "tx", "rx", "tx", "rx";
+			i2c-scl-internal-delay-ns = <110>;
+			clocks = <&cpg R8A78000_CPG_SGASYNCD8_PERW_BUS>;
+			power-domains = <&mdlc_perw R8A78000_MDLC_PD_APL 0x45>;
+			resets = <&mdlc_perw 0x45>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			status = "disabled";
+		};
+
+		i2c3: i2c@c06d0000 {
+			compatible = "renesas,i2c-r8a78000",
+				     "renesas,rcar-gen5-i2c";
+			reg = <0 0xc06d0000 0 0x40>;
+			interrupts = <GIC_SPI 958 IRQ_TYPE_LEVEL_HIGH>;
+			dmas = <&sys_dmac10 0x97>, <&sys_dmac10 0x96>,
+			       <&sys_dmac11 0x97>, <&sys_dmac11 0x96>,
+			       <&sys_dmac12 0x97>, <&sys_dmac12 0x96>;
+			dma-names = "tx", "rx", "tx", "rx", "tx", "rx";
+			i2c-scl-internal-delay-ns = <110>;
+			clocks = <&cpg R8A78000_CPG_SGASYNCD8_PERW_BUS>;
+			power-domains = <&mdlc_perw R8A78000_MDLC_PD_APL 0x46>;
+			resets = <&mdlc_perw 0x46>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			status = "disabled";
+		};
+
+		i2c4: i2c@c06d8000 {
+			compatible = "renesas,i2c-r8a78000",
+				     "renesas,rcar-gen5-i2c";
+			reg = <0 0xc06d8000 0 0x40>;
+			interrupts = <GIC_SPI 959 IRQ_TYPE_LEVEL_HIGH>;
+			dmas = <&sys_dmac10 0x99>, <&sys_dmac10 0x98>,
+			       <&sys_dmac11 0x99>, <&sys_dmac11 0x98>,
+			       <&sys_dmac12 0x99>, <&sys_dmac12 0x98>;
+			dma-names = "tx", "rx", "tx", "rx", "tx", "rx";
+			i2c-scl-internal-delay-ns = <110>;
+			clocks = <&cpg R8A78000_CPG_SGASYNCD8_PERW_BUS>;
+			power-domains = <&mdlc_perw R8A78000_MDLC_PD_APL 0x47>;
+			resets = <&mdlc_perw 0x47>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			status = "disabled";
+		};
+
+		i2c5: i2c@c06e0000 {
+			compatible = "renesas,i2c-r8a78000",
+				     "renesas,rcar-gen5-i2c";
+			reg = <0 0xc06e0000 0 0x40>;
+			interrupts = <GIC_ESPI 0 IRQ_TYPE_LEVEL_HIGH>;
+			dmas = <&sys_dmac10 0x9b>, <&sys_dmac10 0x9a>,
+			       <&sys_dmac11 0x9b>, <&sys_dmac11 0x9a>,
+			       <&sys_dmac12 0x9b>, <&sys_dmac12 0x9a>;
+			dma-names = "tx", "rx", "tx", "rx", "tx", "rx";
+			i2c-scl-internal-delay-ns = <110>;
+			clocks = <&cpg R8A78000_CPG_SGASYNCD8_PERW_BUS>;
+			power-domains = <&mdlc_perw R8A78000_MDLC_PD_APL 0x48>;
+			resets = <&mdlc_perw 0x48>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			status = "disabled";
+		};
+
+		i2c6: i2c@c06e8000 {
+			compatible = "renesas,i2c-r8a78000",
+				     "renesas,rcar-gen5-i2c";
+			reg = <0 0xc06e8000 0 0x40>;
+			interrupts = <GIC_ESPI 1 IRQ_TYPE_LEVEL_HIGH>;
+			dmas = <&sys_dmac10 0x9d>, <&sys_dmac10 0x9c>,
+			       <&sys_dmac11 0x9d>, <&sys_dmac11 0x9c>,
+			       <&sys_dmac12 0x9d>, <&sys_dmac12 0x9c>;
+			dma-names = "tx", "rx", "tx", "rx", "tx", "rx";
+			i2c-scl-internal-delay-ns = <110>;
+			clocks = <&cpg R8A78000_CPG_SGASYNCD8_PERW_BUS>;
+			power-domains = <&mdlc_perw R8A78000_MDLC_PD_APL 0x49>;
+			resets = <&mdlc_perw 0x49>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			status = "disabled";
+		};
+
+		i2c7: i2c@c06f0000 {
+			compatible = "renesas,i2c-r8a78000",
+				     "renesas,rcar-gen5-i2c";
+			reg = <0 0xc06f0000 0 0x40>;
+			interrupts = <GIC_ESPI 2 IRQ_TYPE_LEVEL_HIGH>;
+			dmas = <&sys_dmac10 0x9f>, <&sys_dmac10 0x9e>,
+			       <&sys_dmac11 0x9f>, <&sys_dmac11 0x9e>,
+			       <&sys_dmac12 0x9f>, <&sys_dmac12 0x9e>;
+			dma-names = "tx", "rx", "tx", "rx", "tx", "rx";
+			i2c-scl-internal-delay-ns = <110>;
+			clocks = <&cpg R8A78000_CPG_SGASYNCD8_PERW_BUS>;
+			power-domains = <&mdlc_perw R8A78000_MDLC_PD_APL 0x4a>;
+			resets = <&mdlc_perw 0x4a>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			status = "disabled";
+		};
+
+		i2c8: i2c@c06f8000 {
+			compatible = "renesas,i2c-r8a78000",
+				     "renesas,rcar-gen5-i2c";
+			reg = <0 0xc06f8000 0 0x40>;
+			interrupts = <GIC_ESPI 3 IRQ_TYPE_LEVEL_HIGH>;
+			dmas = <&sys_dmac10 0xb1>, <&sys_dmac10 0xb0>,
+			       <&sys_dmac11 0xb1>, <&sys_dmac11 0xb0>,
+			       <&sys_dmac12 0xb1>, <&sys_dmac12 0xb0>;
+			dma-names = "tx", "rx", "tx", "rx", "tx", "rx";
+			i2c-scl-internal-delay-ns = <110>;
+			clocks = <&cpg R8A78000_CPG_SGASYNCD8_PERW_BUS>;
+			power-domains = <&mdlc_perw R8A78000_MDLC_PD_APL 0x4b>;
+			resets = <&mdlc_perw 0x4b>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			status = "disabled";
+		};
+
 		cpg: clock-controller@c1320000 {
 			compatible = "renesas,r8a78000-cpg";
 			reg = <0 0xc1320000 0 0x10000>;
