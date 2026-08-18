@@ -92,6 +92,7 @@
 /* DW_IC_ENABLE bits */
 #define DW_IC_ENABLE_ENABLE			BIT(0)
 #define DW_IC_ENABLE_ABORT			BIT(1)
+#define DW_IC_ENABLE_SAR_EN			BIT(19)
 
 /* DW_IC_STATUS bits */
 #define DW_IC_STATUS_ACTIVITY			BIT(0)
