@@ -23,6 +23,8 @@ properties:
           - const: renesas,r9a09g087-rtc  # RZ/N2H
           - const: renesas,r9a09g077-rtc  # RZ/T2H
 
+      - const: renesas,r8a78000-rtc   # R-Car X5H
+
   reg:
     maxItems: 1
 
@@ -55,8 +57,6 @@ properties:
 required:
   - compatible
   - reg
-  - interrupts
-  - interrupt-names
   - clocks
   - clock-names
   - power-domains
@@ -69,6 +69,7 @@ allOf:
         compatible:
           contains:
             enum:
+              - renesas,r8a78000-rtc
               - renesas,r9a09g077-rtc
               - renesas,r9a09g087-rtc
     then:
@@ -89,6 +90,20 @@ allOf:
     else:
       required:
         - resets
+
+  - if:
+      properties:
+        compatible:
+          contains:
+            const: renesas,r8a78000-rtc
+    then:
+      properties:
+        interrupts: false
+        interrupt-names: false
+    else:
+      required:
+        - interrupts
+        - interrupt-names
 
 unevaluatedProperties: false
 
