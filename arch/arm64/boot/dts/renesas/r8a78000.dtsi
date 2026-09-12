@@ -670,6 +670,13 @@
 		};
 	};
 
+	dummy_tcki: dummy-tcki {
+		compatible = "fixed-clock";
+		#clock-cells = <0>;
+		clock-frequency = <240000>;
+		clock-output-names = "rtcatcki";
+	};
+
 	extal_clk: extal-clk {
 		compatible = "fixed-clock";
 		#clock-cells = <0>;
@@ -1009,6 +1016,17 @@
 			#power-domain-cells = <2>;
 			#reset-cells = <1>;
 			bootph-all;
+		};
+
+		rtca: rtc@c1394000 {
+			compatible = "renesas,r8a78000-rtc";
+			reg = <0 0xc1394000 0 0x70>;
+			/* hclk is only a placeholder! actual clk happens to be enabled by FW */
+			clocks = <&cpg R8A78000_CPG_SGASYNCD16_PERW_BUS>, <&dummy_tcki>;
+			clock-names = "hclk", "xtal";
+			power-domains = <&mdlc_aon R8A78000_MDLC_PD_AON 0x11>;
+			resets = <&mdlc_aon 0x11>;
+			status = "disabled";
 		};
 
 		mdlc_cmnn: system-controller@ca410000 {
