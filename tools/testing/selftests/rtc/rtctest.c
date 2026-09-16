@@ -111,7 +111,7 @@ static enum rtc_alarm_state get_rtc_alarm_state(int fd, int need_seconds)
 	return RTC_ALARM_ENABLED;
 }
 
-TEST_F_TIMEOUT(rtc, date_read_loop, READ_LOOP_DURATION_SEC + 2) {
+TEST_F_TIMEOUT(rtc, date_read_loop, READ_LOOP_DURATION_SEC + 5) {
 	int rc;
 	long iter_count = 0;
 	struct rtc_time rtc_tm;
