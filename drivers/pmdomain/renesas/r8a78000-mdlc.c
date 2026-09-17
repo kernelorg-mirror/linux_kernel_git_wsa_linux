@@ -632,6 +632,11 @@ static const struct power_map_in r8a78000_mdlc_pere_power_fw_4_28_0[] = {
 	{ -1 }
 };
 
+static const struct mod_map_in r8a78000_mdlc_aon_mod_fw_4_28_0[] = {
+	{ 0x11, 814 },	/* RTCA */
+	{ -1 }
+};
+
 static const struct mod_map_in r8a78000_mdlc_pere_mod_fw_4_28_0[] = {
 	{ 0x30, 197 },	/* PERE_GPIODM0 */
 	// No CLOCK_ATTRIBUTES { 0x31, 198 },	/* PERE_GPIODM1 */
@@ -776,6 +781,9 @@ static const struct mdlc_info r8a78000_mdlc_fw_4_28_0[] = {
 		/* FIXME .power_map = r8a78000_mdlc_vio_power_fw_4_28_0, */
 		/* FIXME .mod_map = r8a78000_mdlc_vio_mod_fw_4_28_0, */
 	}, {
+		.base = 0xc1338000 /* mdlc_aon */,
+		.mod_map = r8a78000_mdlc_aon_mod_fw_4_28_0,
+	}, {
 		.base = 0xc08f0000 /* mdlc_pere */,
 		.power_map = r8a78000_mdlc_pere_power_fw_4_28_0,
 		.mod_map = r8a78000_mdlc_pere_mod_fw_4_28_0,
@@ -853,12 +861,14 @@ static const struct mdlc_info r8a78000_mdlc_fw_4_28_0[] = {
 	}, {
 		.base = 0xc1330000 /* mdlc_scp */,
 		/* FIXME .mod_map = r8a78000_mdlc_scp_mod_fw_4_28_0, */
-	}, {
-		.base = 0xc1338000 /* mdlc_aon */,
-		/* FIXME .mod_map = r8a78000_mdlc_aon_mod_fw_4_28_0, */
 #endif
 	},
 	{ /* sentinel */ }
+};
+
+static const struct mod_map_in r8a78000_mdlc_aon_mod_fw_4_31_0[] = {
+	{ 0x11, 810 },	/* RTCA */
+	{ -1 }
 };
 
 static const struct mod_map_in r8a78000_mdlc_pere_mod_fw_4_31_0[] = {
@@ -1000,6 +1010,9 @@ static const struct mdlc_info r8a78000_mdlc_fw_4_31_0[] = {
 		/* FIXME .power_map = r8a78000_mdlc_vio_power_fw_4_28_0, */
 		/* FIXME .mod_map = r8a78000_mdlc_vio_mod_fw_4_31_0, */
 	}, {
+		.base = 0xc1338000 /* mdlc_aon */,
+		.mod_map = r8a78000_mdlc_aon_mod_fw_4_31_0,
+	}, {
 		.base = 0xc08f0000 /* mdlc_pere */,
 		.power_map = r8a78000_mdlc_pere_power_fw_4_28_0,
 		.mod_map = r8a78000_mdlc_pere_mod_fw_4_31_0,
@@ -1077,9 +1090,6 @@ static const struct mdlc_info r8a78000_mdlc_fw_4_31_0[] = {
 	}, {
 		.base = 0xc1330000 /* mdlc_scp */,
 		/* FIXME .mod_map = r8a78000_mdlc_scp_mod_fw_4_31_0, */
-	}, {
-		.base = 0xc1338000 /* mdlc_aon */,
-		/* FIXME .mod_map = r8a78000_mdlc_aon_mod_fw_4_31_0, */
 #endif
 	},
 	{ /* sentinel */ }
