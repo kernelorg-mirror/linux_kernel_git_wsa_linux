@@ -226,12 +226,30 @@ static struct device_node *scmi_find_proto(struct device_node *scmi, u32 proto)
 	return NULL;
 }
 
+static struct clk *scmi_get_clk(struct device *dev, struct device_node *np,
+				u32 id)
+{
+	struct of_phandle_args scmi_spec = {
+		.np = np,
+		.args_count = 1,
+		.args[0] = id,
+	};
+	struct clk *clk = of_clk_get_from_provider(&scmi_spec);
+
+	if (IS_ERR(clk))
+		dev_err(dev, "Cannot get SCMI clock %u: %pe\n", id, clk);
+	else
+		dev_dbg(dev, "SCMI clock %u is %pC\n", id, clk);
+
+	return clk;
+}
+
 static int r8a78000_mdlc_attach_dev(struct generic_pm_domain *domain,
 				    struct device *dev)
 {
-	struct of_phandle_args pd_spec, scmi_spec;
 	struct device_node *np = dev->of_node;
 	struct r8a78000_mdlc_priv *priv;
+	struct of_phandle_args pd_spec;
 	const struct mod_map *map;
 	unsigned int id;
 	struct clk *clk;
@@ -272,18 +290,9 @@ static int r8a78000_mdlc_attach_dev(struct generic_pm_domain *domain,
 	dev_dbg(dev, "Mapping HW module 0x%x to SCMI clock %u\n", id,
 		map->fw_id);
 
-	scmi_spec.np = priv->scmi_clk_np;
-	scmi_spec.args_count = 1;
-	scmi_spec.args[0] = map->fw_id;
-
-	clk = of_clk_get_from_provider(&scmi_spec);
-	if (IS_ERR(clk)) {
-		dev_err(dev, "Cannot get SCMI clock %u: %pe\n", map->fw_id,
-			clk);
+	clk = scmi_get_clk(dev, priv->scmi_clk_np, map->fw_id);
+	if (IS_ERR(clk))
 		return PTR_ERR(clk);
-	}
-
-	dev_dbg(dev, "SCMI clock %u is %pC\n", map->fw_id, clk);
 
 	if (!clk) {
 		/* Ignore missing SCMI module clocks */
