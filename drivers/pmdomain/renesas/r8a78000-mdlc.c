@@ -691,10 +691,10 @@ static const struct mod_map_in r8a78000_mdlc_perw_mod_fw_4_28_0[] = {
 	{ 0x4c, 221, -1 },	/* I3C0 */
 	{ 0x4d, 222, -1 },	/* I3C1 */
 	{ 0x4e, 223, -1 },	/* I3C2 */
-	{ 0x4f, 224, -1 },	/* MSI4 */
-	{ 0x50, 225, -1 },	/* MSI5 */
-	{ 0x51, 226, -1 },	/* MSI6 */
-	{ 0x52, 227, -1 },	/* MSI7 */
+	{ 0x4f, 224, 1671 },	/* MSI4 / MSOCK_PERW_BUS */
+	{ 0x50, 225, 1671 },	/* MSI5 / MSOCK_PERW_BUS */
+	{ 0x51, 226, 1671 },	/* MSI6 / MSOCK_PERW_BUS */
+	{ 0x52, 227, 1671 },	/* MSI7 / MSOCK_PERW_BUS */
 	/*
 	 * HSCIF0 is protected:
 	 *   - CLOCK_ATTRIBUTES is not supported, so clk is NULL
@@ -789,6 +789,14 @@ static const struct mod_map_in r8a78000_mdlc_perw_mod_fw_4_28_0[] = {
 	{ -1 }
 };
 
+static const struct mod_map_in r8a78000_mdlc_scp_mod_fw_4_28_0[] = {
+	{ 0x50, 780, 1463 },	/* MSI0 / MSO_SCP_MAIN */
+	{ 0x51, 781, 1463 },	/* MSI1 / MSO_SCP_MAIN */
+	{ 0x52, 782, 1463 },	/* MSI2 / MSO_SCP_MAIN */
+	{ 0x53, 783, 1463 },	/* MSI3 / MSO_SCP_MAIN */
+	{ -1 }
+};
+
 static const struct mdlc_info r8a78000_mdlc_fw_4_28_0[] = {
 	{
 		.base = 0xc3060000 /* mdlc_vipn */,
@@ -809,6 +817,9 @@ static const struct mdlc_info r8a78000_mdlc_fw_4_28_0[] = {
 	}, {
 		.base = 0xc05d0000 /* mdlc_perw */,
 		.mod_map = r8a78000_mdlc_perw_mod_fw_4_28_0,
+	}, {
+		.base = 0xc1330000 /* mdlc_scp */,
+		.mod_map = r8a78000_mdlc_scp_mod_fw_4_28_0,
 // FIXME We don't need all of them from the start; only add when used/tested
 #if 0
 	}, {
@@ -878,9 +889,6 @@ static const struct mdlc_info r8a78000_mdlc_fw_4_28_0[] = {
 		/* FIXME .power_map = r8a78000_mdlc_cmns_power_fw_4_28_0, */
 		/* FIXME .mod_map = r8a78000_mdlc_cmns_mod_fw_4_28_0, */
 	}, {
-		.base = 0xc1330000 /* mdlc_scp */,
-		/* FIXME .mod_map = r8a78000_mdlc_scp_mod_fw_4_28_0, */
-	}, {
 		.base = 0xc1338000 /* mdlc_aon */,
 		/* FIXME .mod_map = r8a78000_mdlc_aon_mod_fw_4_28_0, */
 #endif
@@ -920,10 +928,10 @@ static const struct mod_map_in r8a78000_mdlc_perw_mod_fw_4_31_0[] = {
 	{ 0x4c, 217, -1 },	/* I3C0 */
 	{ 0x4d, 218, -1 },	/* I3C1 */
 	{ 0x4e, 219, -1 },	/* I3C2 */
-	{ 0x4f, 220, -1 },	/* MSI4 */
-	{ 0x50, 221, -1 },	/* MSI5 */
-	{ 0x51, 222, -1 },	/* MSI6 */
-	{ 0x52, 223, -1 },	/* MSI7 */
+	{ 0x4f, 220, 1667 },	/* MSI4 / MSOCK_PERW_BUS */
+	{ 0x50, 221, 1667 },	/* MSI5 / MSOCK_PERW_BUS */
+	{ 0x51, 222, 1667 },	/* MSI6 / MSOCK_PERW_BUS */
+	{ 0x52, 223, 1667 },	/* MSI7 / MSOCK_PERW_BUS */
 	{ 0x54, 224, -1 },	/* HSCIF0 */
 	{ 0x55, 225, -1 },	/* HSCIF1 */
 	{ 0x56, 226, -1 },	/* HSCIF2 */
@@ -1013,6 +1021,14 @@ static const struct mod_map_in r8a78000_mdlc_perw_mod_fw_4_31_0[] = {
 	{ -1 }
 };
 
+static const struct mod_map_in r8a78000_mdlc_scp_mod_fw_4_31_0[] = {
+	{ 0x50, 776, 1459 },	/* MSI0 / MSO_SCP_MAIN */
+	{ 0x51, 777, 1459 },	/* MSI1 / MSO_SCP_MAIN */
+	{ 0x52, 778, 1459 },	/* MSI2 / MSO_SCP_MAIN */
+	{ 0x53, 779, 1459 },	/* MSI3 / MSO_SCP_MAIN */
+	{ -1 }
+};
+
 static const struct mdlc_info r8a78000_mdlc_fw_4_31_0[] = {
 	{
 		.base = 0xc3060000 /* mdlc_vipn */,
@@ -1033,6 +1049,9 @@ static const struct mdlc_info r8a78000_mdlc_fw_4_31_0[] = {
 	}, {
 		.base = 0xc05d0000 /* mdlc_perw */,
 		.mod_map = r8a78000_mdlc_perw_mod_fw_4_31_0,
+	}, {
+		.base = 0xc1330000 /* mdlc_scp */,
+		.mod_map = r8a78000_mdlc_scp_mod_fw_4_31_0,
 // FIXME We don't need all of them from the start; only add when used/tested
 #if 0
 	}, {
@@ -1101,9 +1120,6 @@ static const struct mdlc_info r8a78000_mdlc_fw_4_31_0[] = {
 		.base = 0xca510000 /* mdlc_cmns */,
 		/* FIXME .power_map = r8a78000_mdlc_cmns_power_fw_4_28_0, */
 		/* FIXME .mod_map = r8a78000_mdlc_cmns_mod_fw_4_31_0, */
-	}, {
-		.base = 0xc1330000 /* mdlc_scp */,
-		/* FIXME .mod_map = r8a78000_mdlc_scp_mod_fw_4_31_0, */
 	}, {
 		.base = 0xc1338000 /* mdlc_aon */,
 		/* FIXME .mod_map = r8a78000_mdlc_aon_mod_fw_4_31_0, */
