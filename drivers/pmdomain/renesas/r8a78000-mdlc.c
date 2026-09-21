@@ -35,11 +35,13 @@ struct power_map {
 struct mod_map_in {
 	int hw_id;		/* Hardware module ID or -1 sentinel */
 	u32 fw_id;		/* SCMI clock and reset IDs are identical */
+	s32 fw_fck_parent;	/* SCMI functional clock parent ID or -1 */
 };
 
 struct mod_map {
 	int hw_id;		/* Hardware module ID or -1 sentinel */
 	u32 fw_id;		/* SCMI clock and reset IDs are identical */
+	s32 fw_fck_parent;	/* SCMI functional clock parent ID or -1 */
 	struct reset_control *rstc;
 };
 
@@ -249,10 +251,10 @@ static int r8a78000_mdlc_attach_dev(struct generic_pm_domain *domain,
 {
 	struct device_node *np = dev->of_node;
 	struct r8a78000_mdlc_priv *priv;
+	struct clk *clk, *parent = NULL;
 	struct of_phandle_args pd_spec;
 	const struct mod_map *map;
 	unsigned int id;
-	struct clk *clk;
 	int ret;
 
 	ret = of_parse_phandle_with_args(np, "power-domains",
@@ -287,8 +289,8 @@ static int r8a78000_mdlc_attach_dev(struct generic_pm_domain *domain,
 		return 0;
 	}
 
-	dev_dbg(dev, "Mapping HW module 0x%x to SCMI clock %u\n", id,
-		map->fw_id);
+	dev_dbg(dev, "Mapping HW module 0x%x to SCMI clock %u fck parent %d\n",
+		id, map->fw_id, map->fw_fck_parent);
 
 	clk = scmi_get_clk(dev, priv->scmi_clk_np, map->fw_id);
 	if (IS_ERR(clk))
@@ -299,11 +301,23 @@ static int r8a78000_mdlc_attach_dev(struct generic_pm_domain *domain,
 		return 0;
 	}
 
+	if (map->fw_fck_parent >= 0) {
+		parent = scmi_get_clk(dev, priv->scmi_clk_np,
+				      map->fw_fck_parent);
+		if (IS_ERR(parent)) {
+			clk_put(clk);
+			return PTR_ERR(parent);
+		}
+	}
+
 	ret = pm_clk_create(dev);
 	if (ret)
 		goto fail_put;
 
-	ret = pm_clk_add_clk(dev, clk);
+	if (parent)
+		ret = pm_clk_add_clk(dev, parent);
+	if (!ret)
+		ret = pm_clk_add_clk(dev, clk);
 	if (ret)
 		goto fail_destroy;
 
@@ -312,6 +326,7 @@ static int r8a78000_mdlc_attach_dev(struct generic_pm_domain *domain,
 fail_destroy:
 	pm_clk_destroy(dev);
 fail_put:
+	clk_put(parent);
 	clk_put(clk);
 	return ret;
 }
@@ -401,6 +416,7 @@ static const struct mod_map *fill_mod_map(struct r8a78000_mdlc_priv *priv,
 			break;
 
 		map[i].fw_id = map_in[i].fw_id;
+		map[i].fw_fck_parent = map_in[i].fw_fck_parent;
 
 		if (!scmi_reset_fwnode)
 			continue;
@@ -624,7 +640,7 @@ fallback:
 }
 
 static const struct mod_map_in r8a78000_mdlc_perw_mod_default[] = {
-	{ 0x54 },	/* HSCIF0 */
+	{ 0x54, 0, -1 },	/* HSCIF0 */
 	{ -1 }
 };
 
@@ -638,138 +654,138 @@ static const struct mdlc_info r8a78000_mdlc_default[] = {
 
 // FIXME We don't need all of them from the start; only add when used/tested
 static const struct power_map_in r8a78000_mdlc_pere_power_fw_4_28_0[] = {
-	{ 0, 12 },	/* PD_UFS0 */
-	{ 1, 13 },	/* PD_UFS1 */
+	{ 0, 12 },		/* PD_UFS0 */
+	{ 1, 13 },		/* PD_UFS1 */
 	{ -1 }
 };
 
 static const struct mod_map_in r8a78000_mdlc_pere_mod_fw_4_28_0[] = {
-	{ 0x30, 197 },	/* PERE_GPIODM0 */
-	// No CLOCK_ATTRIBUTES { 0x31, 198 },	/* PERE_GPIODM1 */
-	// No CLOCK_ATTRIBUTES { 0x32, 199 },	/* PERE_GPIODM2 */
-	// No CLOCK_ATTRIBUTES { 0x33, 200 },	/* PERE_GPIODM3 */
-	{ 0x40, 201 },	/* RPC */
-	{ 0x60, 202 },	/* UFS0 */
-	{ 0x61, 203 },	/* UFS1 */
-	{ 0x70, 204 },	/* SDHI0 */
+	{ 0x30, 197, -1 },	/* PERE_GPIODM0 */
+	// No CLOCK_ATTRIBUTES { 0x31, 198, -1 },	/* PERE_GPIODM1 */
+	// No CLOCK_ATTRIBUTES { 0x32, 199, -1 },	/* PERE_GPIODM2 */
+	// No CLOCK_ATTRIBUTES { 0x33, 200, -1 },	/* PERE_GPIODM3 */
+	{ 0x40, 201, -1 },	/* RPC */
+	{ 0x60, 202, -1 },	/* UFS0 */
+	{ 0x61, 203, -1 },	/* UFS1 */
+	{ 0x70, 204, -1 },	/* SDHI0 */
 	{ -1 }
 };
 
 static const struct mod_map_in r8a78000_mdlc_perw_mod_fw_4_28_0[] = {
-	{ 0x30, 205 },	/* PERW_GPIODM0 */
-	// No CLOCK_ATTRIBUTES { 0x31, 206 },	/* PERW_GPIODM1 */
-	// No CLOCK_ATTRIBUTES { 0x32, 207 },	/* PERW_GPIODM2 */
-	// No CLOCK_ATTRIBUTES { 0x33, 208 },	/* PERW_GPIODM3 */
-	{ 0x40, 209 },	/* SCIF0 */
-	{ 0x41, 210 },	/* SCIF1 */
-	{ 0x42, 211 },	/* SCIF3 */
-	{ 0x43, 212 },	/* SCIF4 */
-	{ 0x44, 213 },	/* I2C1 */
-	{ 0x45, 214 },	/* I2C2 */
-	{ 0x46, 215 },	/* I2C3 */
-	{ 0x47, 216 },	/* I2C4 */
-	{ 0x48, 217 },	/* I2C5 */
-	{ 0x49, 218 },	/* I2C6 */
-	{ 0x4a, 219 },	/* I2C7 */
-	{ 0x4b, 220 },	/* I2C8 */
-	{ 0x4c, 221 },	/* I3C0 */
-	{ 0x4d, 222 },	/* I3C1 */
-	{ 0x4e, 223 },	/* I3C2 */
-	{ 0x4f, 224 },	/* MSI4 */
-	{ 0x50, 225 },	/* MSI5 */
-	{ 0x51, 226 },	/* MSI6 */
-	{ 0x52, 227 },	/* MSI7 */
+	{ 0x30, 205, -1 },	/* PERW_GPIODM0 */
+	// No CLOCK_ATTRIBUTES { 0x31, 206, -1 },	/* PERW_GPIODM1 */
+	// No CLOCK_ATTRIBUTES { 0x32, 207, -1 },	/* PERW_GPIODM2 */
+	// No CLOCK_ATTRIBUTES { 0x33, 208, -1 },	/* PERW_GPIODM3 */
+	{ 0x40, 209, -1 },	/* SCIF0 */
+	{ 0x41, 210, -1 },	/* SCIF1 */
+	{ 0x42, 211, -1 },	/* SCIF3 */
+	{ 0x43, 212, -1 },	/* SCIF4 */
+	{ 0x44, 213, -1 },	/* I2C1 */
+	{ 0x45, 214, -1 },	/* I2C2 */
+	{ 0x46, 215, -1 },	/* I2C3 */
+	{ 0x47, 216, -1 },	/* I2C4 */
+	{ 0x48, 217, -1 },	/* I2C5 */
+	{ 0x49, 218, -1 },	/* I2C6 */
+	{ 0x4a, 219, -1 },	/* I2C7 */
+	{ 0x4b, 220, -1 },	/* I2C8 */
+	{ 0x4c, 221, -1 },	/* I3C0 */
+	{ 0x4d, 222, -1 },	/* I3C1 */
+	{ 0x4e, 223, -1 },	/* I3C2 */
+	{ 0x4f, 224, -1 },	/* MSI4 */
+	{ 0x50, 225, -1 },	/* MSI5 */
+	{ 0x51, 226, -1 },	/* MSI6 */
+	{ 0x52, 227, -1 },	/* MSI7 */
 	/*
 	 * HSCIF0 is protected:
 	 *   - CLOCK_ATTRIBUTES is not supported, so clk is NULL
 	 *   - Reset operations fail with -EOPNOTSUPP
 	 */
-	{ 0x54, 228 },	/* HSCIF0 */
-	{ 0x55, 229 },	/* HSCIF1 */
-	{ 0x56, 230 },	/* HSCIF2 */
-	{ 0x57, 231 },	/* HSCIF3 */
-	{ 0x58, 232 },	/* DRI00 */
-	{ 0x59, 233 },	/* DRI01 */
-	{ 0x5a, 234 },	/* DRI10 */
-	{ 0x5b, 235 },	/* DRI11 */
-	{ 0x5c, 236 },	/* DRI20 */
-	{ 0x5d, 237 },	/* DRI21 */
-	{ 0x5e, 238 },	/* DRI30 */
-	{ 0x5f, 239 },	/* DRI31 */
-	{ 0x60, 240 },	/* DRI40 */
-	{ 0x61, 241 },	/* DRI41 */
-	{ 0x62, 242 },	/* DRI50 */
-	{ 0x63, 243 },	/* DRI51 */
-	{ 0x64, 244 },	/* DRI60 */
-	{ 0x65, 245 },	/* DRI61 */
-	{ 0x66, 246 },	/* DRI70 */
-	{ 0x67, 247 },	/* DRI71 */
-	{ 0x70, 248 },	/* PWM0 */
-	{ 0x72, 249 },	/* TMU1 */
-	{ 0x73, 250 },	/* TMU2 */
-	{ 0x74, 251 },	/* TMU3 */
-	{ 0x75, 252 },	/* TMU4 */
-	{ 0x76, 253 },	/* TPU0 */
-	{ 0x90, 254 },	/* ADG0 */
-	{ 0x91, 255 },	/* ADG1 */
-	{ 0x92, 256 },	/* SSI0 */
-	{ 0x93, 257 },	/* SSI00 */
-	{ 0x94, 258 },	/* SSI01 */
-	{ 0x95, 259 },	/* SSI02 */
-	{ 0x96, 260 },	/* SSI03 */
-	{ 0x97, 261 },	/* SSI04 */
-	{ 0x98, 262 },	/* SSI05 */
-	{ 0x99, 263 },	/* SSI06 */
-	{ 0x9a, 264 },	/* SSI07 */
-	{ 0x9b, 265 },	/* SSI08 */
-	{ 0x9c, 266 },	/* SSI09 */
-	{ 0x9d, 267 },	/* SSI1 */
-	{ 0x9e, 268 },	/* SSI10 */
-	{ 0x9f, 269 },	/* SSI11 */
-	{ 0xa0, 270 },	/* SSI12 */
-	{ 0xa1, 271 },	/* SSI13 */
-	{ 0xa2, 272 },	/* SSI14 */
-	{ 0xa3, 273 },	/* SSI15 */
-	{ 0xa4, 274 },	/* SSI16 */
-	{ 0xa5, 275 },	/* SSI17 */
-	{ 0xa6, 276 },	/* SSI18 */
-	{ 0xa7, 277 },	/* SSI19 */
-	{ 0xa8, 278 },	/* SCU0 */
-	{ 0xa9, 279 },	/* SRC00 */
-	{ 0xaa, 280 },	/* SRC01 */
-	{ 0xab, 281 },	/* SRC02 */
-	{ 0xac, 282 },	/* SRC03 */
-	{ 0xad, 283 },	/* SRC04 */
-	{ 0xae, 284 },	/* SRC05 */
-	{ 0xaf, 285 },	/* SRC06 */
-	{ 0xb0, 286 },	/* SRC07 */
-	{ 0xb1, 287 },	/* SRC08 */
-	{ 0xb2, 288 },	/* SRC09 */
-	{ 0xb3, 289 },	/* SCU00 */
-	{ 0xb4, 290 },	/* SCU01 */
-	{ 0xb5, 291 },	/* DVC00 */
-	{ 0xb6, 292 },	/* DVC01 */
-	{ 0xb7, 293 },	/* SCU1 */
-	{ 0xb8, 294 },	/* SRC10 */
-	{ 0xb9, 295 },	/* SRC11 */
-	{ 0xba, 296 },	/* SRC12 */
-	{ 0xbb, 297 },	/* SRC13 */
-	{ 0xbc, 298 },	/* SRC14 */
-	{ 0xbd, 299 },	/* SRC15 */
-	{ 0xbe, 300 },	/* SRC16 */
-	{ 0xbf, 301 },	/* SRC17 */
-	{ 0xc0, 302 },	/* SRC18 */
-	{ 0xc1, 303 },	/* SRC19 */
-	{ 0xc2, 304 },	/* SCU10 */
-	{ 0xc3, 305 },	/* SCU11 */
-	{ 0xc4, 306 },	/* DVC10 */
-	{ 0xc5, 307 },	/* DVC11 */
-	{ 0xc6, 308 },	/* APD00 */
-	{ 0xc7, 309 },	/* APD01 */
-	{ 0xc8, 310 },	/* APD10 */
-	{ 0xc9, 311 },	/* APD11 */
-	{ 0xca, 312 },	/* APD02 */
-	{ 0xcb, 313 },	/* APD12 */
+	{ 0x54, 228, -1 },	/* HSCIF0 */
+	{ 0x55, 229, -1 },	/* HSCIF1 */
+	{ 0x56, 230, -1 },	/* HSCIF2 */
+	{ 0x57, 231, -1 },	/* HSCIF3 */
+	{ 0x58, 232, -1 },	/* DRI00 */
+	{ 0x59, 233, -1 },	/* DRI01 */
+	{ 0x5a, 234, -1 },	/* DRI10 */
+	{ 0x5b, 235, -1 },	/* DRI11 */
+	{ 0x5c, 236, -1 },	/* DRI20 */
+	{ 0x5d, 237, -1 },	/* DRI21 */
+	{ 0x5e, 238, -1 },	/* DRI30 */
+	{ 0x5f, 239, -1 },	/* DRI31 */
+	{ 0x60, 240, -1 },	/* DRI40 */
+	{ 0x61, 241, -1 },	/* DRI41 */
+	{ 0x62, 242, -1 },	/* DRI50 */
+	{ 0x63, 243, -1 },	/* DRI51 */
+	{ 0x64, 244, -1 },	/* DRI60 */
+	{ 0x65, 245, -1 },	/* DRI61 */
+	{ 0x66, 246, -1 },	/* DRI70 */
+	{ 0x67, 247, -1 },	/* DRI71 */
+	{ 0x70, 248, -1 },	/* PWM0 */
+	{ 0x72, 249, -1 },	/* TMU1 */
+	{ 0x73, 250, -1 },	/* TMU2 */
+	{ 0x74, 251, -1 },	/* TMU3 */
+	{ 0x75, 252, -1 },	/* TMU4 */
+	{ 0x76, 253, -1 },	/* TPU0 */
+	{ 0x90, 254, -1 },	/* ADG0 */
+	{ 0x91, 255, -1 },	/* ADG1 */
+	{ 0x92, 256, -1 },	/* SSI0 */
+	{ 0x93, 257, -1 },	/* SSI00 */
+	{ 0x94, 258, -1 },	/* SSI01 */
+	{ 0x95, 259, -1 },	/* SSI02 */
+	{ 0x96, 260, -1 },	/* SSI03 */
+	{ 0x97, 261, -1 },	/* SSI04 */
+	{ 0x98, 262, -1 },	/* SSI05 */
+	{ 0x99, 263, -1 },	/* SSI06 */
+	{ 0x9a, 264, -1 },	/* SSI07 */
+	{ 0x9b, 265, -1 },	/* SSI08 */
+	{ 0x9c, 266, -1 },	/* SSI09 */
+	{ 0x9d, 267, -1 },	/* SSI1 */
+	{ 0x9e, 268, -1 },	/* SSI10 */
+	{ 0x9f, 269, -1 },	/* SSI11 */
+	{ 0xa0, 270, -1 },	/* SSI12 */
+	{ 0xa1, 271, -1 },	/* SSI13 */
+	{ 0xa2, 272, -1 },	/* SSI14 */
+	{ 0xa3, 273, -1 },	/* SSI15 */
+	{ 0xa4, 274, -1 },	/* SSI16 */
+	{ 0xa5, 275, -1 },	/* SSI17 */
+	{ 0xa6, 276, -1 },	/* SSI18 */
+	{ 0xa7, 277, -1 },	/* SSI19 */
+	{ 0xa8, 278, -1 },	/* SCU0 */
+	{ 0xa9, 279, -1 },	/* SRC00 */
+	{ 0xaa, 280, -1 },	/* SRC01 */
+	{ 0xab, 281, -1 },	/* SRC02 */
+	{ 0xac, 282, -1 },	/* SRC03 */
+	{ 0xad, 283, -1 },	/* SRC04 */
+	{ 0xae, 284, -1 },	/* SRC05 */
+	{ 0xaf, 285, -1 },	/* SRC06 */
+	{ 0xb0, 286, -1 },	/* SRC07 */
+	{ 0xb1, 287, -1 },	/* SRC08 */
+	{ 0xb2, 288, -1 },	/* SRC09 */
+	{ 0xb3, 289, -1 },	/* SCU00 */
+	{ 0xb4, 290, -1 },	/* SCU01 */
+	{ 0xb5, 291, -1 },	/* DVC00 */
+	{ 0xb6, 292, -1 },	/* DVC01 */
+	{ 0xb7, 293, -1 },	/* SCU1 */
+	{ 0xb8, 294, -1 },	/* SRC10 */
+	{ 0xb9, 295, -1 },	/* SRC11 */
+	{ 0xba, 296, -1 },	/* SRC12 */
+	{ 0xbb, 297, -1 },	/* SRC13 */
+	{ 0xbc, 298, -1 },	/* SRC14 */
+	{ 0xbd, 299, -1 },	/* SRC15 */
+	{ 0xbe, 300, -1 },	/* SRC16 */
+	{ 0xbf, 301, -1 },	/* SRC17 */
+	{ 0xc0, 302, -1 },	/* SRC18 */
+	{ 0xc1, 303, -1 },	/* SRC19 */
+	{ 0xc2, 304, -1 },	/* SCU10 */
+	{ 0xc3, 305, -1 },	/* SCU11 */
+	{ 0xc4, 306, -1 },	/* DVC10 */
+	{ 0xc5, 307, -1 },	/* DVC11 */
+	{ 0xc6, 308, -1 },	/* APD00 */
+	{ 0xc7, 309, -1 },	/* APD01 */
+	{ 0xc8, 310, -1 },	/* APD10 */
+	{ 0xc9, 311, -1 },	/* APD11 */
+	{ 0xca, 312, -1 },	/* APD02 */
+	{ 0xcb, 313, -1 },	/* APD12 */
 	{ -1 }
 };
 
@@ -873,127 +889,127 @@ static const struct mdlc_info r8a78000_mdlc_fw_4_28_0[] = {
 };
 
 static const struct mod_map_in r8a78000_mdlc_pere_mod_fw_4_31_0[] = {
-	{ 0x30, 193 },	/* PERE_GPIODM0 */
-	// No CLOCK_ATTRIBUTES { 0x31, 194 },	/* PERE_GPIODM1 */
-	// No CLOCK_ATTRIBUTES { 0x32, 195 },	/* PERE_GPIODM2 */
-	// No CLOCK_ATTRIBUTES { 0x33, 196 },	/* PERE_GPIODM3 */
-	{ 0x40, 197 },	/* RPC */
-	{ 0x60, 198 },	/* UFS0 */
-	{ 0x61, 199 },	/* UFS1 */
-	{ 0x70, 200 },	/* SDHI0 */
+	{ 0x30, 193, -1 },	/* PERE_GPIODM0 */
+	// No CLOCK_ATTRIBUTES { 0x31, 194, -1 },	/* PERE_GPIODM1 */
+	// No CLOCK_ATTRIBUTES { 0x32, 195, -1 },	/* PERE_GPIODM2 */
+	// No CLOCK_ATTRIBUTES { 0x33, 196, -1 },	/* PERE_GPIODM3 */
+	{ 0x40, 197, -1 },	/* RPC */
+	{ 0x60, 198, -1 },	/* UFS0 */
+	{ 0x61, 199, -1 },	/* UFS1 */
+	{ 0x70, 200, -1 },	/* SDHI0 */
 	{ -1 }
 };
 
 static const struct mod_map_in r8a78000_mdlc_perw_mod_fw_4_31_0[] = {
-	{ 0x30, 201 },	/* PERW_GPIODM0 */
-	// No CLOCK_ATTRIBUTES { 0x31, 202 },	/* PERW_GPIODM1 */
-	// No CLOCK_ATTRIBUTES { 0x32, 203 },	/* PERW_GPIODM2 */
-	// No CLOCK_ATTRIBUTES { 0x33, 204 },	/* PERW_GPIODM3 */
-	{ 0x40, 205 },	/* SCIF0 */
-	{ 0x41, 206 },	/* SCIF1 */
-	{ 0x42, 207 },	/* SCIF3 */
-	{ 0x43, 208 },	/* SCIF4 */
-	{ 0x44, 209 },	/* I2C1 */
-	{ 0x45, 210 },	/* I2C2 */
-	{ 0x46, 211 },	/* I2C3 */
-	{ 0x47, 212 },	/* I2C4 */
-	{ 0x48, 213 },	/* I2C5 */
-	{ 0x49, 214 },	/* I2C6 */
-	{ 0x4a, 215 },	/* I2C7 */
-	{ 0x4b, 216 },	/* I2C8 */
-	{ 0x4c, 217 },	/* I3C0 */
-	{ 0x4d, 218 },	/* I3C1 */
-	{ 0x4e, 219 },	/* I3C2 */
-	{ 0x4f, 220 },	/* MSI4 */
-	{ 0x50, 221 },	/* MSI5 */
-	{ 0x51, 222 },	/* MSI6 */
-	{ 0x52, 223 },	/* MSI7 */
-	{ 0x54, 224 },	/* HSCIF0 */
-	{ 0x55, 225 },	/* HSCIF1 */
-	{ 0x56, 226 },	/* HSCIF2 */
-	{ 0x57, 227 },	/* HSCIF3 */
-	{ 0x58, 228 },	/* DRI00 */
-	{ 0x59, 229 },	/* DRI01 */
-	{ 0x5a, 230 },	/* DRI10 */
-	{ 0x5b, 231 },	/* DRI11 */
-	{ 0x5c, 232 },	/* DRI20 */
-	{ 0x5d, 233 },	/* DRI21 */
-	{ 0x5e, 234 },	/* DRI30 */
-	{ 0x5f, 235 },	/* DRI31 */
-	{ 0x60, 236 },	/* DRI40 */
-	{ 0x61, 237 },	/* DRI41 */
-	{ 0x62, 238 },	/* DRI50 */
-	{ 0x63, 239 },	/* DRI51 */
-	{ 0x64, 240 },	/* DRI60 */
-	{ 0x65, 241 },	/* DRI61 */
-	{ 0x66, 242 },	/* DRI70 */
-	{ 0x67, 243 },	/* DRI71 */
-	{ 0x70, 244 },	/* PWM0 */
-	{ 0x72, 245 },	/* TMU1 */
-	{ 0x73, 246 },	/* TMU2 */
-	{ 0x74, 247 },	/* TMU3 */
-	{ 0x75, 248 },	/* TMU4 */
-	{ 0x76, 249 },	/* TPU0 */
-	{ 0x90, 250 },	/* ADG0 */
-	{ 0x91, 251 },	/* ADG1 */
-	{ 0x92, 252 },	/* SSI0 */
-	{ 0x93, 253 },	/* SSI00 */
-	{ 0x94, 254 },	/* SSI01 */
-	{ 0x95, 255 },	/* SSI02 */
-	{ 0x96, 256 },	/* SSI03 */
-	{ 0x97, 257 },	/* SSI04 */
-	{ 0x98, 258 },	/* SSI05 */
-	{ 0x99, 259 },	/* SSI06 */
-	{ 0x9a, 260 },	/* SSI07 */
-	{ 0x9b, 261 },	/* SSI08 */
-	{ 0x9c, 262 },	/* SSI09 */
-	{ 0x9d, 263 },	/* SSI1 */
-	{ 0x9e, 264 },	/* SSI10 */
-	{ 0x9f, 265 },	/* SSI11 */
-	{ 0xa0, 266 },	/* SSI12 */
-	{ 0xa1, 267 },	/* SSI13 */
-	{ 0xa2, 268 },	/* SSI14 */
-	{ 0xa3, 269 },	/* SSI15 */
-	{ 0xa4, 270 },	/* SSI16 */
-	{ 0xa5, 271 },	/* SSI17 */
-	{ 0xa6, 272 },	/* SSI18 */
-	{ 0xa7, 273 },	/* SSI19 */
-	{ 0xa8, 274 },	/* SCU0 */
-	{ 0xa9, 275 },	/* SRC00 */
-	{ 0xaa, 276 },	/* SRC01 */
-	{ 0xab, 277 },	/* SRC02 */
-	{ 0xac, 278 },	/* SRC03 */
-	{ 0xad, 279 },	/* SRC04 */
-	{ 0xae, 280 },	/* SRC05 */
-	{ 0xaf, 281 },	/* SRC06 */
-	{ 0xb0, 282 },	/* SRC07 */
-	{ 0xb1, 283 },	/* SRC08 */
-	{ 0xb2, 284 },	/* SRC09 */
-	{ 0xb3, 285 },	/* SCU00 */
-	{ 0xb4, 286 },	/* SCU01 */
-	{ 0xb5, 287 },	/* DVC00 */
-	{ 0xb6, 288 },	/* DVC01 */
-	{ 0xb7, 289 },	/* SCU1 */
-	{ 0xb8, 290 },	/* SRC10 */
-	{ 0xb9, 291 },	/* SRC11 */
-	{ 0xba, 292 },	/* SRC12 */
-	{ 0xbb, 293 },	/* SRC13 */
-	{ 0xbc, 294 },	/* SRC14 */
-	{ 0xbd, 295 },	/* SRC15 */
-	{ 0xbe, 296 },	/* SRC16 */
-	{ 0xbf, 297 },	/* SRC17 */
-	{ 0xc0, 298 },	/* SRC18 */
-	{ 0xc1, 299 },	/* SRC19 */
-	{ 0xc2, 300 },	/* SCU10 */
-	{ 0xc3, 301 },	/* SCU11 */
-	{ 0xc4, 302 },	/* DVC10 */
-	{ 0xc5, 303 },	/* DVC11 */
-	{ 0xc6, 304 },	/* APD00 */
-	{ 0xc7, 305 },	/* APD01 */
-	{ 0xc8, 306 },	/* APD10 */
-	{ 0xc9, 307 },	/* APD11 */
-	{ 0xca, 308 },	/* APD02 */
-	{ 0xcb, 309 },	/* APD12 */
+	{ 0x30, 201, -1 },	/* PERW_GPIODM0 */
+	// No CLOCK_ATTRIBUTES { 0x31, 202, -1 },	/* PERW_GPIODM1 */
+	// No CLOCK_ATTRIBUTES { 0x32, 203, -1 },	/* PERW_GPIODM2 */
+	// No CLOCK_ATTRIBUTES { 0x33, 204, -1 },	/* PERW_GPIODM3 */
+	{ 0x40, 205, -1 },	/* SCIF0 */
+	{ 0x41, 206, -1 },	/* SCIF1 */
+	{ 0x42, 207, -1 },	/* SCIF3 */
+	{ 0x43, 208, -1 },	/* SCIF4 */
+	{ 0x44, 209, -1 },	/* I2C1 */
+	{ 0x45, 210, -1 },	/* I2C2 */
+	{ 0x46, 211, -1 },	/* I2C3 */
+	{ 0x47, 212, -1 },	/* I2C4 */
+	{ 0x48, 213, -1 },	/* I2C5 */
+	{ 0x49, 214, -1 },	/* I2C6 */
+	{ 0x4a, 215, -1 },	/* I2C7 */
+	{ 0x4b, 216, -1 },	/* I2C8 */
+	{ 0x4c, 217, -1 },	/* I3C0 */
+	{ 0x4d, 218, -1 },	/* I3C1 */
+	{ 0x4e, 219, -1 },	/* I3C2 */
+	{ 0x4f, 220, -1 },	/* MSI4 */
+	{ 0x50, 221, -1 },	/* MSI5 */
+	{ 0x51, 222, -1 },	/* MSI6 */
+	{ 0x52, 223, -1 },	/* MSI7 */
+	{ 0x54, 224, -1 },	/* HSCIF0 */
+	{ 0x55, 225, -1 },	/* HSCIF1 */
+	{ 0x56, 226, -1 },	/* HSCIF2 */
+	{ 0x57, 227, -1 },	/* HSCIF3 */
+	{ 0x58, 228, -1 },	/* DRI00 */
+	{ 0x59, 229, -1 },	/* DRI01 */
+	{ 0x5a, 230, -1 },	/* DRI10 */
+	{ 0x5b, 231, -1 },	/* DRI11 */
+	{ 0x5c, 232, -1 },	/* DRI20 */
+	{ 0x5d, 233, -1 },	/* DRI21 */
+	{ 0x5e, 234, -1 },	/* DRI30 */
+	{ 0x5f, 235, -1 },	/* DRI31 */
+	{ 0x60, 236, -1 },	/* DRI40 */
+	{ 0x61, 237, -1 },	/* DRI41 */
+	{ 0x62, 238, -1 },	/* DRI50 */
+	{ 0x63, 239, -1 },	/* DRI51 */
+	{ 0x64, 240, -1 },	/* DRI60 */
+	{ 0x65, 241, -1 },	/* DRI61 */
+	{ 0x66, 242, -1 },	/* DRI70 */
+	{ 0x67, 243, -1 },	/* DRI71 */
+	{ 0x70, 244, -1 },	/* PWM0 */
+	{ 0x72, 245, -1 },	/* TMU1 */
+	{ 0x73, 246, -1 },	/* TMU2 */
+	{ 0x74, 247, -1 },	/* TMU3 */
+	{ 0x75, 248, -1 },	/* TMU4 */
+	{ 0x76, 249, -1 },	/* TPU0 */
+	{ 0x90, 250, -1 },	/* ADG0 */
+	{ 0x91, 251, -1 },	/* ADG1 */
+	{ 0x92, 252, -1 },	/* SSI0 */
+	{ 0x93, 253, -1 },	/* SSI00 */
+	{ 0x94, 254, -1 },	/* SSI01 */
+	{ 0x95, 255, -1 },	/* SSI02 */
+	{ 0x96, 256, -1 },	/* SSI03 */
+	{ 0x97, 257, -1 },	/* SSI04 */
+	{ 0x98, 258, -1 },	/* SSI05 */
+	{ 0x99, 259, -1 },	/* SSI06 */
+	{ 0x9a, 260, -1 },	/* SSI07 */
+	{ 0x9b, 261, -1 },	/* SSI08 */
+	{ 0x9c, 262, -1 },	/* SSI09 */
+	{ 0x9d, 263, -1 },	/* SSI1 */
+	{ 0x9e, 264, -1 },	/* SSI10 */
+	{ 0x9f, 265, -1 },	/* SSI11 */
+	{ 0xa0, 266, -1 },	/* SSI12 */
+	{ 0xa1, 267, -1 },	/* SSI13 */
+	{ 0xa2, 268, -1 },	/* SSI14 */
+	{ 0xa3, 269, -1 },	/* SSI15 */
+	{ 0xa4, 270, -1 },	/* SSI16 */
+	{ 0xa5, 271, -1 },	/* SSI17 */
+	{ 0xa6, 272, -1 },	/* SSI18 */
+	{ 0xa7, 273, -1 },	/* SSI19 */
+	{ 0xa8, 274, -1 },	/* SCU0 */
+	{ 0xa9, 275, -1 },	/* SRC00 */
+	{ 0xaa, 276, -1 },	/* SRC01 */
+	{ 0xab, 277, -1 },	/* SRC02 */
+	{ 0xac, 278, -1 },	/* SRC03 */
+	{ 0xad, 279, -1 },	/* SRC04 */
+	{ 0xae, 280, -1 },	/* SRC05 */
+	{ 0xaf, 281, -1 },	/* SRC06 */
+	{ 0xb0, 282, -1 },	/* SRC07 */
+	{ 0xb1, 283, -1 },	/* SRC08 */
+	{ 0xb2, 284, -1 },	/* SRC09 */
+	{ 0xb3, 285, -1 },	/* SCU00 */
+	{ 0xb4, 286, -1 },	/* SCU01 */
+	{ 0xb5, 287, -1 },	/* DVC00 */
+	{ 0xb6, 288, -1 },	/* DVC01 */
+	{ 0xb7, 289, -1 },	/* SCU1 */
+	{ 0xb8, 290, -1 },	/* SRC10 */
+	{ 0xb9, 291, -1 },	/* SRC11 */
+	{ 0xba, 292, -1 },	/* SRC12 */
+	{ 0xbb, 293, -1 },	/* SRC13 */
+	{ 0xbc, 294, -1 },	/* SRC14 */
+	{ 0xbd, 295, -1 },	/* SRC15 */
+	{ 0xbe, 296, -1 },	/* SRC16 */
+	{ 0xbf, 297, -1 },	/* SRC17 */
+	{ 0xc0, 298, -1 },	/* SRC18 */
+	{ 0xc1, 299, -1 },	/* SRC19 */
+	{ 0xc2, 300, -1 },	/* SCU10 */
+	{ 0xc3, 301, -1 },	/* SCU11 */
+	{ 0xc4, 302, -1 },	/* DVC10 */
+	{ 0xc5, 303, -1 },	/* DVC11 */
+	{ 0xc6, 304, -1 },	/* APD00 */
+	{ 0xc7, 305, -1 },	/* APD01 */
+	{ 0xc8, 306, -1 },	/* APD10 */
+	{ 0xc9, 307, -1 },	/* APD11 */
+	{ 0xca, 308, -1 },	/* APD02 */
+	{ 0xcb, 309, -1 },	/* APD12 */
 	{ -1 }
 };
 
