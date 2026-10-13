@@ -21,6 +21,7 @@
 #include <linux/list.h>
 #include <linux/module.h>
 #include <linux/of.h>
+#include <linux/of_irq.h>
 #include <linux/platform_device.h>
 #include <linux/pm_runtime.h>
 #include <linux/reset.h>
@@ -196,6 +197,22 @@
 
 #define NDBSTLV0		0x398
 #define  NDBSTLV0_RDBLV(x)	FIELD_GET(GENMASK(15, 8), x)
+
+#define INTCLR			0x400
+#define INTCLR_INTRESP		BIT(0)
+#define INTCLR_INTCMD		BIT(1)
+#define INTCLR_INTIBI		BIT(2)
+#define INTCLR_INTRX0		BIT(3)
+#define INTCLR_INTTX0		BIT(4)
+#define INTCLR_INTRCV		BIT(5)
+#define INTCLR_INTHRESP		BIT(6)
+#define INTCLR_INTHCMD		BIT(7)
+#define INTCLR_INTHRX		BIT(8)
+#define INTCLR_INTHTX		BIT(9)
+#define INTCLR_ALL		(INTCLR_INTRESP | INTCLR_INTCMD | INTCLR_INTIBI |\
+				INTCLR_INTRX0 | INTCLR_INTTX0 | INTCLR_INTRCV |\
+				INTCLR_INTHRESP | INTCLR_INTHCMD | INTCLR_INTHRX |\
+				INTCLR_INTHTX)
 
 #define RENESAS_I3C_MAX_DEVS	8
 #define I2C_INIT_MSG		-1
@@ -1427,6 +1444,49 @@ static irqreturn_t renesas_i3c_start_isr(int irq, void *data)
 	return IRQ_HANDLED;
 }
 
+static irqreturn_t renesas_i3c_main_isr(int irq, void *data)
+{
+	struct renesas_i3c *i3c = data;
+
+	u32 ntst, bst;
+	u32 ntst_flt, bst_flt;
+	irqreturn_t ret = IRQ_NONE;
+
+	ntst = renesas_readl(i3c->regs, NTST);
+	ntst_flt = ntst & renesas_readl(i3c->regs, NTIE);
+	bst = renesas_readl(i3c->regs, BST);
+	bst_flt = bst & renesas_readl(i3c->regs, BIE);
+
+	if (ntst_flt & NTST_TDBEF0) {
+		ret = renesas_i3c_tx_isr(irq, data);
+		renesas_set_bit(i3c->regs, INTCLR, INTCLR_INTTX0);
+	}
+	if (ntst_flt & NTST_RDBFF0) {
+		ret = renesas_i3c_rx_isr(irq, data);
+		renesas_set_bit(i3c->regs, INTCLR, INTCLR_INTRX0);
+	}
+	if (ntst_flt & NTST_RSPQFF) {
+		ret = renesas_i3c_resp_isr(irq, data);
+		renesas_set_bit(i3c->regs, INTCLR, INTCLR_INTRESP);
+	} else {
+		renesas_writel(i3c->regs, INTCLR, INTCLR_ALL);
+		ret = IRQ_HANDLED;
+	}
+
+	if (bst_flt & BST_STCNDDF) {
+		ret = renesas_i3c_start_isr(irq, data);
+	} else if (bst_flt & BST_SPCNDDF) {
+		ret = renesas_i3c_stop_isr(irq, data);
+	} else if (bst_flt & BST_TENDF || bst_flt & BST_NACKDF) {
+		ret = renesas_i3c_tend_isr(irq, data);
+	} else {
+		renesas_clear_bit(i3c->regs, BST, bst);
+		ret = IRQ_HANDLED;
+	}
+
+	return ret;
+}
+
 static const struct i3c_master_controller_ops renesas_i3c_ops = {
 	.bus_init = renesas_i3c_bus_init,
 	.bus_cleanup = renesas_i3c_bus_cleanup,
@@ -1442,7 +1502,7 @@ static const struct i3c_master_controller_ops renesas_i3c_ops = {
 	.i2c_xfers = renesas_i3c_i2c_xfers,
 };
 
-static const struct renesas_i3c_irq_desc renesas_i3c_irqs[] = {
+static const struct renesas_i3c_irq_desc renesas_i3c_multiple_irqs[] = {
 	{ .name = "resp", .isr = renesas_i3c_resp_isr, .desc = "i3c-resp" },
 	{ .name = "rx", .isr = renesas_i3c_rx_isr, .desc = "i3c-rx" },
 	{ .name = "tx", .isr = renesas_i3c_tx_isr, .desc = "i3c-tx" },
@@ -1450,12 +1510,19 @@ static const struct renesas_i3c_irq_desc renesas_i3c_irqs[] = {
 	{ .name = "sp", .isr = renesas_i3c_stop_isr, .desc = "i3c-stop" },
 	{ .name = "tend", .isr = renesas_i3c_tend_isr, .desc = "i3c-tend" },
 	{ .name = "nack", .isr = renesas_i3c_tend_isr, .desc = "i3c-nack" },
+	{ }
+};
+
+static const struct renesas_i3c_irq_desc renesas_i3c_single_irq[] = {
+	{ .name = "main", .isr = renesas_i3c_main_isr, .desc = "i3c-main" },
+	{ }
 };
 
 static int renesas_i3c_probe(struct platform_device *pdev)
 {
+	const struct renesas_i3c_irq_desc *irq_desc;
 	struct renesas_i3c *i3c;
-	int ret, i;
+	int ret, i, num_irqs;
 
 	i3c = devm_kzalloc(&pdev->dev, sizeof(*i3c), GFP_KERNEL);
 	if (!i3c)
@@ -1493,20 +1560,21 @@ static int renesas_i3c_probe(struct platform_device *pdev)
 	if (ret)
 		return ret;
 
-	for (i = 0; i < ARRAY_SIZE(renesas_i3c_irqs); i++) {
-		const char *irqname;
+	num_irqs = of_irq_count(pdev->dev.of_node);
+	irq_desc = num_irqs == 1 ? renesas_i3c_single_irq : renesas_i3c_multiple_irqs;
 
-		ret = platform_get_irq_byname(pdev, renesas_i3c_irqs[i].name);
+	for (i = 0; irq_desc[i].name; i++) {
+		const char *irqname;
+		ret = platform_get_irq_byname(pdev, irq_desc[i].name);
 		if (ret < 0)
 			return ret;
 
 		irqname = devm_kasprintf(&pdev->dev, GFP_KERNEL, "%s:%s", dev_name(&pdev->dev),
-					 renesas_i3c_irqs[i].desc);
+					 irq_desc[i].desc);
 		if (!irqname)
 			return -ENOMEM;
 
-		ret = devm_request_irq(&pdev->dev, ret, renesas_i3c_irqs[i].isr,
-				       0, irqname, i3c);
+		ret = devm_request_irq(&pdev->dev, ret, irq_desc[i].isr, 0, irqname, i3c);
 		if (ret)
 			return ret;
 	}
@@ -1613,6 +1681,7 @@ static const struct dev_pm_ops renesas_i3c_pm_ops = {
 };
 
 static const struct of_device_id renesas_i3c_of_ids[] = {
+	{ .compatible = "renesas,rcar-gen5-i3c" },
 	{ .compatible = "renesas,r9a08g045-i3c" },
 	{ .compatible = "renesas,r9a09g047-i3c" },
 	{ /* sentinel */ },
