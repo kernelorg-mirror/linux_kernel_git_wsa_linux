@@ -1099,6 +1099,52 @@
 			status = "disabled";
 		};
 
+		i3c0: i3c-master@c0788000 {
+			compatible = "renesas,r8a78000-i3c", "renesas,rcar-gen5-i3c";
+			reg = <0 0xc0788000 0 0x1000>;
+			//FIXME: docs say LEVEL_LOW?
+			interrupts = <GIC_ESPI 4 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "main";
+			//FIXME: SG0 instead of SGA
+			clocks = <&cpg R8A78000_CPG_SGASYNCD8_PERW_BUS>,
+			//FIXME: dedicated I3C clock
+				 <&cpg R8A78000_CPG_SGASYNCD8_PERW_BUS>;
+			clock-names = "pclk", "tclk";
+			//resets = <&scmi_reset X5H_RESET_DOMAIN_ID_I3C0>;
+			#address-cells = <3>;
+			#size-cells = <0>;
+			status = "disabled";
+		};
+
+		//FIXME clocks, resets, irq-level
+		i3c1: i3c-master@c0789000 {
+			compatible = "renesas,r8a78000-i3c", "renesas,rcar-gen5-i3c";
+			reg = <0 0xc0789000 0 0x1000>;
+			interrupts = <GIC_ESPI 5 IRQ_TYPE_LEVEL_LOW>;
+			interrupt-names = "main";
+			clocks = <&cpg R8A78000_CPG_SGASYNCD8_PERW_BUS>,
+				 <&cpg R8A78000_CPG_SGASYNCD8_PERW_BUS>;
+			clock-names = "pclk", "tclk";
+			//resets = <&scmi_reset X5H_RESET_DOMAIN_ID_I3C1>;
+			#address-cells = <3>;
+			#size-cells = <0>;
+			status = "disabled";
+		};
+
+		i3c2: i3c-master@c078a000 {
+			compatible = "renesas,r8a78000-i3c", "renesas,rcar-gen5-i3c";
+			reg = <0 0xc078a000 0 0x1000>;
+			interrupts = <GIC_ESPI 6 IRQ_TYPE_LEVEL_LOW>;
+			interrupt-names = "main";
+			clocks = <&cpg R8A78000_CPG_SGASYNCD8_PERW_BUS>,
+				 <&cpg R8A78000_CPG_SGASYNCD8_PERW_BUS>;
+			clock-names = "pclk", "tclk";
+			//resets = <&scmi_reset X5H_RESET_DOMAIN_ID_I3C2>;
+			#address-cells = <3>;
+			#size-cells = <0>;
+			status = "disabled";
+		};
+
 		stcm_transport: sram@c1060000 {
 			compatible = "mmio-sram";
 			reg = <0x0 0xc1060000 0x0 0x1c00>;
