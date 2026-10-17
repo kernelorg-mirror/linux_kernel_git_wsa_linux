@@ -5,6 +5,7 @@
  * Copyright (C) 2026 Glider bv
  */
 
+#define DEBUG
 #include <linux/cleanup.h>
 #include <linux/clk.h>
 #include <linux/clk-provider.h>
