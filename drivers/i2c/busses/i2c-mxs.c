@@ -283,8 +283,7 @@ static int mxs_i2c_dma_setup_xfer(struct i2c_adapter *adap,
 	 * The last descriptor must have this callback,
 	 * to finish the DMA transaction.
 	 */
-	desc->callback = mxs_i2c_dma_irq_callback;
-	desc->callback_param = i2c;
+	dmaengine_desc_set_callback(desc, mxs_i2c_dma_irq_callback, NULL, i2c);
 
 	/* Start the transfer. */
 	dmaengine_submit(desc);

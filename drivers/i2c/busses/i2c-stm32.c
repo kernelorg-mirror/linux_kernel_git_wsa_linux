@@ -134,8 +134,7 @@ int stm32_i2c_prep_dma_xfer(struct device *dev, struct stm32_i2c_dma *dma,
 
 	reinit_completion(&dma->dma_complete);
 
-	txdesc->callback = callback;
-	txdesc->callback_param = dma_async_param;
+	dmaengine_desc_set_callback(txdesc, callback, NULL, dma_async_param);
 	ret = dma_submit_error(dmaengine_submit(txdesc));
 	if (ret < 0) {
 		dev_err(dev, "DMA submit failed\n");

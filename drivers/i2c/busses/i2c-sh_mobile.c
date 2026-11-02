@@ -546,8 +546,7 @@ static void sh_mobile_i2c_xfer_dma(struct sh_mobile_i2c_data *pd)
 		return;
 	}
 
-	txdesc->callback = sh_mobile_i2c_dma_callback;
-	txdesc->callback_param = pd;
+	dmaengine_desc_set_callback(txdesc, sh_mobile_i2c_dma_callback, NULL, pd);
 
 	cookie = dmaengine_submit(txdesc);
 	if (dma_submit_error(cookie)) {

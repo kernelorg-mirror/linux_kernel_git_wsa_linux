@@ -784,8 +784,7 @@ static int qup_i2c_bam_schedule_desc(struct qup_i2c_dev *qup)
 	}
 
 	if (!rx_cnt) {
-		txd->callback = qup_i2c_bam_cb;
-		txd->callback_param = qup;
+		dmaengine_desc_set_callback(txd, qup_i2c_bam_cb, NULL, qup);
 	}
 
 	cookie_tx = dmaengine_submit(txd);
@@ -809,8 +808,7 @@ static int qup_i2c_bam_schedule_desc(struct qup_i2c_dev *qup)
 			goto desc_err;
 		}
 
-		rxd->callback = qup_i2c_bam_cb;
-		rxd->callback_param = qup;
+		dmaengine_desc_set_callback(rxd, qup_i2c_bam_cb, NULL, qup);
 		cookie_rx = dmaengine_submit(rxd);
 		if (dma_submit_error(cookie_rx)) {
 			ret = -EINVAL;

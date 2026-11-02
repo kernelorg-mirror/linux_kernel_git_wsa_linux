@@ -531,8 +531,7 @@ static bool rcar_i2c_dma(struct rcar_i2c_priv *priv)
 		return false;
 	}
 
-	txdesc->callback = rcar_i2c_dma_callback;
-	txdesc->callback_param = priv;
+	dmaengine_desc_set_callback(txdesc, rcar_i2c_dma_callback, NULL, priv);
 
 	cookie = dmaengine_submit(txdesc);
 	if (dma_submit_error(cookie)) {

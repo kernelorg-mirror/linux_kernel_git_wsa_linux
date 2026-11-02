@@ -887,8 +887,7 @@ static int lpi2c_dma_submit(struct lpi2c_imx_struct *lpi2c_imx)
 	}
 
 	reinit_completion(&lpi2c_imx->complete);
-	desc->callback = lpi2c_dma_callback;
-	desc->callback_param = lpi2c_imx;
+	dmaengine_desc_set_callback(desc, lpi2c_dma_callback, NULL, lpi2c_imx);
 
 	cookie = dmaengine_submit(desc);
 	if (dma_submit_error(cookie)) {

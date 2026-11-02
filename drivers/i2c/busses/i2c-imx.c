@@ -498,8 +498,7 @@ static int i2c_imx_dma_xfer(struct imx_i2c_struct *i2c_imx,
 	}
 
 	reinit_completion(&dma->cmd_complete);
-	txdesc->callback = i2c_imx_dma_callback;
-	txdesc->callback_param = i2c_imx;
+	dmaengine_desc_set_callback(txdesc, i2c_imx_dma_callback, NULL, i2c_imx);
 	if (dma_submit_error(dmaengine_submit(txdesc))) {
 		dev_err(dev, "DMA submit failed\n");
 		goto err_submit;

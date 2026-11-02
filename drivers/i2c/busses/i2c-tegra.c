@@ -657,8 +657,7 @@ static int tegra_i2c_dma_submit(struct tegra_i2c_dev *i2c_dev, size_t len)
 		return -EINVAL;
 	}
 
-	dma_desc->callback = tegra_i2c_dma_complete;
-	dma_desc->callback_param = i2c_dev;
+	dmaengine_desc_set_callback(dma_desc, tegra_i2c_dma_complete, NULL, i2c_dev);
 
 	dmaengine_submit(dma_desc);
 	dma_async_issue_pending(i2c_dev->dma_chan);

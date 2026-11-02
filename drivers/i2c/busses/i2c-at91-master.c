@@ -256,8 +256,7 @@ static void at91_twi_write_data_dma(struct at91_twi_dev *dev)
 		goto error;
 	}
 
-	txdesc->callback = at91_twi_write_data_dma_callback;
-	txdesc->callback_param = dev;
+	dmaengine_desc_set_callback(txdesc, at91_twi_write_data_dma_callback, NULL, dev);
 
 	dma->xfer_in_progress = true;
 	dmaengine_submit(txdesc);
@@ -374,8 +373,7 @@ static void at91_twi_read_data_dma(struct at91_twi_dev *dev)
 		goto error;
 	}
 
-	rxdesc->callback = at91_twi_read_data_dma_callback;
-	rxdesc->callback_param = dev;
+	dmaengine_desc_set_callback(rxdesc, at91_twi_read_data_dma_callback, NULL, dev);
 
 	dma->xfer_in_progress = true;
 	dmaengine_submit(rxdesc);
