@@ -34,13 +34,13 @@ struct power_map {
 
 struct mod_map_in {
 	int hw_id;		/* Hardware module ID or -1 sentinel */
-	u32 fw_id;		/* SCMI clock and reset IDs are identical */
+	s32 fw_id;		/* SCMI clock ID (reset IDs are identical) or -1 */
 	s32 fw_fck_parent;	/* SCMI functional clock parent ID or -1 */
 };
 
 struct mod_map {
 	int hw_id;		/* Hardware module ID or -1 sentinel */
-	u32 fw_id;		/* SCMI clock and reset IDs are identical */
+	s32 fw_id;		/* SCMI clock ID (reset IDs are identical) or -1 */
 	s32 fw_fck_parent;	/* SCMI functional clock parent ID or -1 */
 	struct reset_control *rstc;
 };
@@ -237,7 +237,7 @@ static int r8a78000_mdlc_attach_dev(struct generic_pm_domain *domain,
 {
 	struct device_node *np = dev->of_node;
 	struct r8a78000_mdlc_priv *priv;
-	struct clk *clk, *parent = NULL;
+	struct clk *clk = NULL, *parent = NULL;
 	struct of_phandle_args pd_spec;
 	const struct mod_map *map;
 	unsigned int id;
@@ -279,9 +279,11 @@ static int r8a78000_mdlc_attach_dev(struct generic_pm_domain *domain,
 	dev_dbg(dev, "Mapping HW module 0x%x to SCMI clock %u fck parent %d\n",
 		id, map->fw_id, map->fw_fck_parent);
 
-	clk = scmi_get_clk(dev, priv->scmi_clk_np, map->fw_id);
-	if (IS_ERR(clk))
-		return PTR_ERR(clk);
+	if (map->fw_id >= 0) {
+		clk = scmi_get_clk(dev, priv->scmi_clk_np, map->fw_id);
+		if (IS_ERR(clk))
+			return PTR_ERR(clk);
+	}
 
 	if (!clk) {
 		/* Ignore missing SCMI module clocks */
@@ -406,7 +408,7 @@ static const struct mod_map *fill_mod_map(struct r8a78000_mdlc_priv *priv,
 		map[i].fw_id = map_in[i].fw_id;
 		map[i].fw_fck_parent = map_in[i].fw_fck_parent;
 
-		if (!scmi_reset_fwnode)
+		if (!scmi_reset_fwnode || map[i].fw_id < 0)
 			continue;
 
 		scmi_spec.fwnode = scmi_reset_fwnode;
@@ -683,6 +685,9 @@ static const struct mod_map_in r8a78000_mdlc_perw_mod_fw[] = {
 	{ 0x57, 227, -1 },	/* HSCIF3 */
 	{ 0x70, 244, -1 },	/* PWM0 */
 	{ 0x76, 249, -1 },	/* TPU0 */
+	{ 0x80, -1, -1 },	/* SYS-DMAC PERW0 */
+	{ 0x81, -1, -1 },	/* SYS-DMAC PERW1 */
+	{ 0x82, -1, -1 },	/* SYS-DMAC PERW2 */
 	{ -1 }
 };
 
