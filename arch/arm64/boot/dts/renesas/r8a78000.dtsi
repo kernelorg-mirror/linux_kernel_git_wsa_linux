@@ -689,6 +689,12 @@
 		/* clock-frequency must be set on board */
 	};
 
+	lsiosc: lsiosc-clk {
+		compatible = "fixed-clock";
+		clock-frequency = <240000>;
+		#clock-cells = <0>;
+	};
+
 	psci {
 		compatible = "arm,psci-1.0";
 		method = "smc";
@@ -1572,6 +1578,21 @@
 			#power-domain-cells = <2>;
 			#reset-cells = <1>;
 			bootph-all;
+		};
+
+		rtca: rtc@c1394000 {
+			compatible = "renesas,r8a78000-rtc";
+			reg = <0 0xc1394000 0 0x70>;
+			/*
+			 * If extalr is desired instead of lsiosc, FW needs to
+			 * update second phandle and the clock controller
+			 * (CKS_ARTCAC)
+			 */
+			clocks = <&cpg R8A78000_CPG_SCPBUSD6_SCP_MAIN>, <&lsiosc>;
+			clock-names = "hclk", "xtal";
+			power-domains = <&mdlc_aon R8A78000_MDLC_PD_AON 0x11>;
+			resets = <&mdlc_aon 0x11>;
+			status = "disabled";
 		};
 
 		mdlc_cmnn: system-controller@ca410000 {
