@@ -730,16 +730,17 @@ static int nmk_i2c_xfer_one(struct nmk_i2c_dev *priv, u16 flags)
 static int nmk_i2c_xfer(struct i2c_adapter *i2c_adap,
 		struct i2c_msg msgs[], int num_msgs)
 {
-	int status = 0;
-	int i;
+	int status, i;
 	struct nmk_i2c_dev *priv = i2c_get_adapdata(i2c_adap);
 
-	pm_runtime_get_sync(&priv->adev->dev);
+	status = pm_runtime_get_sync(&priv->adev->dev);
+	if (status < 0)
+		return status;
 
 	/* setup the i2c controller */
 	setup_i2c_controller(priv);
 
-	for (i = 0; i < num_msgs; i++) {
+	for (i = 0, status = 0; i < num_msgs; i++) {
 		priv->cli.slave_adr	= msgs[i].addr;
 		priv->cli.buffer		= msgs[i].buf;
 		priv->cli.count		= msgs[i].len;
