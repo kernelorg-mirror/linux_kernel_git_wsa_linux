@@ -505,6 +505,11 @@ static bool nmk_i2c_wait_xfer_done(struct nmk_i2c_dev *priv)
 		wait_event_timeout(priv->xfer_wq, priv->xfer_done, timeout);
 	}
 
+	/* Disable interrupts and wait for pending interrupts */
+	disable_all_interrupts(priv);
+	clear_all_interrupts(priv);
+	synchronize_irq(priv->irq);
+
 	return priv->xfer_done;
 }
 
