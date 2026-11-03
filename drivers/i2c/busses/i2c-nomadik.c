@@ -278,9 +278,8 @@ static inline void nmk_i2c_writeb(const struct nmk_i2c_dev *priv, u32 val,
  */
 static int flush_i2c_fifo(struct nmk_i2c_dev *priv)
 {
-#define LOOP_ATTEMPTS 10
-	ktime_t timeout;
-	int i;
+#define FIFO_FLUSH_TIMEOUT_US 100
+	u32 reg, err;
 
 	/*
 	 * flush the transmit and receive FIFO. The flushing
@@ -291,21 +290,16 @@ static int flush_i2c_fifo(struct nmk_i2c_dev *priv)
 	 */
 	writel((I2C_CR_FTX | I2C_CR_FRX), priv->virtbase + I2C_CR);
 
-	for (i = 0; i < LOOP_ATTEMPTS; i++) {
-		timeout = ktime_add_us(ktime_get(), priv->timeout_usecs);
+	/* This may execute in interrupt handler, so use read_poll_timeout_atomic() */
+	err = read_poll_timeout_atomic(readl, reg, (reg & (I2C_CR_FTX | I2C_CR_FRX)) == 0,
+				       1, FIFO_FLUSH_TIMEOUT_US, 0, priv->virtbase + I2C_CR);
 
-		while (ktime_after(timeout, ktime_get())) {
-			if ((readl(priv->virtbase + I2C_CR) &
-				(I2C_CR_FTX | I2C_CR_FRX)) == 0)
-				return 0;
-		}
-	}
+	if (err)
+		dev_err(&priv->adev->dev,
+			"flushing operation timed out giving up after %d microseconds",
+			FIFO_FLUSH_TIMEOUT_US);
 
-	dev_err(&priv->adev->dev,
-		"flushing operation timed out giving up after %d attempts",
-		LOOP_ATTEMPTS);
-
-	return -ETIMEDOUT;
+	return err;
 }
 
 /**
