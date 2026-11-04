@@ -46,6 +46,7 @@ enum fixed_clk {
 	FIXED_CLK_100M,
 	FIXED_CLK_133M,
 	FIXED_CLK_150M,
+	FIXED_CLK_160M,
 	FIXED_CLK_200M,
 	FIXED_CLK_266M,
 };
@@ -58,6 +59,7 @@ static const unsigned long fixed_clk_rates[] = {
 	[FIXED_CLK_100M] = 100000000,
 	[FIXED_CLK_133M] = 133330000,
 	[FIXED_CLK_150M] = 150000000,
+	[FIXED_CLK_160M] = 160000000,
 	[FIXED_CLK_200M] = 200000000,
 	[FIXED_CLK_266M] = 266660000,
 };
@@ -302,6 +304,8 @@ static const struct clk_id_map_entry r8a78000_cpg_default[] = {
 	{ R8A78000_CPG_S0ASYNCD8_PERW_MAIN,	FIXED_CLK(100M) },
 	{ R8A78000_CPG_SGD4_PERW_MAIN,		FIXED_CLK(266M) },
 	{ R8A78000_CPG_RTCATCKI,		FIXED_CLK(240K) },
+	{ R8A78000_CPG_S0ASYNCD8_PERW_BUS,	FIXED_CLK(100M) },
+	{ R8A78000_CPG_SASYNCCK_I3C_PERW_BUS,	FIXED_CLK(160M) },
 };
 
 static const struct clk_id_map_entry r8a78000_cpg_fw[] = {
@@ -326,6 +330,8 @@ static const struct clk_id_map_entry r8a78000_cpg_fw[] = {
 	 * register (EXTALR / LSIOSC (default)). We use the default for now.
 	 */
 	{ R8A78000_CPG_RTCATCKI,		FIXED_CLK(240K) },
+	{ R8A78000_CPG_S0ASYNCD8_PERW_BUS,	1665 },
+	{ R8A78000_CPG_SASYNCCK_I3C_PERW_BUS,	1668 },
 };
 
 static const struct cpg_data r8a78000_cpg_data = {
