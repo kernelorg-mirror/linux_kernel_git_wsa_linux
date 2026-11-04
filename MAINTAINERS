@@ -11234,7 +11234,9 @@ F:	kernel/entry/
 GENERIC GPIO I2C DRIVER
 M:	Wolfram Sang <wsa+renesas@sang-engineering.com>
 S:	Supported
+F:	drivers/i2c/algos/i2c-algo-bit.c
 F:	drivers/i2c/busses/i2c-gpio.c
+F:	include/linux/i2c-algo-bit.h
 F:	include/linux/platform_data/i2c-gpio.h
 
 GENERIC GPIO I2C MULTIPLEXER DRIVER
