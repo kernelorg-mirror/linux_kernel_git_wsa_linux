@@ -673,6 +673,9 @@ static const struct mod_map_in r8a78000_mdlc_perw_mod_fw[] = {
 	{ 0x49, 214, -1 },	/* I2C6 */
 	{ 0x4a, 215, -1 },	/* I2C7 */
 	{ 0x4b, 216, -1 },	/* I2C8 */
+	{ 0x4c, 217, -1 },	/* I3C0 */
+	{ 0x4d, 218, -1 },	/* I3C1 */
+	{ 0x4e, 219, -1 },	/* I3C2 */
 	{ 0x4f, 220, 1667 },	/* MSI4 / MSOCK_PERW_BUS */
 	{ 0x50, 221, 1667 },	/* MSI5 / MSOCK_PERW_BUS */
 	{ 0x51, 222, 1667 },	/* MSI6 / MSOCK_PERW_BUS */
