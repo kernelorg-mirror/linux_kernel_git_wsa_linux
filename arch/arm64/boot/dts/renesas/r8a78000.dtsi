@@ -864,6 +864,328 @@
 			status = "disabled";
 		};
 
+		wwdt0: watchdog@1c100000 {
+			compatible = "renesas,r8a78000-wwdt", "renesas,rcar-gen5-wwdt";
+			reg = <0 0x1c100000 0 0x0c>;
+			interrupts = <GIC_ESPI 78 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_ESPI 78 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "pretimeout", "error";
+			clocks = <&cpg R8A78000_CPG_R>, <&cpg R8A78000_CPG_SASYNCD4_RT_MAIN>;
+			clock-names = "cnt", "bus";
+			power-domains = <&mdlc_rt R8A78000_MDLC_PD_SCP 0xa3>,
+					<&mdlc_rt R8A78000_MDLC_PD_SCP 0xb1>;
+			power-domain-names = "cnt", "bus";
+			resets = <&mdlc_rt 0xa3>, <&mdlc_rt 0xb1>;
+			reset-names = "cnt", "bus";
+			status = "disabled";
+		};
+
+		wwdt1: watchdog@1c110000 {
+			compatible = "renesas,r8a78000-wwdt", "renesas,rcar-gen5-wwdt";
+			reg = <0 0x1c110000 0 0x0c>;
+			interrupts = <GIC_ESPI 79 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_ESPI 79 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "pretimeout", "error";
+			clocks = <&cpg R8A78000_CPG_R>, <&cpg R8A78000_CPG_SASYNCD4_RT_MAIN>;
+			clock-names = "cnt", "bus";
+			power-domains = <&mdlc_rt R8A78000_MDLC_PD_SCP 0xa4>,
+					<&mdlc_rt R8A78000_MDLC_PD_SCP 0xb2>;
+			power-domain-names = "cnt", "bus";
+			resets = <&mdlc_rt 0xa4>, <&mdlc_rt 0xb2>;
+			reset-names = "cnt", "bus";
+			status = "disabled";
+		};
+
+		wwdt2: watchdog@1c120000 {
+			compatible = "renesas,r8a78000-wwdt", "renesas,rcar-gen5-wwdt";
+			reg = <0 0x1c120000 0 0x0c>;
+			interrupts = <GIC_ESPI 80 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_ESPI 80 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "pretimeout", "error";
+			clocks = <&cpg R8A78000_CPG_R>, <&cpg R8A78000_CPG_SASYNCD4_RT_MAIN>;
+			clock-names = "cnt", "bus";
+			power-domains = <&mdlc_rt R8A78000_MDLC_PD_SCP 0xa5>,
+					<&mdlc_rt R8A78000_MDLC_PD_SCP 0xb3>;
+			power-domain-names = "cnt", "bus";
+			resets = <&mdlc_rt 0xa5>, <&mdlc_rt 0xb3>;
+			reset-names = "cnt", "bus";
+			status = "disabled";
+		};
+
+		wwdt3: watchdog@1c130000 {
+			compatible = "renesas,r8a78000-wwdt", "renesas,rcar-gen5-wwdt";
+			reg = <0 0x1c130000 0 0x0c>;
+			interrupts = <GIC_ESPI 81 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_ESPI 81 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "pretimeout", "error";
+			clocks = <&cpg R8A78000_CPG_R>, <&cpg R8A78000_CPG_SASYNCD4_RT_MAIN>;
+			clock-names = "cnt", "bus";
+			power-domains = <&mdlc_rt R8A78000_MDLC_PD_SCP 0xa6>,
+					<&mdlc_rt R8A78000_MDLC_PD_SCP 0xb4>;
+			power-domain-names = "cnt", "bus";
+			resets = <&mdlc_rt 0xa6>, <&mdlc_rt 0xb4>;
+			reset-names = "cnt", "bus";
+			status = "disabled";
+		};
+
+		wwdt4: watchdog@1c140000 {
+			compatible = "renesas,r8a78000-wwdt", "renesas,rcar-gen5-wwdt";
+			reg = <0 0x1c140000 0 0x0c>;
+			interrupts = <GIC_ESPI 82 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_ESPI 82 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "pretimeout", "error";
+			clocks = <&cpg R8A78000_CPG_R>, <&cpg R8A78000_CPG_SASYNCD4_RT_MAIN>;
+			clock-names = "cnt", "bus";
+			power-domains = <&mdlc_rt R8A78000_MDLC_PD_SCP 0xa7>,
+					<&mdlc_rt R8A78000_MDLC_PD_SCP 0xb5>;
+			power-domain-names = "cnt", "bus";
+			resets = <&mdlc_rt 0xa7>, <&mdlc_rt 0xb5>;
+			reset-names = "cnt", "bus";
+			status = "disabled";
+		};
+
+		wwdt5: watchdog@1c150000 {
+			compatible = "renesas,r8a78000-wwdt", "renesas,rcar-gen5-wwdt";
+			reg = <0 0x1c150000 0 0x0c>;
+			interrupts = <GIC_ESPI 83 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_ESPI 83 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "pretimeout", "error";
+			clocks = <&cpg R8A78000_CPG_R>, <&cpg R8A78000_CPG_SASYNCD4_RT_MAIN>;
+			clock-names = "cnt", "bus";
+			power-domains = <&mdlc_rt R8A78000_MDLC_PD_SCP 0xa8>,
+					<&mdlc_rt R8A78000_MDLC_PD_SCP 0xb6>;
+			power-domain-names = "cnt", "bus";
+			resets = <&mdlc_rt 0xa8>, <&mdlc_rt 0xb6>;
+			reset-names = "cnt", "bus";
+			status = "disabled";
+		};
+
+		wwdt6: watchdog@1c160000 {
+			compatible = "renesas,r8a78000-wwdt", "renesas,rcar-gen5-wwdt";
+			reg = <0 0x1c160000 0 0x0c>;
+			interrupts = <GIC_ESPI 84 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_ESPI 84 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "pretimeout", "error";
+			clocks = <&cpg R8A78000_CPG_R>, <&cpg R8A78000_CPG_SASYNCD4_RT_MAIN>;
+			clock-names = "cnt", "bus";
+			power-domains = <&mdlc_rt R8A78000_MDLC_PD_SCP 0xa9>,
+					<&mdlc_rt R8A78000_MDLC_PD_SCP 0xb7>;
+			power-domain-names = "cnt", "bus";
+			resets = <&mdlc_rt 0xa9>, <&mdlc_rt 0xb7>;
+			reset-names = "cnt", "bus";
+			status = "disabled";
+		};
+
+		wwdt7: watchdog@1c170000 {
+			compatible = "renesas,r8a78000-wwdt", "renesas,rcar-gen5-wwdt";
+			reg = <0 0x1c170000 0 0x0c>;
+			interrupts = <GIC_ESPI 85 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_ESPI 85 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "pretimeout", "error";
+			clocks = <&cpg R8A78000_CPG_R>, <&cpg R8A78000_CPG_SASYNCD4_RT_MAIN>;
+			clock-names = "cnt", "bus";
+			power-domains = <&mdlc_rt R8A78000_MDLC_PD_SCP 0xaa>,
+					<&mdlc_rt R8A78000_MDLC_PD_SCP 0xb8>;
+			power-domain-names = "cnt", "bus";
+			resets = <&mdlc_rt 0xaa>, <&mdlc_rt 0xb8>;
+			reset-names = "cnt", "bus";
+			status = "disabled";
+		};
+
+		wwdt8: watchdog@1c180000 {
+			compatible = "renesas,r8a78000-wwdt", "renesas,rcar-gen5-wwdt";
+			reg = <0 0x1c180000 0 0x0c>;
+			interrupts = <GIC_ESPI 86 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_ESPI 86 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "pretimeout", "error";
+			clocks = <&cpg R8A78000_CPG_R>, <&cpg R8A78000_CPG_SASYNCD4_RT_MAIN>;
+			clock-names = "cnt", "bus";
+			power-domains = <&mdlc_rt R8A78000_MDLC_PD_SCP 0xab>,
+					<&mdlc_rt R8A78000_MDLC_PD_SCP 0xb9>;
+			power-domain-names = "cnt", "bus";
+			resets = <&mdlc_rt 0xab>, <&mdlc_rt 0xb9>;
+			reset-names = "cnt", "bus";
+			status = "disabled";
+		};
+
+		wwdt9: watchdog@1c190000 {
+			compatible = "renesas,r8a78000-wwdt", "renesas,rcar-gen5-wwdt";
+			reg = <0 0x1c190000 0 0x0c>;
+			interrupts = <GIC_ESPI 87 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_ESPI 87 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "pretimeout", "error";
+			clocks = <&cpg R8A78000_CPG_R>, <&cpg R8A78000_CPG_SASYNCD4_RT_MAIN>;
+			clock-names = "cnt", "bus";
+			power-domains = <&mdlc_rt R8A78000_MDLC_PD_SCP 0xac>,
+					<&mdlc_rt R8A78000_MDLC_PD_SCP 0xba>;
+			power-domain-names = "cnt", "bus";
+			resets = <&mdlc_rt 0xac>, <&mdlc_rt 0xba>;
+			reset-names = "cnt", "bus";
+			status = "disabled";
+		};
+
+		wwdt10: watchdog@1c1a0000 {
+			compatible = "renesas,r8a78000-wwdt", "renesas,rcar-gen5-wwdt";
+			reg = <0 0x1c1a0000 0 0x0c>;
+			interrupts = <GIC_ESPI 88 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_ESPI 88 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "pretimeout", "error";
+			clocks = <&cpg R8A78000_CPG_R>, <&cpg R8A78000_CPG_SASYNCD4_RT_MAIN>;
+			clock-names = "cnt", "bus";
+			power-domains = <&mdlc_rt R8A78000_MDLC_PD_SCP 0xad>,
+					<&mdlc_rt R8A78000_MDLC_PD_SCP 0xbb>;
+			power-domain-names = "cnt", "bus";
+			resets = <&mdlc_rt 0xad>, <&mdlc_rt 0xbb>;
+			reset-names = "cnt", "bus";
+			status = "disabled";
+		};
+
+		wwdt11: watchdog@1c1b0000 {
+			compatible = "renesas,r8a78000-wwdt", "renesas,rcar-gen5-wwdt";
+			reg = <0 0x1c1b0000 0 0x0c>;
+			interrupts = <GIC_ESPI 89 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_ESPI 89 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "pretimeout", "error";
+			clocks = <&cpg R8A78000_CPG_R>, <&cpg R8A78000_CPG_SASYNCD4_RT_MAIN>;
+			clock-names = "cnt", "bus";
+			power-domains = <&mdlc_rt R8A78000_MDLC_PD_SCP 0xae>,
+					<&mdlc_rt R8A78000_MDLC_PD_SCP 0xbc>;
+			power-domain-names = "cnt", "bus";
+			resets = <&mdlc_rt 0xae>, <&mdlc_rt 0xbc>;
+			reset-names = "cnt", "bus";
+			status = "disabled";
+		};
+
+		wwdt12: watchdog@1c1c0000 {
+			compatible = "renesas,r8a78000-wwdt", "renesas,rcar-gen5-wwdt";
+			reg = <0 0x1c1c0000 0 0x0c>;
+			interrupts = <GIC_ESPI 90 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_ESPI 90 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "pretimeout", "error";
+			clocks = <&cpg R8A78000_CPG_R>, <&cpg R8A78000_CPG_SASYNCD4_RT_MAIN>;
+			clock-names = "cnt", "bus";
+			power-domains = <&mdlc_rt R8A78000_MDLC_PD_SCP 0xaf>,
+					<&mdlc_rt R8A78000_MDLC_PD_SCP 0xbd>;
+			power-domain-names = "cnt", "bus";
+			resets = <&mdlc_rt 0xaf>, <&mdlc_rt 0xbd>;
+			reset-names = "cnt", "bus";
+			status = "disabled";
+		};
+
+		wwdt13: watchdog@1c1d0000 {
+			compatible = "renesas,r8a78000-wwdt", "renesas,rcar-gen5-wwdt";
+			reg = <0 0x1c1d0000 0 0x0c>;
+			interrupts = <GIC_ESPI 91 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_ESPI 91 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "pretimeout", "error";
+			clocks = <&cpg R8A78000_CPG_R>, <&cpg R8A78000_CPG_SASYNCD4_RT_MAIN>;
+			clock-names = "cnt", "bus";
+			power-domains = <&mdlc_rt R8A78000_MDLC_PD_SCP 0xb0>,
+					<&mdlc_rt R8A78000_MDLC_PD_SCP 0xbe>;
+			power-domain-names = "cnt", "bus";
+			resets = <&mdlc_rt 0xb0>, <&mdlc_rt 0xbe>;
+			reset-names = "cnt", "bus";
+			status = "disabled";
+		};
+
+		wwdt14: watchdog@1c1e0000 {
+			compatible = "renesas,r8a78000-wwdt", "renesas,rcar-gen5-wwdt";
+			reg = <0 0x1c1e0000 0 0x0c>;
+			interrupts = <GIC_ESPI 92 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_ESPI 92 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "pretimeout", "error";
+			clocks = <&cpg R8A78000_CPG_R>, <&cpg R8A78000_CPG_SASYNCD4_RT_MAIN>;
+			clock-names = "cnt", "bus";
+			power-domains = <&mdlc_rt R8A78000_MDLC_PD_SCP 0xbf>,
+					<&mdlc_rt R8A78000_MDLC_PD_SCP 0xc0>;
+			power-domain-names = "cnt", "bus";
+			resets = <&mdlc_rt 0xbf>, <&mdlc_rt 0xc0>;
+			reset-names = "cnt", "bus";
+			status = "disabled";
+		};
+
+		wwdt15: watchdog@1c1f0000 {
+			compatible = "renesas,r8a78000-wwdt", "renesas,rcar-gen5-wwdt";
+			reg = <0 0x1c1f0000 0 0x0c>;
+			interrupts = <GIC_ESPI 93 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_ESPI 93 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "pretimeout", "error";
+			clocks = <&cpg R8A78000_CPG_R>, <&cpg R8A78000_CPG_SASYNCD4_RT_MAIN>;
+			clock-names = "cnt", "bus";
+			power-domains = <&mdlc_rt R8A78000_MDLC_PD_SCP 0xc1>,
+					<&mdlc_rt R8A78000_MDLC_PD_SCP 0xc2>;
+			power-domain-names = "cnt", "bus";
+			resets = <&mdlc_rt 0xc1>, <&mdlc_rt 0xc2>;
+			reset-names = "cnt", "bus";
+			status = "disabled";
+		};
+
+		wwdt16: watchdog@1c200000 {
+			compatible = "renesas,r8a78000-wwdt", "renesas,rcar-gen5-wwdt";
+			reg = <0 0x1c200000 0 0x0c>;
+			interrupts = <GIC_ESPI 94 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_ESPI 94 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "pretimeout", "error";
+			clocks = <&cpg R8A78000_CPG_R>, <&cpg R8A78000_CPG_SASYNCD4_RT_MAIN>;
+			clock-names = "cnt", "bus";
+			power-domains = <&mdlc_rt R8A78000_MDLC_PD_SCP 0xc3>,
+					<&mdlc_rt R8A78000_MDLC_PD_SCP 0xc4>;
+			power-domain-names = "cnt", "bus";
+			resets = <&mdlc_rt 0xc3>, <&mdlc_rt 0xc4>;
+			reset-names = "cnt", "bus";
+			status = "disabled";
+		};
+
+		wwdt17: watchdog@1c210000 {
+			compatible = "renesas,r8a78000-wwdt", "renesas,rcar-gen5-wwdt";
+			reg = <0 0x1c210000 0 0x0c>;
+			interrupts = <GIC_ESPI 95 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_ESPI 95 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "pretimeout", "error";
+			clocks = <&cpg R8A78000_CPG_R>, <&cpg R8A78000_CPG_SASYNCD4_RT_MAIN>;
+			clock-names = "cnt", "bus";
+			power-domains = <&mdlc_rt R8A78000_MDLC_PD_SCP 0xc5>,
+					<&mdlc_rt R8A78000_MDLC_PD_SCP 0xc6>;
+			power-domain-names = "cnt", "bus";
+			resets = <&mdlc_rt 0xc5>, <&mdlc_rt 0xc6>;
+			reset-names = "cnt", "bus";
+			status = "disabled";
+		};
+
+		wwdt18: watchdog@1c220000 {
+			compatible = "renesas,r8a78000-wwdt", "renesas,rcar-gen5-wwdt";
+			reg = <0 0x1c220000 0 0x0c>;
+			interrupts = <GIC_ESPI 96 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_ESPI 96 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "pretimeout", "error";
+			clocks = <&cpg R8A78000_CPG_R>, <&cpg R8A78000_CPG_SASYNCD4_RT_MAIN>;
+			clock-names = "cnt", "bus";
+			power-domains = <&mdlc_rt R8A78000_MDLC_PD_SCP 0xc7>,
+					<&mdlc_rt R8A78000_MDLC_PD_SCP 0xc8>;
+			power-domain-names = "cnt", "bus";
+			resets = <&mdlc_rt 0xc7>, <&mdlc_rt 0xc8>;
+			reset-names = "cnt", "bus";
+			status = "disabled";
+		};
+
+		wwdt19: watchdog@1c230000 {
+			compatible = "renesas,r8a78000-wwdt", "renesas,rcar-gen5-wwdt";
+			reg = <0 0x1c230000 0 0x0c>;
+			interrupts = <GIC_ESPI 97 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_ESPI 97 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "pretimeout", "error";
+			clocks = <&cpg R8A78000_CPG_R>, <&cpg R8A78000_CPG_SASYNCD4_RT_MAIN>;
+			clock-names = "cnt", "bus";
+			power-domains = <&mdlc_rt R8A78000_MDLC_PD_SCP 0xc9>,
+					<&mdlc_rt R8A78000_MDLC_PD_SCP 0xca>;
+			power-domain-names = "cnt", "bus";
+			resets = <&mdlc_rt 0xc9>, <&mdlc_rt 0xca>;
+			reset-names = "cnt", "bus";
+			status = "disabled";
+		};
+
+		/* WWDT20 is only for SCP. IRQs are not routed to the AP */
+
 		/* Application Processors manage View-1 of a GIC-720AE */
 		gic: interrupt-controller@39000000 {
 			compatible = "arm,gic-v3";
