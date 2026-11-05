@@ -701,6 +701,15 @@
 		clock-frequency = <0>; /* optional */
 	};
 
+	/* RFC: can come from extalr or intosc depending on fuse.
+	 * Dunno how to check for that, but outcome is always 32768Hz, so don't bother?
+	 */
+	rclk: r-clk {
+		compatible = "fixed-clock";
+		#clock-cells = <0>;
+		clock-frequency = <32768>;
+	};
+
 	soc: soc {
 		compatible = "simple-bus";
 		#address-cells = <2>;
@@ -823,6 +832,35 @@
 					  "ch24i", "ch25i", "ch26i", "ch27i", "ch28i", "ch29i", "ch30i", "ch31i";
 			#mbox-cells = <2>;
 			#hwlock-cells = <1>;
+			status = "disabled";
+		};
+
+		rwdt: watchdog@1c040000 {
+			compatible = "renesas,r8a78000-wdt", "renesas,rcar-gen5-wdt";
+			reg = <0 0x1c040000 0 0x0c>;
+			interrupts = <GIC_ESPI 77 IRQ_TYPE_LEVEL_HIGH>;
+			clocks = <&rclk>, <&cpg R8A78000_CPG_SASYNCD4_RT_MAIN>;
+			clock-names = "cnt", "bus";
+			power-domains = <&mdlc_rt R8A78000_MDLC_PD_APL 0xa1>,
+					<&mdlc_rt R8A78000_MDLC_PD_APL 0xa2>;
+			power-domain-names = "cnt", "bus";
+			resets = <&mdlc_rt 0xa1>, <&mdlc_rt 0xa2>;
+			reset-names = "cnt", "bus";
+			status = "disabled";
+		};
+
+		swdt: watchdog@1c050000 {
+			compatible = "renesas,r8a78000-wdt", "renesas,rcar-gen5-wdt";
+			reg = <0 0x1c050000 0 0x0c>;
+			interrupts = <GIC_ESPI 98 IRQ_TYPE_LEVEL_HIGH>;
+			clocks = <&rclk>, <&cpg R8A78000_CPG_SASYNCD4_RT_MAIN>;
+			clock-names = "cnt", "bus";
+			power-domains = <&mdlc_rt R8A78000_MDLC_PD_APL 0xcc>,
+					<&mdlc_rt R8A78000_MDLC_PD_APL 0xcb>;
+			power-domain-names = "cnt", "bus";
+			// FIXME: First 0xcc, then 0xcb? Ask Morimoto-san
+			resets = <&mdlc_rt 0xcc>, <&mdlc_rt 0xcb>;
+			reset-names = "cnt", "bus";
 			status = "disabled";
 		};
 
