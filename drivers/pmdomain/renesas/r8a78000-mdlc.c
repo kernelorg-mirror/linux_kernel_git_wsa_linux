@@ -696,6 +696,12 @@ static const struct mod_map_in r8a78000_mdlc_scp_mod_fw[] = {
 	{ -1 }
 };
 
+static const struct mod_map_in r8a78000_mdlc_rt_mod_fw[] = {
+	{ 0xa1, 387, -1 },	/* FIXME: naming WDT0 */
+	{ 0xa2, 388, -1 },	/* WDT0 */
+	{ -1 }
+};
+
 static const struct mdlc_info r8a78000_mdlc_fw[] = {
 	{
 		.base = 0xc1338000 /* mdlc_aon */,
@@ -712,6 +718,9 @@ static const struct mdlc_info r8a78000_mdlc_fw[] = {
 	}, {
 		.base = 0xc1330000 /* mdlc_scp */,
 		.mod_map = r8a78000_mdlc_scp_mod_fw,
+	}, {
+		.base = 0x19440000 /* mdlc_rt */,
+		.mod_map = r8a78000_mdlc_rt_mod_fw,
 	},
 	{ /* sentinel */ }
 };
