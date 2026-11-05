@@ -699,6 +699,46 @@ static const struct mod_map_in r8a78000_mdlc_scp_mod_fw[] = {
 static const struct mod_map_in r8a78000_mdlc_rt_mod_fw[] = {
 	{ 0xa1, 387, -1 },	/* RWDTCNT */
 	{ 0xa2, 388, -1 },	/* RWDTBUS */
+	{ 0xa3, 389, -1 },	/* WWDT0CNT */
+	{ 0xb1, 403, -1 },	/* WWDT0BUS */
+	{ 0xa4, 390, -1 },	/* WWDT1CNT */
+	{ 0xb2, 404, -1 },	/* WWDT1BUS */
+	{ 0xa5, 391, -1 },	/* WWDT2CNT */
+	{ 0xb3, 405, -1 },	/* WWDT2BUS */
+	{ 0xa6, 392, -1 },	/* WWDT3CNT */
+	{ 0xb4, 406, -1 },	/* WWDT3BUS */
+	{ 0xa7, 393, -1 },	/* WWDT4CNT */
+	{ 0xb5, 407, -1 },	/* WWDT4BUS */
+	{ 0xa8, 394, -1 },	/* WWDT5CNT */
+	{ 0xb6, 408, -1 },	/* WWDT5BUS */
+	{ 0xa9, 395, -1 },	/* WWDT6CNT */
+	{ 0xb7, 409, -1 },	/* WWDT6BUS */
+	{ 0xaa, 396, -1 },	/* WWDT7CNT */
+	{ 0xb8, 410, -1 },	/* WWDT7BUS */
+	{ 0xab, 397, -1 },	/* WWDT8CNT */
+	{ 0xb9, 411, -1 },	/* WWDT8BUS */
+	{ 0xac, 398, -1 },	/* WWDT9CNT */
+	{ 0xba, 412, -1 },	/* WWDT9BUS */
+	{ 0xad, 399, -1 },	/* WWDT10CNT */
+	{ 0xbb, 413, -1 },	/* WWDT10BUS */
+	{ 0xae, 400, -1 },	/* WWDT11CNT */
+	{ 0xbc, 414, -1 },	/* WWDT11BUS */
+	{ 0xaf, 401, -1 },	/* WWDT12CNT */
+	{ 0xbd, 415, -1 },	/* WWDT12BUS */
+	{ 0xb0, 402, -1 },	/* WWDT13CNT */
+	{ 0xbe, 416, -1 },	/* WWDT13BUS */
+	{ 0xbf, 417, -1 },	/* WWDT14CNT */
+	{ 0xc0, 418, -1 },	/* WWDT14BUS */
+	{ 0xc1, 419, -1 },	/* WWDT15CNT */
+	{ 0xc2, 420, -1 },	/* WWDT15BUS */
+	{ 0xc3, 421, -1 },	/* WWDT16CNT */
+	{ 0xc4, 422, -1 },	/* WWDT16BUS */
+	{ 0xc5, 423, -1 },	/* WWDT17CNT */
+	{ 0xc6, 424, -1 },	/* WWDT17BUS */
+	{ 0xc7, 425, -1 },	/* WWDT18CNT */
+	{ 0xc8, 426, -1 },	/* WWDT18BUS */
+	{ 0xc9, 427, -1 },	/* WWDT19CNT */
+	{ 0xca, 428, -1 },	/* WWDT19BUS */
 	{ 0xcb, 430, -1 },	/* SWDTBUS */
 	{ 0xcc, 429, -1 },	/* SWDTCNT */
 	{ -1 }
