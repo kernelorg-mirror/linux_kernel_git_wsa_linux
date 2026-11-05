@@ -749,6 +749,11 @@ static const struct mod_id_map_entry r8a78000_mdlc_vio_mod_fw[] = {
 	{ 0x10a, 180, -1 },	/* FCPVI3 */
 };
 
+static const struct mod_map_in r8a78000_mdlc_rt_mod_fw[] = {
+	{ 0xa1, 387, -1 },	/* RWDTCNT */
+	{ 0xa2, 388, -1 },	/* RWDTBUS */
+};
+
 static const struct mdlc_info r8a78000_mdlc_fw[] = {
 	{
 		.base = 0xc1338000,
@@ -770,6 +775,9 @@ static const struct mdlc_info r8a78000_mdlc_fw[] = {
 		.base = 0xc5000000,
 		POWER_ID_MAP(r8a78000_mdlc_vio_power_fw),
 		MOD_ID_MAP(r8a78000_mdlc_vio_mod_fw),
+	}, {
+		.base = 0x19440000,
+		.mod_map = r8a78000_mdlc_rt_mod_fw,
 	},
 	{ /* sentinel */ }
 };
