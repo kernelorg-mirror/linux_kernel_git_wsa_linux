@@ -40,6 +40,7 @@ struct cpg_data {
 
 enum fixed_clk {
 	FIXED_CLK_32768,
+	FIXED_CLK_130210,
 	FIXED_CLK_240K,
 	FIXED_CLK_16M,
 	FIXED_CLK_33M,
@@ -54,6 +55,7 @@ enum fixed_clk {
 
 static const unsigned long fixed_clk_rates[] = {
 	[FIXED_CLK_32768] = 32768,
+	[FIXED_CLK_130210] = 130210,
 	[FIXED_CLK_240K] = 240000,
 	[FIXED_CLK_16M] = 16666500,
 	[FIXED_CLK_33M] = 33333000,
@@ -337,6 +339,12 @@ static const struct clk_id_map_entry r8a78000_cpg_fw[] = {
 	 * now, the fuse is considered not readable, but RCLK is always 32768.
 	 */
 	{ R8A78000_CPG_R,			FIXED_CLK(32768) },
+	/*
+	 * OSCCLK has EXTAL as a source divided by a fused value. The value can
+	 * be read from the OSCCKCR register. For now, we use the default value
+	 * for a 16.666MHz EXTAL as a fixed clock.
+	 */
+	{ R8A78000_CPG_OSCCLK,			FIXED_CLK(130210) },
 };
 
 static const struct cpg_data r8a78000_cpg_data = {
