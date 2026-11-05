@@ -35,6 +35,7 @@ struct cpg_data {
 };
 
 enum fixed_clk {
+	FIXED_CLK_16M,
 	FIXED_CLK_33M,
 	FIXED_CLK_37M5,
 	FIXED_CLK_66M,
@@ -45,6 +46,7 @@ enum fixed_clk {
 };
 
 static const unsigned long fixed_clk_rates[] = {
+	[FIXED_CLK_16M] = 16666500,
 	[FIXED_CLK_33M] = 33333000,
 	[FIXED_CLK_37M5] = 37500000,
 	[FIXED_CLK_66M] = 66666000,
@@ -306,6 +308,7 @@ static const struct clk_map_in r8a78000_cpg_default[] = {
 	{ R8A78000_CPG_S0D24_HSCN_OTHER,	FIXED_CLK(33M) },
 	{ R8A78000_CPG_SGASYNCD16_PERW_MAIN,	FIXED_CLK(66M) },
 	{ R8A78000_CPG_S0ASYNCD8_PERW_MAIN,	FIXED_CLK(100M) },
+	{ R8A78000_CPG_SASYNCD4_RT_MAIN,	FIXED_CLK(16M) },
 	{ -1 }
 };
 
@@ -323,6 +326,7 @@ static const struct clk_map_in r8a78000_cpg_fw[] = {
 	{ R8A78000_CPG_SGASYNCD16_PERW_MAIN,	1651 },
 	{ R8A78000_CPG_S0ASYNCD8_PERW_MAIN,	1653 },
 	{ R8A78000_CPG_CANFD_SCP_MAIN,		1456 },
+	{ R8A78000_CPG_SASYNCD4_RT_MAIN,	1392 },
 	{ -1 }
 };
 
