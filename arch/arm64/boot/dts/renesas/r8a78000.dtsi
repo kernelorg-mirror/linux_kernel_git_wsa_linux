@@ -826,6 +826,20 @@
 			status = "disabled";
 		};
 
+		rwdt: watchdog@1c040000 {
+			compatible = "renesas,r8a78000-wdt", "renesas,rcar-gen5-wdt";
+			reg = <0 0x1c040000 0 0x0c>;
+			interrupts = <GIC_ESPI 77 IRQ_TYPE_LEVEL_HIGH>;
+			clocks = <&cpg R8A78000_CPG_R>, <&cpg R8A78000_CPG_SASYNCD4_RT_MAIN>;
+			clock-names = "cnt", "bus";
+			power-domains = <&mdlc_rt R8A78000_MDLC_PD_APL 0xa1>,
+					<&mdlc_rt R8A78000_MDLC_PD_APL 0xa2>;
+			power-domain-names = "cnt", "bus";
+			resets = <&mdlc_rt 0xa1>, <&mdlc_rt 0xa2>;
+			reset-names = "cnt", "bus";
+			status = "disabled";
+		};
+
 		/* Application Processors manage View-1 of a GIC-720AE */
 		gic: interrupt-controller@39000000 {
 			compatible = "arm,gic-v3";
