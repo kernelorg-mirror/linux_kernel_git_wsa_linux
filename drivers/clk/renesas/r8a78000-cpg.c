@@ -39,7 +39,9 @@ struct cpg_data {
 };
 
 enum fixed_clk {
+	FIXED_CLK_32768,
 	FIXED_CLK_240K,
+	FIXED_CLK_16M,
 	FIXED_CLK_33M,
 	FIXED_CLK_37M5,
 	FIXED_CLK_66M,
@@ -51,7 +53,9 @@ enum fixed_clk {
 };
 
 static const unsigned long fixed_clk_rates[] = {
+	[FIXED_CLK_32768] = 32768,
 	[FIXED_CLK_240K] = 240000,
+	[FIXED_CLK_16M] = 16666500,
 	[FIXED_CLK_33M] = 33333000,
 	[FIXED_CLK_37M5] = 37500000,
 	[FIXED_CLK_66M] = 66666000,
@@ -302,6 +306,7 @@ static const struct clk_id_map_entry r8a78000_cpg_default[] = {
 	{ R8A78000_CPG_S0ASYNCD8_PERW_MAIN,	FIXED_CLK(100M) },
 	{ R8A78000_CPG_SGD4_PERW_MAIN,		FIXED_CLK(266M) },
 	{ R8A78000_CPG_RTCATCKI,		FIXED_CLK(240K) },
+	{ R8A78000_CPG_SASYNCD4_RT_MAIN,	FIXED_CLK(16M) },
 };
 
 static const struct clk_id_map_entry r8a78000_cpg_fw[] = {
@@ -326,6 +331,12 @@ static const struct clk_id_map_entry r8a78000_cpg_fw[] = {
 	 * register (EXTALR / LSIOSC (default)). We use the default for now.
 	 */
 	{ R8A78000_CPG_RTCATCKI,		FIXED_CLK(240K) },
+	{ R8A78000_CPG_SASYNCD4_RT_MAIN,	1392 },
+	/*
+	 * RCLK can be fused to have EXTALR or HSIOSC/8138 as a source. Up to
+	 * now, the fuse is considered not readable, but RCLK is always 32768.
+	 */
+	{ R8A78000_CPG_R,			FIXED_CLK(32768) },
 };
 
 static const struct cpg_data r8a78000_cpg_data = {
