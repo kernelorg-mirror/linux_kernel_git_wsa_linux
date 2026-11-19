@@ -301,7 +301,6 @@ static const struct clk_id_map_entry r8a78000_cpg_default[] = {
 	{ R8A78000_CPG_SGASYNCD16_PERW_MAIN,	FIXED_CLK(66M) },
 	{ R8A78000_CPG_S0ASYNCD8_PERW_MAIN,	FIXED_CLK(100M) },
 	{ R8A78000_CPG_SGD4_PERW_MAIN,		FIXED_CLK(266M) },
-	{ R8A78000_CPG_RTCATCKI,		FIXED_CLK(240K) },
 };
 
 static const struct clk_id_map_entry r8a78000_cpg_fw[] = {
