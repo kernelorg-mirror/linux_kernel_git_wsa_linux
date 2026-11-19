@@ -548,6 +548,12 @@
 	};
 };
 
+&swdt {
+	/* Needs 'devmem 0xc1320420 32 0' to allow SWDT resets */
+	timeout-sec = <2>;
+	status = "okay";
+};
+
 &tpu {
 	pinctrl-0 = <&tpu_pins>;
 	pinctrl-names = "default";
