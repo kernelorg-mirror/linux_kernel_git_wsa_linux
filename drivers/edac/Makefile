@@ -94,3 +94,4 @@ obj-$(CONFIG_EDAC_LOONGSON)		+= loongson_edac.o
 obj-$(CONFIG_EDAC_VERSALNET)		+= versalnet_edac.o
 obj-$(CONFIG_EDAC_CORTEX_A72)		+= a72_edac.o
 obj-$(CONFIG_EDAC_DUMMY)		+= dummy_edac.o
+obj-$(CONFIG_EDAC_CADENCE)		+= cadence_edac.o
