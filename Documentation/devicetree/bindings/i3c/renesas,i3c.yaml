@@ -22,51 +22,59 @@ properties:
               - renesas,r9a09g056-i3c # RZ/V2N
               - renesas,r9a09g057-i3c # RZ/V2H(P)
           - const: renesas,r9a09g047-i3c
+      - items:
+          - enum:
+              - renesas,r8a78000-i3c # R-Car X5H
+          - const: renesas,rcar-gen5-i3c
 
   reg:
     maxItems: 1
 
   interrupts:
-    items:
-      - description: Non-recoverable internal error interrupt
-      - description: Normal transfer error interrupt
-      - description: Normal transfer abort interrupt
-      - description: Normal response status buffer full interrupt
-      - description: Normal command buffer empty interrupt
-      - description: Normal IBI status buffer full interrupt
-      - description: Normal Rx data buffer full interrupt
-      - description: Normal Tx data buffer empty interrupt
-      - description: Normal receive status buffer full interrupt
-      - description: START condition detection interrupt
-      - description: STOP condition detection interrupt
-      - description: Transmit end interrupt
-      - description: NACK detection interrupt
-      - description: Arbitration lost interrupt
-      - description: Timeout detection interrupt
-      - description: Wake-up condition detection interrupt
-      - description: HDR Exit Pattern detection interrupt
-    minItems: 16
+    oneOf:
+      - items:
+          - description: Non-recoverable internal error interrupt
+          - description: Normal transfer error interrupt
+          - description: Normal transfer abort interrupt
+          - description: Normal response status buffer full interrupt
+          - description: Normal command buffer empty interrupt
+          - description: Normal IBI status buffer full interrupt
+          - description: Normal Rx data buffer full interrupt
+          - description: Normal Tx data buffer empty interrupt
+          - description: Normal receive status buffer full interrupt
+          - description: START condition detection interrupt
+          - description: STOP condition detection interrupt
+          - description: Transmit end interrupt
+          - description: NACK detection interrupt
+          - description: Arbitration lost interrupt
+          - description: Timeout detection interrupt
+          - description: Wake-up condition detection interrupt
+          - description: HDR Exit Pattern detection interrupt
+      - items:
+          - description: Main interrupt
 
   interrupt-names:
-    items:
-      - const: ierr
-      - const: terr
-      - const: abort
-      - const: resp
-      - const: cmd
-      - const: ibi
-      - const: rx
-      - const: tx
-      - const: rcv
-      - const: st
-      - const: sp
-      - const: tend
-      - const: nack
-      - const: al
-      - const: tmo
-      - const: wu
-      - const: exit
-    minItems: 16
+    oneOf:
+      - items:
+          - const: ierr
+          - const: terr
+          - const: abort
+          - const: resp
+          - const: cmd
+          - const: ibi
+          - const: rx
+          - const: tx
+          - const: rcv
+          - const: st
+          - const: sp
+          - const: tend
+          - const: nack
+          - const: al
+          - const: tmo
+          - const: wu
+          - const: exit
+      - items:
+          - const: main
 
   clocks:
     items:
@@ -89,11 +97,13 @@ properties:
     items:
       - description: Reset signal
       - description: APB interface reset signal/SCAN reset signal
+    minItems: 1
 
   reset-names:
     items:
       - const: presetn
       - const: tresetn
+    minItems: 1
 
 required:
   - compatible
@@ -137,9 +147,31 @@ allOf:
         clock-names:
           minItems: 3
         interrupts:
+          minItems: 16
           maxItems: 16
         interrupt-names:
+          minItems: 16
           maxItems: 16
+
+  - if:
+      properties:
+        compatible:
+          contains:
+            const: renesas,rcar-gen5-i3c
+    then:
+      properties:
+        clocks:
+          maxItems: 2
+        clock-names:
+          maxItems: 2
+        resets:
+          maxItems: 1
+        reset-names:
+          maxItems: 1
+        interrupts:
+          maxItems: 1
+        interrupt-names:
+          maxItems: 1
 
 unevaluatedProperties: false
 
