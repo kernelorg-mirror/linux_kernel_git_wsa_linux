@@ -1335,6 +1335,7 @@ static int r9a06g032_reset_set(struct reset_controller_dev *rcdev,
 	 * a 5us delay for reset to propegate after assert or deassert
 	 */
 	udelay(5);
+printk(KERN_INFO "****** wsa: %lu %u\n", id, set);
 
 	return 0;
 }
